@@ -2,6 +2,23 @@
 
 A simple web app to stream music built using modern java libraries and angularjs
 
+##Setup
+
+###Dependencies
+
+* Install Groovy 
+* Install Gradle
+* Install Node
+* Install Node Package Manager (npm)
+* Install Grunt
+
+###Steps
+
+* Run 'bower install' in web directory
+* Run 'gradle build' in root directory
+* Run 'gradle run' to start the server
+* In browser, open http://localhost:8080
+
 ##TODO
 * add a Player Queue (persisted) model to keep track of all songs queued up to play
 * add a History model to keep track of what was played and when
