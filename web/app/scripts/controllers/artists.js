@@ -14,4 +14,4 @@ angular.module('musicApp')
 
 	$scope.sortField = 'name';
 	$scope.reverse = true;
-  }]); 
+}]);

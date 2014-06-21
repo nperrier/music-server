@@ -20,4 +20,4 @@ angular.module('musicApp')
         params: { trackId: '@trackId' }
       }
     });
-}]);
+  }]);
