@@ -1,0 +1,34 @@
+<!-- artistDetail.html -->
+<div class="jumbotron text-center">
+
+	<h1>{{artist.name}}</h1>
+
+	<h2>Albums</h2>
+
+	<div class="table-responsive">
+		<table class="table">
+			<thead>
+				<tr>
+					<th />
+					<th ng-click="sortOrder = 'name'; reverse = !reverse">Title</th>
+					<th ng-click="sortOrder = 'year'; reverse = !reverse">Year</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="a in albums | orderBy:sortOrder:reverse">
+					<td>
+						<img class="coverart-thumb" ng-src="{{a.coverArtUrl}}"/>
+					</td>
+					<td>		
+						<a ng-href="#/album/{{a.id}}" class="thumb">
+							{{a.name}}
+						</a>
+					</td>
+					<td>
+						{{a.year | date : 'yyyy'}}
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

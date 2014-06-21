@@ -1,0 +1,40 @@
+<!-- albums.html -->
+<div class="jumbotron text-center">
+	
+	<h1>Albums</h1>
+
+	<div class="table-responsive">
+		<table class="table">
+			<thead>
+				<tr>
+					<th />
+					<th ng-click="sortOrder = 'name'; reverse = !reverse">Title</th>
+					<th ng-click="sortOrder = 'artist.name'; reverse = !reverse">Artist</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="a in albums | orderBy:sortOrder:reverse">
+					<td>
+						<img class="coverart-thumb" ng-src="{{a.coverArtUrl}}"/>
+					</td>
+					<td>		
+						<a ng-href="#/album/{{a.id}}" class="thumb">
+							{{a.name}}
+						</a>
+					</td>
+					<td>
+						<a ng-href="#/artist/{{a.artist.id}}" class="thumb">
+							{{a.artist.name}}
+						</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+<!--
+	<div>
+		{{albums | json}} 
+	</div>
+-->
+</div>

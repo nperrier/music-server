@@ -1,0 +1,36 @@
+<!-- library.html -->
+<div class="jumbotron text-center">
+
+	<h2>Libraries</h2>
+
+	<div class="table-responsive">
+		<table class="table">
+			<thead>
+				<tr>
+					<th ng-click="sortOrder = 'path'; reverse = !reverse">Library Path</th>
+					<th>Last Scanned</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="l in libraries | orderBy:sortOrder:reverse">
+					<td>
+						{{l.path}}
+					</td>
+					<td>
+						{{l.lastIndexedDate}}
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<form ng-submit="createLibrary(library)">
+
+		<legend>Create Library</legend>
+
+		<label>Path</label>
+		<input ng-model="library.path" id="path" name="path" type="text" size="50" placeholder="/your/music/library">
+
+	</form>
+
+</div>
