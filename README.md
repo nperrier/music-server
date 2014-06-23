@@ -14,6 +14,7 @@ A simple web app to stream music built using modern java libraries and angularjs
 
 ###Steps
 
+* Run 'npm install' in web directory
 * Run 'bower install' in web directory
 * Run 'gradle build' in root directory
 * Run 'gradle run' to start the server
