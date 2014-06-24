@@ -6,8 +6,8 @@ A simple web app to stream music built using modern java libraries and angularjs
 
 ###Dependencies
 
+* Install Java
 * Install Groovy 
-* Install Gradle
 * Install Node
 * Install Node Package Manager (npm)
 * Install Grunt
