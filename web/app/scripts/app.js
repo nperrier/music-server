@@ -5,6 +5,7 @@
 var musicApp = angular.module('musicApp', [
 	'ui.bootstrap',
 	'ngRoute',
+	'ngResource',
 	'musicAppFilters',
 	'audioPlayer-directive'
 ]);
