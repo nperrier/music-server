@@ -17,7 +17,10 @@ import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
+import com.perrier.music.db.DBException;
+import com.perrier.music.db.IDatabase;
 import com.perrier.music.entity.library.Library;
+import com.perrier.music.entity.library.LibraryUpdateQuery;
 import com.perrier.music.entity.track.Track;
 import com.perrier.music.entity.track.TrackProvider;
 import com.perrier.music.indexer.event.ChangedTrackEvent;
@@ -27,94 +30,97 @@ import com.perrier.music.indexer.event.UnknownTrackEvent;
 public class LibraryIndexerTask implements Callable<Void> {
 
 	private static final Logger log = LoggerFactory.getLogger(LibraryIndexerTask.class);
-	
+
 	// dependencies
 	private EventBus bus;
 	private TrackProvider trackProvider;
-	
+	private IDatabase db;
+
 	private static class MusicFileFilter implements FileFilter {
+
 		@Override
 		public boolean accept(File f) {
-			boolean accept = f.exists() && f.canRead() &&
-					(f.isDirectory() || (f.isFile() && f.getName().endsWith(".mp3")));
+			boolean accept = f.exists() && f.canRead() && (f.isDirectory() || (f.isFile() && f.getName().endsWith(".mp3")));
 			return accept;
 		}
 	}
-	
+
 	private static final FileFilter songFileFilter = new MusicFileFilter();
-	
+
 	// fields
 	private final Library library;
-	
+
 	@AssistedInject
-	public LibraryIndexerTask(@Assisted Library library) {
+	public LibraryIndexerTask(@Assisted
+	Library library) {
 		this.library = library;
 	}
-	
+
 	@Inject
 	public void setEventBus(EventBus bus) {
 		this.bus = bus;
 	}
-	
+
 	@Inject
 	public void setTrackProvider(TrackProvider trackProvider) {
 		this.trackProvider = trackProvider;
 	}
-	
+
+	@Inject
+	public void setDb(IDatabase db) {
+		this.db = db;
+	}
+
 	@Override
 	public Void call() throws LibraryIndexerException {
 
 		File rootPath = new File(this.library.getPath());
-		
-		if(!rootPath.exists() || !rootPath.canRead()) {
+
+		if (!rootPath.exists() || !rootPath.canRead()) {
 			throw new LibraryIndexerException("Unable to index " + rootPath + ": directory doesn't exist or cannot read");
 		}
 
 		// get all indexed files from db for path
-		List<Track> tracks = this.trackProvider.findAllByLibraryId(library.getId());
-		//Map<String, Date> pathToModDate = Maps.newHashMapWithExpectedSize(tracks.size());
+		List<Track> tracks = this.trackProvider.findAllByLibraryId(this.library.getId());
+		// Map<String, Date> pathToModDate = Maps.newHashMapWithExpectedSize(tracks.size());
 		Map<String, Track> pathToTrack = Maps.uniqueIndex(tracks, new Function<Track, String>() {
+
 			@Override
 			public String apply(Track track) {
 				return track.getPath();
 			}
 		});
-		
-		scan(rootPath, pathToTrack);
-		
-//		try {
-//			for(int i = 1; i <= 10; i++) {
-//			log.info("Scanning path: " + path + " for " + i + " seconds");
-//				Thread.sleep(1000);
-//			}
-//		} catch (InterruptedException e) {
-//			log.debug("{} was interrupted", CollectionIndexerService.class.getSimpleName());
-//			e.printStackTrace();
-//		}
-		
+
+		this.scan(rootPath, pathToTrack);
+
+		// Update lastIndexedDate to now
+		try {
+			this.library.setLastIndexedDate(new Date());
+			this.db.update(new LibraryUpdateQuery(this.library));
+		} catch (DBException e) {
+			throw new LibraryIndexerException("Error updating library: " + this.library, e);
+		}
+
 		return null;
 	}
 
 	private void scan(File dir, Map<String, Track> pathToTrack) {
-		
-		/* 
-		 * First, search for all files in dir:
-		 * * If it has been indexed before (exists) AND its file modification date has not changed (not sure what field to use yet)
-		 * * Then continue
-		 * * If the file mod date has changed, Then post IndexEvent.CHANGED
-		 * * If it has not been indexed before (new), Then post IndexEvent.NEW
-		 * Remove the existing file from the tracks map
-		 * 
-		 * Second, loop through the rest of the tracks map and mark all the files as IndexEvent.MISSING
-		 * * Don't actually delete the columns! The tracks may have been relocated
-		 * * Let the User manage cleaning up missing Tracks
-		 */
-		
-		for(File file : dir.listFiles(LibraryIndexerTask.songFileFilter)) {
+
+		// First, search for all files in dir:
+		//
+		// * If it has been indexed before (exists) AND its file modification date has not changed (not sure what field to
+		// use yet), then continue
+		// * If the file mod date has changed, then post IndexEvent.CHANGED
+		// * If it has not been indexed before (new), then post IndexEvent.NEW
+		// * Remove the existing file from the tracks map
+		//
+		// Second, loop through the rest of the tracks map and mark all the files as IndexEvent.MISSING
+		// NOTE: Don't actually delete the columns! - the tracks may have been relocated
+		// Let the User manage cleaning up missing Tracks
+		for (File file : dir.listFiles(LibraryIndexerTask.songFileFilter)) {
 			if (file.isDirectory()) {
-				scan(file, pathToTrack);
-			}
-			else {
+				this.scan(file, pathToTrack);
+			} else {
 				// TODO Need to consider:
 				// standardized paths (slash at the end, etc..)
 				// if path is relative or absolute
@@ -123,12 +129,12 @@ public class LibraryIndexerTask implements Callable<Void> {
 				// canonical is supposed to resolve sym links...this is what
 				// should be stored in db
 				try {
-					index(file, pathToTrack);
+					this.index(file, pathToTrack);
 				} catch (Exception e) {
 					log.warn("Unable to index file: {}", file, e);
 				}
 			}
-		}	
+		}
 	}
 
 	private void index(File file, Map<String, Track> pathToTrack) throws IOException {
@@ -137,7 +143,7 @@ public class LibraryIndexerTask implements Callable<Void> {
 		String path = file.getCanonicalPath();
 		Track track = pathToTrack.get(path);
 		ITrackEvent event = null;
-		
+
 		if (track == null) {
 			// NEW
 			event = new UnknownTrackEvent(file, this.library);
@@ -149,7 +155,7 @@ public class LibraryIndexerTask implements Callable<Void> {
 				pathToTrack.remove(file);
 			}
 		}
-		
+
 		this.bus.post(event);
 	}
 
@@ -157,31 +163,35 @@ public class LibraryIndexerTask implements Callable<Void> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result
-				+ ((library == null) ? 0 : library.hashCode());
+		result = prime * result + ((this.library == null) ? 0 : this.library.hashCode());
 		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (!(obj instanceof LibraryIndexerTask))
+		}
+		if (!(obj instanceof LibraryIndexerTask)) {
 			return false;
+		}
 		LibraryIndexerTask other = (LibraryIndexerTask) obj;
-		
-		if (library == null) {
-			if (other.library != null)
+
+		if (this.library == null) {
+			if (other.library != null) {
 				return false;
-		} else if (!library.equals(other.library))
+			}
+		} else if (!this.library.equals(other.library)) {
 			return false;
+		}
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "LibraryIndexerTask [library=" + library + "]";
+		return "LibraryIndexerTask [library=" + this.library + "]";
 	}
 }
