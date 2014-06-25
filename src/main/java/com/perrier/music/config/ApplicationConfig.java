@@ -8,7 +8,7 @@ import java.util.Map;
 public class ApplicationConfig implements IConfiguration {
 
 	@SuppressWarnings("rawtypes")
-	private Map properties;
+	private final Map properties;
 
 	public ApplicationConfig(@SuppressWarnings("rawtypes")
 	Map props) {
@@ -34,7 +34,6 @@ public class ApplicationConfig implements IConfiguration {
 		if (this.properties.containsKey(key)) {
 			Object p = this.properties.get(key);
 			if (List.class.isAssignableFrom(p.getClass())) {
-				// System.out.println("p.class = " + p.getClass());
 				return (List<?>) p;
 			}
 		}
@@ -45,7 +44,6 @@ public class ApplicationConfig implements IConfiguration {
 
 		if (this.properties.containsKey(key)) {
 			Object p = this.properties.get(key);
-			// System.out.println("p.class = " + p.getClass());
 			if (p.getClass().equals(type)) {
 				return type.cast(p);
 			}
@@ -71,20 +69,22 @@ public class ApplicationConfig implements IConfiguration {
 		return this.getRequiredForType(key, String.class);
 	}
 
+	@Override
 	public Boolean getOptionalBoolean(OptionalProperty<Boolean> op) {
-		return getOptionalBoolean(op.getKey(), op.getDefaultValue());
+		return this.getOptionalBoolean(op.getKey(), op.getDefaultValue());
 	}
 
 	private Boolean getOptionalBoolean(String key, Boolean keyDefault) {
-		return getOptionalForType(key, keyDefault, Boolean.class);
+		return this.getOptionalForType(key, keyDefault, Boolean.class);
 	}
 
 	private String getOptionalString(String key, String keyDefault) {
-		return getOptionalForType(key, keyDefault, String.class);
+		return this.getOptionalForType(key, keyDefault, String.class);
 	}
 
+	@Override
 	public Integer getOptionalInteger(OptionalProperty<Integer> op) {
-		return getOptionalInteger(op.getKey(), op.getDefaultValue());
+		return this.getOptionalInteger(op.getKey(), op.getDefaultValue());
 	}
 
 	private Integer getOptionalInteger(String key, Integer defaultValue) {
@@ -97,17 +97,17 @@ public class ApplicationConfig implements IConfiguration {
 
 	@Override
 	public String getOptionalString(OptionalProperty<String> op) {
-		return getOptionalString(op.getKey(), op.getDefaultValue());
+		return this.getOptionalString(op.getKey(), op.getDefaultValue());
 	}
 
 	@Override
 	public String getRequiredString(Property<String> p) throws ConfigException {
-		return getRequiredString(p.getKey());
+		return this.getRequiredString(p.getKey());
 	}
 
 	@Override
 	public Integer getRequiredInteger(Property<Integer> p) throws ConfigException {
-		return getRequiredInteger(p.getKey());
+		return this.getRequiredInteger(p.getKey());
 	}
 
 }
