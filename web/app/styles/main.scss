@@ -1,14 +1,9 @@
 /* main.css */
-
-/* TODO: Figure out what this stuff is for...
  
-$icon-font-path: "/bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";
-
-@import 'bootstrap-sass-official/vendor/assets/stylesheets/bootstrap';
-*/
+$icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";
 // bower:scss
+@import "../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap.scss";
 // endbower
-
 
 /*
  * Base structure

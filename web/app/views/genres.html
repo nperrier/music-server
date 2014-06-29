@@ -1,0 +1,23 @@
+<!-- artists.html -->
+<div class="jumbotron text-center">
+	
+	<h1>Genres</h1>
+
+	<div class="table-responsive">
+		<table class="table">
+			<thead>
+				<tr>
+					<th ng-click="sortOrder = 'name'; reverse = !reverse">Genre</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="g in genres | orderBy:sortOrder:reverse">
+					<td>
+						{{g.name}}
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+</div>

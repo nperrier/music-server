@@ -9,12 +9,19 @@
     <meta charset="utf-8">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
+    
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+    
+    <!-- build:css styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
+    <!-- endbower -->
+    <!-- endbuild -->
 
-	<!-- TODO: main.scss - compile first? -->
-	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
-	<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
-	<link rel="stylesheet" href="styles/main.scss" />
-    <link rel="stylesheet" href="scripts/components/audioPlayer/component.css" />
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+
 </head>
 
 <body ng-app="musicApp">
@@ -127,17 +134,18 @@
     <script src="scripts/controllers/albumDetail.js"></script>
     <script src="scripts/controllers/tracks.js"></script>
     <script src="scripts/controllers/trackDetail.js"></script>
+    <script src="scripts/controllers/genres.js"></script>
 
     <script src="scripts/services/artist.js"></script>
     <script src="scripts/services/album.js"></script>
     <script src="scripts/services/track.js"></script>
+    <script src="scripts/services/genre.js"></script>
     <script src="scripts/services/library.js"></script>
     <script src="scripts/services/artistAlbum.js"></script>
     <script src="scripts/services/albumTrack.js"></script>
     
     <script src="scripts/filters/duration.js"></script>
     <script src="scripts/components/audioPlayer/component.js"></script>
-
     <!-- endbuild -->
 
 </body>

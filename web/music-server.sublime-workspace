@@ -1,0 +1,522 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"Ar",
+				"ArtistAlbums"
+			],
+			[
+				"artist",
+				"artistId"
+			],
+			[
+				"fav",
+				"fav_tracks"
+			],
+			[
+				"client_",
+				"client_secret"
+			],
+			[
+				"Album",
+				"AlbumTracks"
+			],
+			[
+				"inlin",
+				"inline-block"
+			],
+			[
+				"nav",
+				"navbar"
+			],
+			[
+				"art",
+				"artistId"
+			],
+			[
+				"rou",
+				"routeParams"
+			],
+			[
+				"OR",
+				"ORG_PLAN"
+			],
+			[
+				"hello",
+				"helloRule"
+			],
+			[
+				"sever",
+				"severeInMinutes"
+			],
+			[
+				"ale",
+				"alertType"
+			],
+			[
+				"sys",
+				"systemAlerts"
+			],
+			[
+				"usage",
+				"_usage"
+			],
+			[
+				"K",
+				"KEYSTORE_INSTALLED"
+			],
+			[
+				"a",
+				"awk"
+			],
+			[
+				"last",
+				"last_storage_node_sync"
+			],
+			[
+				"check",
+				"check_space_ids"
+			],
+			[
+				"server",
+				"server_process_status"
+			],
+			[
+				"no",
+				"No"
+			],
+			[
+				"CP",
+				"CP_URL"
+			],
+			[
+				"che",
+				"check_space_ids"
+			],
+			[
+				"for",
+				"forin	for … in … done"
+			],
+			[
+				"f",
+				"fi"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 347.0,
+		"selected_items":
+		[
+			[
+				"pack",
+				"Package Control: Install Package"
+			],
+			[
+				"packag",
+				"Package Control: Add Repository"
+			],
+			[
+				"syn",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"markdo",
+				"Set Syntax: Markdown"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 146.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/nathan.perrier/git_repos/music-server/web/app/index.html",
+		"/Users/nathan.perrier/git_repos/music-server/web/app/scripts/services/artist.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/app/scripts/controllers/artists.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/app/scripts/app.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/app/views/library.html",
+		"/Users/nathan.perrier/git_repos/music-server/web/app/scripts/controllers/trackDetail.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/app/scripts/controllers/albums.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/app/scripts/services/album.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/app/scripts/controllers/albumDetail.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/test/spec/controllers/albumDetail.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/app/scripts/components/audioPlayer/component.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/app/scripts/services/albumTrack.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/app/scripts/services/track.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/app/scripts/controllers/artistDetail.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/app/views/setting.html",
+		"/Users/nathan.perrier/git_repos/music-server/web/app/scripts/services/artistAlbum.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/app/scripts/services/services.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/app/scripts/services/library.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/app/scripts/controllers/controllers.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/app/scripts/controllers/dashboard.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/app/scripts/controllers/library.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/test/spec/controllers/trackDetail.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/app/scripts/controllers/leftNav.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/test/spec/controllers/trackdetail.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/test/spec/controllers/tracks.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/test/spec/controllers/leftNav.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/app/scripts/controllers/tracks.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/app/scripts/components/audioPlayer/component.css",
+		"/Users/nathan.perrier/git_repos/music-server/web/app/scripts/components/audioPlayer/views/component.html",
+		"/Users/nathan.perrier/git_repos/music-server/web/app/scripts/controllers/albumdetail.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/test/spec/controllers/artists.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/package.json",
+		"/Users/nathan.perrier/git_repos/music-server/web/app/scripts/controllers/blah.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/app/views/artistDetail.html",
+		"/Users/nathan.perrier/git_repos/music-server/web/app/views/artists.html",
+		"/Users/nathan.perrier/git_repos/music-server/web/app/scripts/filters/duration.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/app/views/tracks.html",
+		"/Users/nathan.perrier/git_repos/music-server/web/bower.json",
+		"/Users/nathan.perrier/git_repos/music-server/web/index.html",
+		"/Users/nathan.perrier/git_repos/music-server/web/pages/setting.html",
+		"/Users/nathan.perrier/git_repos/music-server/web/pages/library.html",
+		"/Users/nathan.perrier/git_repos/music-server/web/pages/artists.html",
+		"/Users/nathan.perrier/git_repos/music-server/web/pages/albumDetail.html",
+		"/Users/nathan.perrier/git_repos/music-server/web/pages/albums.html",
+		"/Users/nathan.perrier/git_repos/music-server/web/pages/artistDetail.html",
+		"/Users/nathan.perrier/git_repos/music-server/web/js/controllers.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/pages/tracks.html",
+		"/Users/nathan.perrier/git_repos/music-server/web/css/main.css",
+		"/Users/nathan.perrier/git_repos/music-server/web/js/app.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/pages/trackDetail.html",
+		"/Users/nathan.perrier/git_repos/music-server/web/js/services.js",
+		"/Users/nathan.perrier/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/Users/nathan.perrier/ruby_scripts/private.rb",
+		"/Users/nathan.perrier/git_repos/music-server/web/js/artist.js",
+		"/Users/nathan.perrier/git_repos/music-server/src/main/java/com/perrier/music/entity/album/AlbumsFindAllByArtistIdQuery.java",
+		"/Users/nathan.perrier/git_repos/music-server/web/delete.json",
+		"/Users/nathan.perrier/ruby_scripts/sc_likes.rb",
+		"/Users/nathan.perrier/sc_likes.rb",
+		"/Users/nathan.perrier/Downloads/provider-tear-down-table-locks (1).txt",
+		"/Users/nathan.perrier/Downloads/provider-tear-down-table-locks.txt",
+		"/Users/nathan.perrier/git_repos/music-server/web2/app/scripts/controllers/main.js",
+		"/Users/nathan.perrier/git_repos/music-server/web2/app/views/main.html",
+		"/Users/nathan.perrier/git_repos/music-server/web2/app/index.html",
+		"/Users/nathan.perrier/git_repos/music-server/web2/app/scripts/app.js",
+		"/Users/nathan.perrier/Downloads/file.json",
+		"/Users/nathan.perrier/SharePlan 9.24.14 AM/Core Services/provider-tear-down-table-locks.txt",
+		"/Users/nathan.perrier/git_repos/music-server/web/pages/dashboard.html",
+		"/Users/nathan.perrier/git_repos/music-server/web/js/main.js",
+		"/Users/nathan.perrier/Desktop/geek-email.eml",
+		"/Users/nathan.perrier/Desktop/test-sp-alpha-email.html",
+		"/Users/nathan.perrier/Desktop/test-sp-invite.html",
+		"/Users/nathan.perrier/Downloads/86704.html",
+		"/Users/nathan.perrier/Downloads/75225.html",
+		"/Users/nathan.perrier/Downloads/75231.html",
+		"/Users/nathan.perrier/git_repos/music-server/web/vendor/bootstrap/css/bootstrap.css.map",
+		"/Users/nathan.perrier/git_repos/music-server/web/vendor/bootstrap-angular/ui-bootstrap-tpls-0.11.0.js",
+		"/Users/nathan.perrier/Desktop/tv-email.html",
+		"/Users/nathan.perrier/git_repos/android-homework/SDCardViewer/src/com/perrier/sdcardviewer/FileListFragment.java",
+		"/Users/nathan.perrier/git_repos/music-server/web/vendor/bootstrap/css/bootstrap.css",
+		"/Users/nathan.perrier/Dropbox/RASP-PI-FIRST-SETUP.sh",
+		"/Users/nathan.perrier/Desktop/server-black.log",
+		"/Users/nathan.perrier/git_repos/music-server/web/js/setting.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/pages/collection.html",
+		"/Users/nathan.perrier/git_repos/music-server/web/pages/main.html",
+		"/Users/nathan.perrier/git_repos/music-server/web/js/dashboard.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/js/collection.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/js/script.js",
+		"/Users/nathan.perrier/git_repos/music-server/web/content/dashboard.html",
+		"/Users/nathan.perrier/Library/Application Support/Sublime Text 2/Packages/Default/Default (OSX).sublime-keymap",
+		"/Users/nathan.perrier/Library/Application Support/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
+		"/Users/nathan.perrier/settings.sql",
+		"/Users/nathan.perrier/git_repos/music-server/build.gradle",
+		"/Users/nathan.perrier/SharePlan/El Jefe’s Team/provider-sync-tony-notes",
+		"/Users/nathan.perrier/git_repos/c42_protolib/protos/sps/authority/plan-notification.message",
+		"/Users/nathan.perrier/git_repos/c42_protolib/protos/shared/connect/handshake.structure",
+		"/Users/nathan.perrier/Downloads/PL5101Test.groovy",
+		"/Users/nathan.perrier/Downloads/newUser.sh",
+		"/Users/nathan.perrier/git_repos/c42_protolib/protos/legacy-crashplan/com.code42.peer.proto",
+		"/Users/nathan.perrier/git_repos/c42_protolib/protos/shared/connect/handshake.message",
+		"/Users/nathan.perrier/git_repos/d.diff",
+		"/Users/nathan.perrier/git_repos/c42_protolib/protos/legacy-crashplan/com.backup42.common.proto",
+		"/Users/nathan.perrier/git_repos/c42_protolib/protos/shared/authority.message",
+		"/Users/nathan.perrier/git_repos/c42_protolib/protos/sps/planevent.structure",
+		"/Users/nathan.perrier/git_repos/c42_protolib/protos/sps/authority/plan-notification.structure",
+		"/Users/nathan.perrier/git_repos/c42_protolib/protos/sps/authority/plan-administration.structure",
+		"/Users/nathan.perrier/git_repos/c42_protolib/protos/sps/authority/plan-administration.message",
+		"/Users/nathan.perrier/git_repos/c42_protolib/protos/shared/filetransfer.message",
+		"/Users/nathan.perrier/git_repos/c42_protolib/protos/sps/authority/plan-email-invite.message",
+		"/Users/nathan.perrier/git_repos/c42_protolib/protos/shared/common/util.structure",
+		"/Users/nathan.perrier/git_repos/c42_protolib/protos/shared/common/core.structure",
+		"/Users/nathan.perrier/git_repos/c42_protolib/protos/shared/protomover_options.proto",
+		"/Users/nathan.perrier/git_repos/c42_protolib/protos/shared/filetransfer.structure",
+		"/Users/nathan.perrier/git_repos/c42_protolib/protos/legacy-crashplan/com.code42.procore.entities.proto",
+		"/Users/nathan.perrier/git_repos/c42_protolib/protos/legacy-crashplan/com.code42.messaging.tests.proto",
+		"/Users/nathan.perrier/git_repos/c42_protolib/protos/legacy-crashplan/c42_protobuf.sublime-project",
+		"/Users/nathan.perrier/Library/Application Support/Sublime Text 2/Packages/Protocol Buffers/protobuf.tmLanguage",
+		"/Users/nathan.perrier/Library/Application Support/Sublime Text 2/Packages/Package Control/Package Control.sublime-settings",
+		"/Users/nathan.perrier/Downloads/gist5900971-92d21af7e630bffcb4db07e1ed19cac82129af1a/Protobuf.JSON-tmLanguage",
+		"/Users/nathan.perrier/Downloads/gist5900971-92d21af7e630bffcb4db07e1ed19cac82129af1a/Protobuf.tmLanguage",
+		"/Users/nathan.perrier/git_repos/c42_protolib/protos/legacy-crashplan/com.backup42.service.proto",
+		"/Users/nathan.perrier/Library/Application Support/Sublime Text 2/Packages/Default/org.json",
+		"/Users/nathan.perrier/git_repos/c42_crashplan_core/web/base/console/orgEditQuotas.js",
+		"/Users/nathan.perrier/git_repos/c42_crashplan_core/web/base/console/config.html",
+		"/Users/nathan.perrier/git_repos/c42_crashplan_core/web/shared/js/cp.config.js",
+		"/Users/nathan.perrier/git_repos/c42_crashplan_core/web/base/console/config.js",
+		"/Users/nathan.perrier/git_repos/c42_crashplan_core/web/base/console/configGeneral.html",
+		"/Users/nathan.perrier/git_repos/c42_crashplan_core/web/base/console/configGeneral.js",
+		"/Users/nathan.perrier/git_repos/c42_crashplan_core/web/base/console/planAddUserSheet.js"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"ng-controller",
+			"setting",
+			"delte",
+			"    <!--",
+			">\n",
+			"\">\n",
+			"foot",
+			"from",
+			"CoreTransportService",
+			"\nProvider Master",
+			"t_server",
+			",",
+			"t_server",
+			"call ",
+			"register for",
+			"  \n",
+			"			\n",
+			"										\n",
+			"<\n",
+			"Welcome",
+			"$",
+			"navbar-fixed-bottom",
+			"	\n",
+			"outlook",
+			"nav",
+			"(.*) = .*",
+			".*( = .*)",
+			".*$( = .*)",
+			".*( = .*)",
+			"artistId",
+			"routeParams",
+			"/>\n",
+			"coll",
+			"navbar",
+			", ",
+			"}\n",
+			"		\n",
+			"-->\n",
+			"+r\"",
+			"+r",
+			"keys",
+			"\\t",
+			"PlanDeviceAddedNotification",
+			"update",
+			"^\\s*",
+			"^ *",
+			"\"",
+			"PlanPeer\nPlanPeer",
+			"PlanPeerNetwork",
+			"backupSessionCount",
+			"session",
+			"1000",
+			"CPCVersionMessage2",
+			"Destination",
+			"T_FRIEND_COMPUTER_USAGE",
+			"T_FRIEND_COMPUTER_USAGE\n\n\n",
+			"\\n",
+			"depend",
+			"configGeneral",
+			"ui.",
+			"form",
+			"validat",
+			"validate",
+			"alertsSection",
+			"section",
+			"add",
+			"warn",
+			"minutesUntil",
+			"minutesUnti",
+			"warnInDays",
+			"minutes",
+			"warnIn",
+			"\nwarn",
+			"warnIn",
+			"warn",
+			"warnInDays",
+			"\nwarn",
+			"warnInDays",
+			"warn",
+			"severe",
+			"locale",
+			"nathan",
+			"nathan\nnathan",
+			", Role",
+			"Role\n",
+			", Role\n",
+			"}\n",
+			",",
+			"edi",
+			"userUI",
+			"UserFormUI",
+			"SubscriptionCancelHookUI",
+			"AUTH_REST_URL",
+			"authData",
+			"auth",
+			"populate",
+			"orderId",
+			"cp.order",
+			"cp.order\ncp\\.order",
+			"cp.order\ncp.order",
+			"Cancel",
+			"resend-keys",
+			"sysadmin",
+			",",
+			"cancelMaintenanceJob\ncancelMaintenanceJob",
+			"_acceptUpgrade",
+			"INSERT INTO PUBLIC.",
+			"PLAN_COMPUTER_USAGE",
+			"103",
+			"T_COMPUTER",
+			"0af56e919a3665cf",
+			"t_plan",
+			"infoMap",
+			"unsubscribe",
+			"_notifyOfChanges",
+			"updateUiBlock",
+			"\n_callbacks",
+			"callbacks",
+			"_callbacks",
+			"_alert",
+			"systemAlert",
+			"Pill",
+			"pill",
+			"open_files_in_new_window",
+			",",
+			"newline",
+			",",
+			"//="
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": true,
+		"replace_history":
+		[
+			"\\n",
+			"",
+			"$1",
+			"\\1",
+			"$1",
+			"\\n",
+			"  ",
+			" ",
+			"",
+			" , ",
+			" ",
+			",",
+			"\\n",
+			",\\nRole",
+			"\\n",
+			"1	565559824424250484	3	19	565550111573814388	10	73	null	FALSE	3	1	2014-01-10 14:16:56.945	1	794	0	0	606	145877	0	2013-01-10 13:52:15.998	2013-01-10 13:52:15.998	2013-01-10 13:52:46.645	2013-01-10 13:52:06.016	null	null	null	null	null	null	null	null	null	0	1	1	1,1357848435997,1357847535998,1357847535998,f,1,794,0,0,0,f,0,0,-1	2013-01-10 13:52:04.486	2013-01-10 14:17:27.215",
+			"\\n"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 38.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 242.0,
+	"status_bar_visible": true
+}
