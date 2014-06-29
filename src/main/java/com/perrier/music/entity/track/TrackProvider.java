@@ -9,7 +9,7 @@ import com.perrier.music.db.IDatabase;
 
 public class TrackProvider {
 
-	private IDatabase db;
+	private final IDatabase db;
 
 	@Inject
 	public TrackProvider(IDatabase db) {
