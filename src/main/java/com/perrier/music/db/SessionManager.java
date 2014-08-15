@@ -50,7 +50,7 @@ public class SessionManager {
 	 * @return
 	 */
 	public ThreadSession getExistingThreadSession() {
-		return (ThreadSession) this.threadObject.get();
+		return this.threadObject.get();
 	}
 
 	/**
@@ -83,6 +83,7 @@ public class SessionManager {
 				try {
 					// manually send a rollback before handing back the connection
 					session.doWork(new Work() {
+
 						@Override
 						public void execute(Connection connection) throws SQLException {
 							Statement st = connection.createStatement();

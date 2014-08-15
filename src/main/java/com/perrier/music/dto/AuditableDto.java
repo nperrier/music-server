@@ -8,7 +8,7 @@ public abstract class AuditableDto {
 	private Date modificationDate;
 
 	public Date getCreationDate() {
-		return creationDate;
+		return this.creationDate;
 	}
 
 	public void setCreationDate(Date creationDate) {
@@ -16,11 +16,10 @@ public abstract class AuditableDto {
 	}
 
 	public Date getModificationDate() {
-		return modificationDate;
+		return this.modificationDate;
 	}
 
 	public void setModificationDate(Date modificationDate) {
 		this.modificationDate = modificationDate;
 	}
-
 }

@@ -73,7 +73,7 @@ public class Track extends AbstractAuditableEntity {
 
 	@Column(nullable = true)
 	public Integer getNumber() {
-		return number;
+		return this.number;
 	}
 
 	public void setNumber(Integer number) {
@@ -83,7 +83,7 @@ public class Track extends AbstractAuditableEntity {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = true)
 	public Date getYear() {
-		return year;
+		return this.year;
 	}
 
 	public void setYear(Date year) {
@@ -93,10 +93,10 @@ public class Track extends AbstractAuditableEntity {
 	public void setArtist(Artist artist) {
 		this.artist = artist;
 	}
-	
+
 	@Column(nullable = false)
 	public Long getLength() {
-		return length;
+		return this.length;
 	}
 
 	public void setLength(Long length) {
@@ -112,7 +112,7 @@ public class Track extends AbstractAuditableEntity {
 	@ManyToOne
 	@JoinColumn(name = "album_id", nullable = false, insertable = true, updatable = true)
 	public Album getAlbum() {
-		return album;
+		return this.album;
 	}
 
 	public void setAlbum(Album album) {
@@ -122,7 +122,7 @@ public class Track extends AbstractAuditableEntity {
 	@ManyToOne
 	@JoinColumn(name = "library_id", nullable = false, insertable = true, updatable = true)
 	public Library getLibrary() {
-		return library;
+		return this.library;
 	}
 
 	public void setLibrary(Library library) {
@@ -132,7 +132,7 @@ public class Track extends AbstractAuditableEntity {
 	@ManyToOne
 	@JoinColumn(name = "genre_id", insertable = true, updatable = true)
 	public Genre getGenre() {
-		return genre;
+		return this.genre;
 	}
 
 	public void setGenre(Genre genre) {
@@ -142,7 +142,7 @@ public class Track extends AbstractAuditableEntity {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "file_modification_date", nullable = false)
 	public Date getFileModificationDate() {
-		return fileModificationDate;
+		return this.fileModificationDate;
 	}
 
 	public void setFileModificationDate(Date fileModificationDate) {
@@ -151,10 +151,19 @@ public class Track extends AbstractAuditableEntity {
 
 	@Column(name = "cover_art", nullable = true, length = 255)
 	public String getCoverArt() {
-		return coverArt;
+		return this.coverArt;
 	}
 
 	public void setCoverArt(String coverArt) {
 		this.coverArt = coverArt;
 	}
+
+	@Override
+	public String toString() {
+		return "Track [id=" + this.id + ", name=" + this.name + ", number=" + this.number + ", path=" + this.path
+				+ ", year=" + this.year + ", length=" + this.length + ", artist=" + this.artist + ", album=" + this.album
+				+ ", genre=" + this.genre + ", library=" + this.library + ", coverArt=" + this.coverArt
+				+ ", fileModificationDate=" + this.fileModificationDate + "]";
+	}
+
 }

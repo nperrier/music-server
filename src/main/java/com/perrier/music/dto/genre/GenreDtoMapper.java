@@ -11,6 +11,7 @@ public class GenreDtoMapper {
 
 		GenreDto dto = new GenreDto();
 		dto.setName(genre.getName());
+		dto.setId(genre.getId());
 		dto.setCreationDate(genre.getCreationDate());
 		dto.setModificationDate(genre.getModificationDate());
 

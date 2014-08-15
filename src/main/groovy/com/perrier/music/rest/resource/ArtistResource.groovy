@@ -41,7 +41,6 @@ class ArtistResource extends RestResource {
 
 	@GET
 	@Path("{id}")
-	@Produces(MediaType.APPLICATION_JSON)
 	def ArtistDto get(@PathParam("id") Long id) {
 
 		Artist artist = this.artistProvider.findById(id)
@@ -54,7 +53,6 @@ class ArtistResource extends RestResource {
 	}
 
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
 	def Collection<ArtistDto> getAll() {
 
 		List<Artist> artists = this.artistProvider.findAll()
@@ -64,7 +62,6 @@ class ArtistResource extends RestResource {
 
 	@GET
 	@Path("{id}/tracks")
-	@Produces(MediaType.APPLICATION_JSON)
 	def List<TrackDto> getTracks(@PathParam("id") Long id) {
 
 		List<Track> tracks = this.trackProvider.findAllByArtistId(id)
@@ -74,7 +71,6 @@ class ArtistResource extends RestResource {
 
 	@GET
 	@Path("{id}/albums")
-	@Produces(MediaType.APPLICATION_JSON)
 	def List<AlbumDto> getAlbums(@PathParam("id") Long id) {
 
 		List<Album> albums = this.albumProvider.findAllByArtistId(id)
