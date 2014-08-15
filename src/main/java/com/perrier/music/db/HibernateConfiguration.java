@@ -20,6 +20,8 @@ import com.perrier.music.entity.album.Album;
 import com.perrier.music.entity.artist.Artist;
 import com.perrier.music.entity.genre.Genre;
 import com.perrier.music.entity.library.Library;
+import com.perrier.music.entity.playlist.Playlist;
+import com.perrier.music.entity.playlist.PlaylistTrack;
 import com.perrier.music.entity.track.Track;
 
 public class HibernateConfiguration implements IDBConfiguration {
@@ -36,6 +38,7 @@ public class HibernateConfiguration implements IDBConfiguration {
 		this.config = config;
 	}
 
+	@Override
 	public SessionFactory create() throws DBException {
 
 		Configuration hibernateConfig = new Configuration();
@@ -47,8 +50,9 @@ public class HibernateConfiguration implements IDBConfiguration {
 				Genre.class, //
 				Album.class, //
 				Track.class, //
-				Library.class //
-				);
+				Library.class, //
+				Playlist.class, //
+				PlaylistTrack.class);
 
 		for (Class<?> entity : entities) {
 			hibernateConfig.addAnnotatedClass(entity);
@@ -69,12 +73,12 @@ public class HibernateConfiguration implements IDBConfiguration {
 
 		hibernateConfig.setProperty(Environment.DRIVER, Driver.class.getName());
 		hibernateConfig.setProperty(Environment.DIALECT, H2Dialect.class.getName());
-		hibernateConfig.setProperty(Environment.URL, config.getRequiredString(URL));
-		hibernateConfig.setProperty(Environment.USER, config.getRequiredString(USERNAME));
-		hibernateConfig.setProperty(Environment.PASS, config.getRequiredString(PASSWORD));
+		hibernateConfig.setProperty(Environment.URL, this.config.getRequiredString(URL));
+		hibernateConfig.setProperty(Environment.USER, this.config.getRequiredString(USERNAME));
+		hibernateConfig.setProperty(Environment.PASS, this.config.getRequiredString(PASSWORD));
 
 		hibernateConfig.setProperty(Environment.AUTOCOMMIT, "true");
-		hibernateConfig.setProperty(Environment.SHOW_SQL, config.getOptionalBoolean(SHOW_SQL).toString());
+		hibernateConfig.setProperty(Environment.SHOW_SQL, this.config.getOptionalBoolean(SHOW_SQL).toString());
 
 		// second-level cache
 		// hibernateConfig.setProperty(Environment.USE_SECOND_LEVEL_CACHE, "true");

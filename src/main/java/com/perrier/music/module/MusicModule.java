@@ -15,6 +15,7 @@ import com.perrier.music.entity.album.AlbumProvider;
 import com.perrier.music.entity.artist.ArtistProvider;
 import com.perrier.music.entity.genre.GenreProvider;
 import com.perrier.music.entity.library.LibraryProvider;
+import com.perrier.music.entity.playlist.PlaylistProvider;
 import com.perrier.music.entity.track.TrackProvider;
 import com.perrier.music.indexer.ILibraryIndexerService;
 import com.perrier.music.indexer.ILibraryIndexerTaskFactory;
@@ -45,6 +46,7 @@ public class MusicModule implements Module {
 		binder.bind(TrackProvider.class);
 		binder.bind(LibraryProvider.class);
 		binder.bind(GenreProvider.class);
+		binder.bind(PlaylistProvider.class);
 
 	}
 }
