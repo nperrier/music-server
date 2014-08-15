@@ -8,7 +8,7 @@
  * Controller of the musicApp
  */
 angular.module('musicApp')
-  .controller('LibraryCtrl', ['$scope', '$log', '$routeParams', 'Library', 'LibraryScan', function($scope, $log, $routeParams, Library, LibraryScan) {
+  .controller('LibraryCtrl', ['$scope', '$log', '$routeParams', 'Library', function($scope, $log, $routeParams, Library) {
 
 	$scope.libraries = Library.query();
 	$scope.sortField = 'path';
@@ -22,7 +22,6 @@ angular.module('musicApp')
 		$log.info('Requesting scan for library: ' + library);
 
     Library.scan({ libraryId: library.id });
-		//LibraryScan.scan({ libraryId: library.id });
 	};
 
 }]);
