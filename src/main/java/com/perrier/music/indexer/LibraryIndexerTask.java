@@ -36,6 +36,8 @@ public class LibraryIndexerTask implements Callable<Void> {
 	private TrackProvider trackProvider;
 	private IDatabase db;
 
+	private volatile boolean cancelScan = false;
+
 	private static class MusicFileFilter implements FileFilter {
 
 		@Override
@@ -106,6 +108,10 @@ public class LibraryIndexerTask implements Callable<Void> {
 
 	private void scan(File dir, Map<String, Track> pathToTrack) {
 
+		if (this.cancelScan) {
+			return;
+		}
+
 		// First, search for all files in dir:
 		//
 		// * If it has been indexed before (exists) AND its file modification date has not changed (not sure what field to
@@ -118,6 +124,14 @@ public class LibraryIndexerTask implements Callable<Void> {
 		// NOTE: Don't actually delete the columns! - the tracks may have been relocated
 		// Let the User manage cleaning up missing Tracks
 		for (File file : dir.listFiles(LibraryIndexerTask.songFileFilter)) {
+
+			// check that we're not being told to stop - called from Executor.shutdownNow()
+			if (Thread.currentThread().isInterrupted()) {
+				log.debug("Stopping scan: thread was interrupted");
+				this.cancelScan = true;
+				return;
+			}
+
 			if (file.isDirectory()) {
 				this.scan(file, pathToTrack);
 			} else {
@@ -126,8 +140,7 @@ public class LibraryIndexerTask implements Callable<Void> {
 				// if path is relative or absolute
 				// symbolic links
 				// collection root path
-				// canonical is supposed to resolve sym links...this is what
-				// should be stored in db
+				// canonical path (resolves sym links)...leave sym links alone?
 				try {
 					this.index(file, pathToTrack);
 				} catch (Exception e) {
