@@ -87,6 +87,9 @@
     		<li ng-class="{ active: isActive('/genres')}">
     			<a href="#genres">Genres</a>
     		</li>
+            <li ng-class="{ active: isActive('/playlists')}">
+                <a href="#playlists">Playlists</a>
+            </li>
     	</ul>
     </div>
     <!-- /sidebar -->
@@ -135,6 +138,7 @@
     <script src="scripts/controllers/tracks.js"></script>
     <script src="scripts/controllers/trackDetail.js"></script>
     <script src="scripts/controllers/genres.js"></script>
+    <script src="scripts/controllers/playlists.js"></script>
 
     <script src="scripts/services/artist.js"></script>
     <script src="scripts/services/album.js"></script>
@@ -144,7 +148,8 @@
     <script src="scripts/services/libraryScan.js"></script>
     <script src="scripts/services/artistAlbum.js"></script>
     <script src="scripts/services/albumTrack.js"></script>
-    
+    <script src="scripts/services/playlist.js"></script>
+
     <script src="scripts/filters/duration.js"></script>
     <script src="scripts/components/audioPlayer/component.js"></script>
     <!-- endbuild -->

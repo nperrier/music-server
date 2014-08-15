@@ -1,0 +1,32 @@
+<!-- playlists.html -->
+<div class="jumbotron text-center">
+
+	<h2>Libraries</h2>
+
+	<div class="table-responsive">
+		<table class="table">
+			<thead>
+				<tr>
+					<th ng-click="sortOrder = 'name'; reverse = !reverse">Playlist</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="p in playlists | orderBy:sortOrder:reverse">
+					<td>
+						{{p.name}}
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<form ng-submit="createPlaylist(playlist)">
+
+		<legend>Create Playlist</legend>
+
+		<label>Name</label>
+		<input ng-model="playlist.name" id="name" name="name" type="text" size="50">
+
+	</form>
+
+</div>
