@@ -9,10 +9,8 @@
  * # duration: input: 270000, output: '04:30'
  * Filter in the musicAppFilters.
  */
-var musicAppFilters = angular.module('musicAppFilters', []);
-
-// duration filter
-musicAppFilters.filter('duration', function () {
+angular.module('musicAppFilters', [])
+  .filter('duration', function () {
 
     return function (durationInMillis) {
 
