@@ -9,7 +9,6 @@ import org.hibernate.cfg.Environment;
 import org.hibernate.dialect.H2Dialect;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
-import org.hibernate.service.jdbc.connections.internal.C3P0ConnectionProvider;
 
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
@@ -86,7 +85,7 @@ public class HibernateConfiguration implements IDBConfiguration {
 		// hibernateConfig.setProperty(Environment.USE_QUERY_CACHE, "true");
 
 		// connection pool
-		hibernateConfig.setProperty(Environment.CONNECTION_PROVIDER, C3P0ConnectionProvider.class.getName());
+		// hibernateConfig.setProperty(Environment.CONNECTION_PROVIDER, C3P0ConnectionProvider.class.getName());
 		hibernateConfig.setProperty(Environment.C3P0_MIN_SIZE, "5");
 		hibernateConfig.setProperty(Environment.C3P0_MAX_SIZE, "20");
 		hibernateConfig.setProperty(Environment.C3P0_TIMEOUT, "1800"); // 5 min
