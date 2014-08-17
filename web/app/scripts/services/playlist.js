@@ -27,6 +27,11 @@ angular.module('musicApp')
         method: 'GET',
         isArray: true,
         params: { playlistId: '@playlistId' }
+      },
+      addTracks: {
+        url: 'api/playlist/:playlistId/tracks',
+        method: 'POST',
+        params: { tracks: '@tracks' }
       }
     });
   }]);
