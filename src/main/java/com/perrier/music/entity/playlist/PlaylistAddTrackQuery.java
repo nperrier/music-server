@@ -39,12 +39,11 @@ public class PlaylistAddTrackQuery extends CreateQuery<List<PlaylistTrack>> {
 
 			// TODO: this class is doing much more than querying, so it should probably be up a layer higher
 			if (pos > playlistTracks.size() || pos < 0) {
-				// TODO Change this to a different exception
+				throw new DBException("Invalid position: " + pos);
 			}
 
 			for (final Track track : this.tracks) {
 				PlaylistTrack playlistTrack = new PlaylistTrack();
-				playlistTrack.setId(new PlaylistTrack.Id(this.playlist.getId(), track.getId()));
 				playlistTrack.setPlaylist(this.playlist);
 				playlistTrack.setTrack(track);
 				playlistTracks.add(pos, playlistTrack);
