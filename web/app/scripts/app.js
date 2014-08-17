@@ -67,6 +67,11 @@ musicApp.config(['$routeProvider', function($routeProvider) {
 		controller: 'PlaylistsCtrl'
 	})
 
+	.when('/playlist/:playlistId', {
+		templateUrl: 'views/playlistDetail.html',
+		controller: 'PlaylistDetailCtrl'
+	})
+
 	.otherwise({
 		redirectTo: '/dashboard'
 	});

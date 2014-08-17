@@ -21,6 +21,12 @@ angular.module('musicApp')
       save: {
         method: 'POST',
         params: { name: '@name' }
+      },
+      getTracks: {
+        url: 'api/playlist/:playlistId/tracks',
+        method: 'GET',
+        isArray: true,
+        params: { playlistId: '@playlistId' }
       }
     });
   }]);

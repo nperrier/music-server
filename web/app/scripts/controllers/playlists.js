@@ -10,11 +10,10 @@
 angular.module('musicApp')
   .controller('PlaylistsCtrl', ['$scope', 'Playlist', function ($scope, Playlist) {
 
-	$scope.playlists = Playlist.query();
-	$scope.sortField = 'name';
+    $scope.playlists = Playlist.query();
+    $scope.sortField = 'name';
 
-	$scope.createPlaylist = function(playlist) {
-
-		Playlist.save(playlist);
-	};
-}]);
+	  $scope.createPlaylist = function(playlist) {
+		  Playlist.save(playlist);
+	  };
+  }]);

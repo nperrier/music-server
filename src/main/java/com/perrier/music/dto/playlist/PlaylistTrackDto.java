@@ -6,7 +6,7 @@ public class PlaylistTrackDto {
 
 	private Integer position;
 	private Long playlistId;
-	private TrackDto trackDto;
+	private TrackDto track;
 
 	public Integer getPosition() {
 		return this.position;
@@ -24,12 +24,12 @@ public class PlaylistTrackDto {
 		this.playlistId = playlistId;
 	}
 
-	public TrackDto getTrackDto() {
-		return this.trackDto;
+	public TrackDto getTrack() {
+		return this.track;
 	}
 
-	public void setTrackDto(TrackDto trackDto) {
-		this.trackDto = trackDto;
+	public void setTrack(TrackDto trackDto) {
+		this.track = trackDto;
 	}
 
 }

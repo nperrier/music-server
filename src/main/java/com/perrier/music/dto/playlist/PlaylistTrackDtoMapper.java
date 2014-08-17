@@ -26,7 +26,7 @@ public class PlaylistTrackDtoMapper {
 		PlaylistTrackDto dto = new PlaylistTrackDto();
 		dto.setPosition(playlistTrack.getPosition());
 		dto.setPlaylistId(playlistTrack.getPlaylist().getId());
-		dto.setTrackDto(TrackDtoMapper.build(playlistTrack.getTrack()));
+		dto.setTrack(TrackDtoMapper.build(playlistTrack.getTrack()));
 
 		return dto;
 	}

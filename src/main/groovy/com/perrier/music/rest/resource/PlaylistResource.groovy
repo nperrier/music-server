@@ -32,9 +32,33 @@ class PlaylistResource extends RestResource {
 
 		return PlaylistDtoMapper.build(playlists)
 	}
-
+	
 	@GET
-	@Path("{id : \\d+}/tracks")
+	@Path("{id}")
+	public PlaylistDto get(@PathParam("id") Long id) {
+
+		Playlist playlist = this.playlistProvider.findById(id, false /* no tracks */)
+
+		if (!playlist) {
+			throw new EntityNotFoundException("Playlist not found, id: " + id)
+		}
+
+		def output = PlaylistDtoMapper.build(playlist)
+		return output
+	}
+	
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response createPlaylist(Playlist playlist) {
+
+		this.playlistProvider.create(playlist)
+
+		def playlistDto = PlaylistDtoMapper.build(playlist)
+		return Response.status(Response.Status.CREATED).entity(playlistDto).build()
+	}
+	
+	@GET
+	@Path("{id}/tracks")
 	public Collection<PlaylistTrackDto> getTracks(@PathParam("id") Long id) {
 
 		Playlist playlist = this.playlistProvider.findById(id, true /* include tracks */)
@@ -47,22 +71,8 @@ class PlaylistResource extends RestResource {
 		return output
 	}
 
-	@GET
-	@Path("{id : \\d+}")
-	public PlaylistDto get(@PathParam("id") Long id) {
-
-		Playlist playlist = this.playlistProvider.findById(id, false /* no tracks */)
-
-		if (!playlist) {
-			throw new EntityNotFoundException("Playlist not found, id: " + id)
-		}
-
-		def output = PlaylistDtoMapper.build(playlist)
-		return output
-	}
-
 	@POST
-	@Path("{id : \\d+}/tracks")
+	@Path("{id}/tracks")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addTracks(@PathParam("id") Long id, @QueryParam("position") Integer position, List<Long> playlistTrackIds) {
 		// TODO: Wrap all this logic in a separate class that throws exceptions that the API translates to Response codes
@@ -78,13 +88,4 @@ class PlaylistResource extends RestResource {
 		return Response.status(Response.Status.CREATED).build()
 	}
 
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response createPlaylist(Playlist playlist) {
-
-		this.playlistProvider.create(playlist)
-
-		def playlistDto = PlaylistDtoMapper.build(playlist)
-		return Response.status(Response.Status.CREATED).entity(playlistDto).build()
-	}
 }
