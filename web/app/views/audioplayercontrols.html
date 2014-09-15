@@ -1,0 +1,34 @@
+<!-- BEGIN: audio-player-controls -->
+<div class="ap-widget">
+    <label>volume: <input min="0" max="1" step="0.01" type="range" ng-model="audio.volume" /></label>
+</div>
+
+<div class="ap-widget">
+
+    <button ng-disabled="!hasPrevious()" class="btn btn-default prev" ng-click="previous()">
+        <span class="glyphicon glyphicon-step-backward"></span>
+    </button>
+
+    <button class="btn btn-default playpause" ng-click="playOrPause()" ng-class="{paused:audio.paused}" ng-disabled="!audio.src">
+        <span class="play-text glyphicon glyphicon-play"></span>
+        <span class="pause-text glyphicon glyphicon-pause"></span>
+    </button>
+
+    <button ng-disabled="!hasNext()" class="btn btn-default next" ng-click="next()">
+        <span class="glyphicon glyphicon-step-forward"></span>
+    </button>
+
+</div>
+
+<div class="ap-widget time">
+    <label>time: {{getDuration()}}
+        <input min="0" max="{{getDuration()}}" step="0.01" type="range" ng-model="currentPercentage" />
+    </label>
+</div>
+
+<div class="ap-widget now-playing" ng-show="currentTrack">
+    <b>Now Playing:</b>
+    <img class="coverart-thumb" ng-src="{{currentTrack.coverArtUrl}}" />
+    {{currentTrack.artist.name}} - {{currentTrack.name}}
+</div>
+<!-- END: audio-player-controls -->

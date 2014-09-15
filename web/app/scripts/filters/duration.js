@@ -7,9 +7,9 @@
  * @function
  * @description
  * # duration: input: 270000, output: '04:30'
- * Filter in the musicAppFilters.
+ * Filter in the musicApp.
  */
-angular.module('musicAppFilters', [])
+angular.module('musicApp')
   .filter('duration', function () {
 
     return function (durationInMillis) {

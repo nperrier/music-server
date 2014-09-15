@@ -10,7 +10,7 @@ h2 {
 	url = 'jdbc:h2:file:dev/db/music'
 	username = 'SA'
 	password = ''
-	showSql = false
+	showSql = true
 }
 
 server {

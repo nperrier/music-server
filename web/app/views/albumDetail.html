@@ -1,4 +1,5 @@
-<!-- albumDetail.html -->
+<!-- albumdetail.html -->
+
 <div class="jumbotron text-center">
 
 	<img class="coverart-medium" ng-src="{{album.coverArtUrl}}"/>
@@ -11,6 +12,9 @@
 				<tr>
 					<th ng-click="sortOrder = 'number'; reverse = !reverse">#</th>
 					<th ng-click="sortOrder = 'name'; reverse = !reverse">Title</th>
+          <th ng-click="sortOrder = 'length'; reverse = !reverse">
+            <span class="glyphicon glyphicon-time"></span>
+          </th>
 				</tr>
 			</thead>
 			<tbody>
@@ -19,10 +23,14 @@
 						{{t.number}}
 					</td>
 					<td>
-						<a ng-href="#/track/{{t.id}}" class="thumb">
-							{{t.name}}
-						</a>
-					</td>
+            <a ng-href="#/track/{{t.id}}" class="thumb">
+              {{t.name}}
+            </a>
+            <track-action-menu track="t"></track-action-menu>
+          </td>
+          <td>
+            {{t.length | duration}}
+          </td>
 				</tr>
 			</tbody>
 		</table>

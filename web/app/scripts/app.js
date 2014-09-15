@@ -5,9 +5,7 @@
 var musicApp = angular.module('musicApp', [
 	'ui.bootstrap',
 	'ngRoute',
-	'ngResource',
-	'musicAppFilters',
-	'audioPlayer-directive'
+	'ngResource'
 ]);
 
 musicApp.config(['$routeProvider', function($routeProvider) {
@@ -33,7 +31,7 @@ musicApp.config(['$routeProvider', function($routeProvider) {
 	})
 
 	.when('/artist/:artistId', {
-		templateUrl: 'views/artistDetail.html',
+		templateUrl: 'views/artistdetail.html',
 		controller: 'ArtistDetailCtrl'
 	})
 
@@ -43,7 +41,7 @@ musicApp.config(['$routeProvider', function($routeProvider) {
 	})
 
 	.when('/album/:albumId', {
-		templateUrl: 'views/albumDetail.html',
+		templateUrl: 'views/albumdetail.html',
 		controller: 'AlbumDetailCtrl'
 	})
 
@@ -53,7 +51,7 @@ musicApp.config(['$routeProvider', function($routeProvider) {
 	})
 
 	.when('/track/:trackId', {
-		templateUrl: 'views/trackDetail.html',
+		templateUrl: 'views/trackdetail.html',
 		controller: 'TrackDetailCtrl'
 	})
 
@@ -68,8 +66,13 @@ musicApp.config(['$routeProvider', function($routeProvider) {
 	})
 
 	.when('/playlist/:playlistId', {
-		templateUrl: 'views/playlistDetail.html',
+		templateUrl: 'views/playlistdetail.html',
 		controller: 'PlaylistDetailCtrl'
+	})
+
+  .when('/queue', {
+		templateUrl: 'views/queue.html',
+		controller: 'QueueCtrl'
 	})
 
 	.otherwise({

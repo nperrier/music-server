@@ -4,14 +4,14 @@
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
- 
+
 <head>
     <meta charset="utf-8">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-    
+
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    
+
     <!-- build:css styles/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
@@ -21,6 +21,8 @@
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
+
+    <link rel="stylesheet" href="styles/audioplayercontrols.css">
 
 </head>
 
@@ -38,25 +40,14 @@
     				<span class="sr-only">Toggle navigation</span>
     				<span class="icon-bar"></span>
     			</button>
-    			<a class="navbar-brand" href="#">ICON</a>
+    			<a class="navbar-brand glyphicon glyphicon-headphones" href="#"></a>
     		</div>
 
     		<!-- Collect the nav links, forms, and other content for toggling -->
     		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
     			<ul class="nav navbar-nav">
-    				<li class="active">
-    					<a href="#music"><i class="fa fa-music"></i> Music</a>
-    				</li>
     				<li>
     					<a href="#library"><i class="fa fa-gear"></i> Libraries</a>
-    				</li>
-    				<li class="dropdown">
-    					<a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-    					<ul class="dropdown-menu">
-    						<li><a href="#">Action</a></li>
-    						<li class="divider"></li>
-    						<li><a href="#">Separated link</a></li>
-    					</ul>
     				</li>
     			</ul>
 
@@ -90,6 +81,9 @@
             <li ng-class="{ active: isActive('/playlists')}">
                 <a href="#playlists">Playlists</a>
             </li>
+            <li ng-class="{ active: isActive('/queue')}">
+                <a href="#queue">Queue</a>
+            </li>
     	</ul>
     </div>
     <!-- /sidebar -->
@@ -103,10 +97,7 @@
     <footer id="footer" class="navbar-fixed-bottom">
     	<div class="container-fluid">
     		<div id="player-controls">
-    			<button class="player-button glyphicon glyphicon-step-backward" />
-    			<button class="player-button glyphicon glyphicon-play" />
-    			<!--<button class="player-button glyphicon glyphicon-pause" />-->
-    			<button class="player-button glyphicon glyphicon-step-forward" />
+                <audio-player-controls />
     		</div>
     	</div>
     </footer>
@@ -127,31 +118,35 @@
 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="scripts/app.js"></script>
-    
+
     <script src="scripts/controllers/dashboard.js"></script>
-    <script src="scripts/controllers/leftNav.js"></script>
+    <script src="scripts/controllers/leftnav.js"></script>
     <script src="scripts/controllers/library.js"></script>
     <script src="scripts/controllers/artists.js"></script>
-    <script src="scripts/controllers/artistDetail.js"></script>
+    <script src="scripts/controllers/artistdetail.js"></script>
     <script src="scripts/controllers/albums.js"></script>
-    <script src="scripts/controllers/albumDetail.js"></script>
+    <script src="scripts/controllers/albumdetail.js"></script>
     <script src="scripts/controllers/tracks.js"></script>
-    <script src="scripts/controllers/trackDetail.js"></script>
+    <script src="scripts/controllers/trackdetail.js"></script>
     <script src="scripts/controllers/genres.js"></script>
     <script src="scripts/controllers/playlists.js"></script>
-    <script src="scripts/controllers/playlistDetail.js"></script>
+    <script src="scripts/controllers/playlistdetail.js"></script>
+    <script src="scripts/controllers/queue.js"></script>
 
     <script src="scripts/services/artist.js"></script>
     <script src="scripts/services/album.js"></script>
     <script src="scripts/services/track.js"></script>
     <script src="scripts/services/genre.js"></script>
     <script src="scripts/services/library.js"></script>
-    <script src="scripts/services/artistAlbum.js"></script>
-    <script src="scripts/services/albumTrack.js"></script>
+    <script src="scripts/services/artistalbum.js"></script>
+    <script src="scripts/services/albumtrack.js"></script>
     <script src="scripts/services/playlist.js"></script>
+    <script src="scripts/services/playerqueue.js"></script>
 
     <script src="scripts/filters/duration.js"></script>
-    <script src="scripts/components/audioPlayer/component.js"></script>
+
+    <script src="scripts/directives/audioplayercontrols.js"></script>
+    <script src="scripts/directives/trackactionmenu.js"></script>
     <!-- endbuild -->
 
 </body>

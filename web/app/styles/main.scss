@@ -1,5 +1,5 @@
 /* main.css */
- 
+
 $icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/fonts/bootstrap/";
 // bower:scss
 @import "../bower_components/bootstrap-sass-official/vendor/assets/stylesheets/bootstrap.scss";
@@ -115,13 +115,15 @@ td {
   bottom: 0;
   width: 100%;
   height: 60px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   background-color: #e5e5e5;
 }
 
 #player-controls {
-  width: 156px; /* 3x .player-button width */
-  margin: 0 auto; /* align the controls in the center */
-  line-height: 75px; /* center vertically */
+  /* width: 156px; */ /* 3x .player-button width */
+  /* margin: 0 auto; */ /* align the controls in the center */
+  /* line-height: 75px; */ /* center vertically */
 }
 
 .player-button {
@@ -143,4 +145,8 @@ td {
 .coverart-thumb {
   width: 40px;
   /* height: 40px; svg crops the width if aspect ratio is different */
+}
+
+.track-menu {
+  float: right;
 }
