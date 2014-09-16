@@ -8,7 +8,8 @@
  * Controller of the musicApp
  */
 angular.module('musicApp')
-  .controller('AlbumDetailCtrl', ['$scope', '$routeParams', 'Album', 'AlbumTrack', function($scope, $routeParams, Album, AlbumTrack) {
+  .controller('AlbumDetailCtrl', ['$scope', '$routeParams', 'Album', 'AlbumTrack',
+    function($scope, $routeParams, Album, AlbumTrack) {
 
 	Album.get({ albumId: $routeParams.albumId }, function(album) {
 		$scope.album = album;
