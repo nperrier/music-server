@@ -1,7 +1,7 @@
 
 package com.perrier.music.rest.resource
 
-import java.io.IOException;
+import java.io.IOException
 
 import javax.ws.rs.GET
 import javax.ws.rs.Path

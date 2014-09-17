@@ -1,10 +1,13 @@
 
 package com.perrier.music.rest.resource
 
-import java.util.Collection;
+import java.io.IOException
+import java.io.OutputStream
+import java.util.Collection
 
 import javax.ws.rs.WebApplicationException
 import javax.ws.rs.core.Response
+import javax.ws.rs.core.StreamingOutput
 import javax.ws.rs.Consumes
 import javax.ws.rs.GET
 import javax.ws.rs.POST
@@ -16,13 +19,14 @@ import javax.ws.rs.core.MediaType
 import com.google.inject.Inject
 
 import com.perrier.music.entity.TrackProvider
-import com.perrier.music.dto.album.AlbumDto;
-import com.perrier.music.dto.track.TrackDto;
+import com.perrier.music.dto.album.AlbumDto
+import com.perrier.music.dto.track.TrackDto
 import com.perrier.music.dto.track.TrackDtoMapper
 import com.perrier.music.entity.artist.Artist
 import com.perrier.music.entity.track.Track
 import com.perrier.music.entity.track.TrackProvider
 import com.perrier.music.server.EntityNotFoundException
+import com.perrier.music.stream.TrackStreamer
 
 @Path("api/track")
 @Produces(MediaType.APPLICATION_JSON)
@@ -55,5 +59,40 @@ public class TrackResource extends RestResource {
 		List<Track> tracks = this.trackProvider.findAll()
 
 		return TrackDtoMapper.build(tracks)
+	}
+
+	@GET
+	@Path("download/{id}")
+	@Produces([
+		"audio/mpeg",
+		"application/json"
+	])
+	public Response download(@PathParam("id") Long id) {
+
+		Track track = this.trackProvider.findById(id)
+
+		if (track == null) {
+			throw new EntityNotFoundException("track not found")
+		}
+
+		StreamingOutput stream = new StreamingOutput() {
+					@Override
+					public void write(OutputStream os) throws IOException, WebApplicationException {
+						try {
+							TrackStreamer streamer = new TrackStreamer(track)
+							streamer.writeStream(os)
+						}
+						catch (Exception e) {
+							throw new WebApplicationException(e)
+						}
+					}
+				}
+
+		def filename = new File(track.getPath()).name
+
+		return Response.ok(stream)
+		.type("audio/mpeg")
+		.header("Content-Disposition", "attachment; filename=\"" + filename + "\"")
+		.build()
 	}
 }
