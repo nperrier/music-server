@@ -14,8 +14,10 @@ angular.module('musicApp')
 	$scope.sortField = 'path';
 
 	$scope.createLibrary = function(library) {
-
-		Library.save(library);
+		Library.save(library).$promise.then(function () {
+			// refresh the model so the UI updates after creating a new library
+		  $scope.libraries = Library.query();
+	  });
 	};
 
 	$scope.scanLibrary = function(library) {
@@ -23,5 +25,9 @@ angular.module('musicApp')
 
     Library.scan({ libraryId: library.id });
 	};
+
+	$scope.removeLibrary = function(library) {
+		// TODO
+	}
 
 }]);
