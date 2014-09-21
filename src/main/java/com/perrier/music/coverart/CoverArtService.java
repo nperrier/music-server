@@ -33,9 +33,9 @@ public class CoverArtService extends AbstractIdleService implements ICoverArtSer
 	public static final OptionalProperty<String> ARTWORK_FORMAT = new OptionalProperty<String>("coverart.format", "png");
 	public static final Property<String> ARTWORK_DEFAULT = new Property<String>("coverart.nocover");
 
-	private IConfiguration config;
-	private TrackProvider trackProvider;
-	private AlbumProvider albumProvider;
+	private final IConfiguration config;
+	private final TrackProvider trackProvider;
+	private final AlbumProvider albumProvider;
 
 	public enum Type {
 		ARTIST, ALBUM, TRACK
@@ -45,7 +45,7 @@ public class CoverArtService extends AbstractIdleService implements ICoverArtSer
 	public CoverArtService(IConfiguration config, TrackProvider trackProvider, AlbumProvider albumProvider) {
 		this.config = config;
 		this.trackProvider = trackProvider;
-		this.albumProvider = albumProvider; 
+		this.albumProvider = albumProvider;
 	}
 
 	@Override
@@ -61,27 +61,27 @@ public class CoverArtService extends AbstractIdleService implements ICoverArtSer
 
 		try {
 			File coverArt = null;
-			
+
 			switch (type) {
 			case ALBUM:
-				
+
 				coverArt = this.getAlbumCoverFile(id);
 				if (coverArt == null) {
 					// TODO check if any tracks have cover art before sending default?
-					return getDefaultCoverArt(type);
+					return this.getDefaultCoverArt(type);
 				}
-				
+
 				return coverArt;
-				
+
 			case ARTIST:
 				throw new UnsupportedOperationException("Not yet implemented");
 			case TRACK:
-				
+
 				coverArt = this.getTrackCoverFile(id);
 				if (coverArt == null) {
-					return getDefaultCoverArt(type);
+					return this.getDefaultCoverArt(type);
 				}
-				
+
 				return coverArt;
 
 			default:
@@ -94,24 +94,24 @@ public class CoverArtService extends AbstractIdleService implements ICoverArtSer
 
 	private File getAlbumCoverFile(long id) throws DBException {
 
-		Album album = albumProvider.findById(id);
+		Album album = this.albumProvider.findById(id);
 		if (album == null || album.getCoverArt() == null) {
 			return null;
 		}
 
 		return new File(album.getCoverArt());
 	}
-	
+
 	private File getTrackCoverFile(long id) throws DBException {
 
-		Track track = trackProvider.findById(id);
+		Track track = this.trackProvider.findById(id);
 		if (track == null || track.getCoverArt() == null) {
 			return null;
 		}
 
 		return new File(track.getCoverArt());
 	}
-	
+
 	/**
 	 * TODO
 	 * 
@@ -128,7 +128,7 @@ public class CoverArtService extends AbstractIdleService implements ICoverArtSer
 	@Override
 	public BufferedImage getCover(String path) throws IOException {
 
-		if (isCached(path)) {
+		if (this.isCached(path)) {
 			File imageFile = new File(path);
 			BufferedImage image = ImageIO.read(imageFile);
 
@@ -141,11 +141,13 @@ public class CoverArtService extends AbstractIdleService implements ICoverArtSer
 	@Override
 	public String cacheCoverArt(BufferedImage image) throws IOException {
 
-		BufferedImage scaledImg = scale(image, this.config.getOptionalInteger(ARTWORK_HEIGHT), this.config
-				.getOptionalInteger(ARTWORK_WIDTH));
+		// TODO: Don't scale for now. May want to cache different sizes of image for thumbnails or for a grid layout, etc..
+		// BufferedImage scaledImg = scale(image, this.config.getOptionalInteger(ARTWORK_HEIGHT), this.config
+		// .getOptionalInteger(ARTWORK_WIDTH));
+		BufferedImage scaledImg = image;
 
 		String extension = this.config.getOptionalString(ARTWORK_FORMAT);
-		String imgPath = generateImagePath(scaledImg);
+		String imgPath = this.generateImagePath(scaledImg);
 		String cacheRoot = this.config.getRequiredString(ApplicationProperties.COVERS_DIR);
 		File imageFile = new File(cacheRoot + File.separator + imgPath + "." + extension);
 		ImageIO.write(scaledImg, extension, imageFile);
