@@ -9,4 +9,4 @@ create table playlist (
 );
 
 /* Create the player's playlist */
-insert into playlist (id, name, creation_date, modification_date) values (1, 'DEFAULT', now(), now());
+/* insert into playlist (id, name, creation_date, modification_date) values (1, 'DEFAULT', now(), now()); */

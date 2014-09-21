@@ -21,7 +21,7 @@ import com.perrier.music.entity.AbstractAuditableEntity;
 public class Playlist extends AbstractAuditableEntity {
 
 	// Use the id of 1 to represent the player's playlist
-	private static final long DEFAULT_PLAYLIST_ID = 1;
+	// private static final long DEFAULT_PLAYLIST_ID = 1;
 
 	private Long id;
 	private String name;
