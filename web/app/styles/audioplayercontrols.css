@@ -18,7 +18,99 @@ audio-player-controls * {
 	user-select: none;
 }
 
-audio-player-controls .ap-widget {
-  float: left;
-  margin: 5px;
+/* player alignment */
+#wrapper-left {
+	width: 50%;
+	margin-right: -69px;
+	position: relative;
+	height: 50px;
+	float: left;
+}
+
+#wrapper-right {
+	width: 50%;
+	margin-left: -69px;
+	height: 50px;
+	float: right;
+	text-align: right;
+  z-index: 100;
+}
+
+#player-wrapper-left {
+	height: 100%;
+	margin-right: 69px;
+}
+
+#player-controls {
+	/* width: 156px; */ /* 3x .player-button width */
+	/* margin: 0 auto; */ /* align the controls in the center */
+	/* line-height: 75px; */ /* center vertically */
+}
+
+.player-button {
+	font-size: 24px;
+	width: 50px;
+	height: 50px;
+	margin: 0px 1px;
+	border: none;
+	display: inline-block;
+	outline: none;
+	padding: 0;
+}
+
+.now-playing {
+	float: left;
+	overflow: hidden;
+	width: 500px;
+	margin-top: 5px;
+	white-space: nowrap;
+}
+
+.player-deck {
+	float: left;
+	margin-top: 8px;
+}
+
+.time {
+	width: 340px;
+	display: inline-block;
+	position: static;
+	margin-top: 2px;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.duration {
+	display: inline-block;
+	float: right;
+}
+
+.current-time {
+	display: inline-block;
+	float: left;
+}
+
+.time-range {
+}
+
+.volume {
+	width: auto;
+	display: inline-block;
+	position: static;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.volume-slider {
+	margin-top: 22px;
+}
+
+#volume-icon-low {
+	float: left;
+	font-size: 20px;
+}
+
+#volume-icon-high {
+	float: right;
+	font-size: 20px;
 }

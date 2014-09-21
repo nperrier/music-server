@@ -12,24 +12,28 @@
 angular.module('musicApp')
   .filter('duration', function () {
 
-    return function (durationInMillis) {
+    return function (duration, unit) {
+      // default to milliseconds
+      if (typeof unit === 'undefined') {
+        unit = 'milliseconds';
+      }
 
       function zeroPad(value) {
         return (value < 10) ? '0' + value : value;
       }
 
-      var d = moment.duration(durationInMillis);
-      var duration = '';
+      var d = moment.duration(duration, unit);
+      var formattedDuration = '';
       // if > 1 hour, then display HH:MM:SS
       if (d.hours() > 0) {
         var hours = zeroPad(d.hours());
-        duration = hours + ':';
+        formattedDuration = hours + ':';
       }
       var minutes = zeroPad(d.minutes());
       var seconds = zeroPad(d.seconds());
       // display MM:SS
-      duration += minutes + ':' + seconds;
+      formattedDuration += minutes + ':' + seconds;
 
-      return duration;
+      return formattedDuration;
     };
   });

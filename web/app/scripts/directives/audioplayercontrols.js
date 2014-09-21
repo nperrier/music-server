@@ -13,6 +13,8 @@ angular.module('musicApp')
         $scope.audio = new Audio();
         $scope.currentTrack = null;
         $scope.currentTime = 0;
+        $scope.currentPercentage = 0;
+        $scope.duration = 0;
 
         $scope.previous = function() {
           var track = PlayerQueue.getPrevious();
@@ -26,7 +28,7 @@ angular.module('musicApp')
           //$rootScope.$emit('audio.prev');
         };
 
-        $scope.getTrackDuration = function() {
+        $scope.getDuration = function() {
           return $scope.currentTrack.length;
         };
 
@@ -88,13 +90,21 @@ angular.module('musicApp')
           $scope.audio.play();
 
           $scope.currentTrack = track;
+
+          $scope.currentTime = 0;
+          $scope.currentPercentage = 0;
+          $scope.duration = $scope.currentTrack.length;
         };
 
         $scope.resetPlayer = function() {
           $scope.audio.pause();
           $scope.audio.removeAttribute('src');
+
           $scope.currentTrack = null;
+
           $scope.currentTime = 0;
+          $scope.currentPercentage = 0;
+          $scope.duration = 0;
         };
 
         // a track has been added to the queue
@@ -120,7 +130,8 @@ angular.module('musicApp')
         // makes the time-scrubber work
         var timeUpdater = $interval(function() {
           if ($scope.currentTrack) {
-            var percentPlayed = $scope.audio.currentTime / ($scope.currentTrack.length / 1000) * 100;
+            $scope.currentTime = $scope.audio.currentTime
+            var percentPlayed = $scope.currentTime / ($scope.currentTrack.length / 1000) * 100;
             $scope.currentPercentage = Math.round(percentPlayed);
           }
         }, 500);
