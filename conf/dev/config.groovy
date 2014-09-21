@@ -7,7 +7,7 @@ appdir {
 
 h2 {
 	driver = 'org.h2.Driver'
-	url = 'jdbc:h2:file:dev/db/music'
+	url = "jdbc:h2:file:" + appdir.root + "/db/music"
 	username = 'SA'
 	password = ''
 	showSql = true
