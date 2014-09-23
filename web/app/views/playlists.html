@@ -22,13 +22,16 @@
     </table>
   </div>
 
-  <form ng-submit="createPlaylist(playlist)">
 
+  <form ng-submit="createPlaylist(playlist)">
     <legend>Create Playlist</legend>
 
-    <label>Name</label>
-    <input ng-model="playlist.name" id="name" name="name" type="text" size="50">
-
+    <div class="input-group library-create-input">
+      <input ng-model="playlist.name" required id="name" name="name" type="text" size="50" placeholder="Enter a name for the playst" class="form-control">
+      <span class="input-group-btn">
+        <button class="btn btn-default">Add Playlist</button>
+      </span>
+    </div>
   </form>
 
 </div>

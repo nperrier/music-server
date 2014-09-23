@@ -28,6 +28,6 @@ angular.module('musicApp')
 
 	$scope.removeLibrary = function(library) {
 		// TODO
-	}
+	};
 
 }]);

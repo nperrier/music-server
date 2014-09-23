@@ -14,6 +14,10 @@ angular.module('musicApp')
     $scope.sortField = 'name';
 
 	  $scope.createPlaylist = function(playlist) {
-		  Playlist.save(playlist);
-	  };
+		  Playlist.save(playlist).$promise.then(function () {
+        // refresh the model so the UI updates after creating a new playlist
+        $scope.playlists = Playlist.query();
+      });
+    };
+
   }]);

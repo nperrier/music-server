@@ -130,7 +130,7 @@ angular.module('musicApp')
         // makes the time-scrubber work
         var timeUpdater = $interval(function() {
           if ($scope.currentTrack) {
-            $scope.currentTime = $scope.audio.currentTime
+            $scope.currentTime = $scope.audio.currentTime;
             var percentPlayed = $scope.currentTime / ($scope.currentTrack.length / 1000) * 100;
             $scope.currentPercentage = Math.round(percentPlayed);
           }
