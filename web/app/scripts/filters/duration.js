@@ -1,5 +1,6 @@
 'use strict';
 /* global moment */
+/* global _ */
 
 /**
  * @ngdoc filter
@@ -14,7 +15,7 @@ angular.module('musicApp')
 
     return function (duration, unit) {
       // default to milliseconds
-      if (typeof unit === 'undefined') {
+      if (_.isUndefined(unit)) {
         unit = 'milliseconds';
       }
 
