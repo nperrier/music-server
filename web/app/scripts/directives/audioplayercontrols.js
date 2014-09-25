@@ -116,6 +116,20 @@ angular.module('musicApp')
           }
         });
 
+        // a track has been removed from the queue
+        // if current track is playing, stop it and reset
+        // Right now we assume that this event is only fired if the current track was playing
+        // because the PlayerQueue keeps track of this, not the audio player
+        // TODO: could add an 'isPlaying' boolean to object send with event...
+        $rootScope.$on('track.removed', function(event) {
+          $scope.resetPlayer();
+          // play the next track in the queue, if there is one
+          var track = PlayerQueue.getNext();
+          if (track) {
+            $scope.playNow(track);
+          }
+        });
+
         // this should only return true if the player isn't playing
         // and the PlayerQueue is empty
         $scope.isTrackLoaded = function() {

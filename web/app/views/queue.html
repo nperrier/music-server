@@ -17,12 +17,13 @@
             </th>
             <th>Artist</th>
             <th>Album</th>
+            <th/>
           </tr>
         </thead>
         <tbody>
           <tr class="track-list-item" ng-repeat="t in tracks">
             <td>
-              <span class="glyphicon glyphicon-headphones"></span>
+              <span ng-show="isPlaying(t.id)" class="glyphicon glyphicon-headphones"></span>
             </td>
             <td>
               <img class="coverart-thumb" ng-src="{{t.coverArtUrl}}"/>
@@ -44,6 +45,11 @@
               <a ng-href="#/album/{{t.album.id}}" class="thumb">
                 {{t.album.name}}
               </a>
+            </td>
+            <td>
+              <button class="btn btn-default queue-remove" ng-click="remove(t, $index)">
+                <span class="glyphicon glyphicon-remove"></span>
+              </button>
             </td>
           </tr>
         </tbody>

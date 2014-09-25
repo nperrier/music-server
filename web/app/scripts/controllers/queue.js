@@ -11,9 +11,22 @@ angular.module('musicApp')
   .controller('QueueCtrl', ['$scope', '$log', '$rootScope', 'PlayerQueue',
     function ($scope, $log, $rootScope, PlayerQueue) {
 
-    // Need a way to indicate the "currently playing" Track
-    // in order to show a visual indicator in the queue view
     $scope.tracks = PlayerQueue.getTracks();
+
+    // Indicate the "currently playing" Track in the view
+    $scope.isPlaying = function(trackId) {
+      var currentTrack = PlayerQueue.getCurrent();
+      // currentTrack can be null
+      if (currentTrack) {
+        return currentTrack.id == trackId;
+      }
+      return false;
+    };
+
+    $scope.remove = function(track, position) {
+      $log.info('remove track.id: ' + track.id + ' at position: ' + position);
+      PlayerQueue.removeTrack(position);
+    }
 
     // This should update the view
     $rootScope.$on('track.added', function() {
