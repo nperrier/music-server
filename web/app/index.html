@@ -6,148 +6,146 @@
 <!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
 
 <head>
-    <meta charset="utf-8">
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width">
+  <meta charset="utf-8">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
 
-    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-    <!-- build:css styles/vendor.css -->
-    <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
-    <!-- endbower -->
-    <!-- endbuild -->
+  <!-- build:css styles/vendor.css -->
+  <!-- bower:css -->
+  <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
+  <!-- endbower -->
+  <!-- endbuild -->
 
-    <!-- build:css(.tmp) styles/main.css -->
-    <link rel="stylesheet" href="styles/main.css">
-    <!-- endbuild -->
+  <!-- build:css(.tmp) styles/main.css -->
+  <link rel="stylesheet" href="styles/main.css">
+  <!-- endbuild -->
 
-    <link rel="stylesheet" href="styles/audioplayercontrols.css">
+  <link rel="stylesheet" href="styles/audioplayercontrols.css">
 
 </head>
 
 <body ng-app="musicApp">
-    <!--[if lt IE 7]>
-    <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-    <![endif]-->
+  <!--[if lt IE 7]>
+  <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+  <![endif]-->
 
-    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-    	<div class="container-fluid">
+  <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
 
-    		<!-- Brand and toggle get grouped for better mobile display -->
-    		<div class="navbar-header">
-    			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-    				<span class="sr-only">Toggle navigation</span>
-    				<span class="icon-bar"></span>
-    			</button>
-    			<a class="navbar-brand glyphicon glyphicon-headphones" href="#"></a>
-    		</div>
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand glyphicon glyphicon-headphones" href="#"></a>
+      </div>
 
-    		<!-- Collect the nav links, forms, and other content for toggling -->
-    		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-    			<ul class="nav navbar-nav">
-    				<li>
-    					<a href="#library"><i class="fa fa-book"></i> Libraries</a>
-    				</li>
-    			</ul>
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li>
+            <a href="#library"><i class="fa fa-book"></i> Libraries</a>
+          </li>
+        </ul>
 
-    			<form class="navbar-form navbar-left" role="search">
-    				<div class="form-group">
-    					<input type="text" class="form-control" placeholder="Search">
-    				</div>
-    				<button type="submit" class="btn btn-default">Submit</button>
-    			</form>
+        <form class="navbar-form navbar-left" role="search">
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="Search">
+          </div>
+          <button type="submit" class="btn btn-default">Submit</button>
+        </form>
 
-    		</div><!-- /.navbar-collapse -->
-    	</div><!-- /.container-fluid -->
-    </nav>
+      </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
 
-    <!-- sidebar -->
-    <div ng-controller="LeftNavCtrl" class="column col-sm-3 col-md-2 sidebar" id="sidebar">
+  <!-- sidebar -->
+  <div ng-controller="LeftNavCtrl" class="column col-sm-3 col-md-2 sidebar" id="sidebar">
+    <ul class="nav nav-pills nav-stacked">
+      <li ng-class="{ active: isActive('/artists')}">
+        <a href="#artists">Artists</a>
+      </li>
+      <li ng-class="{ active: isActive('/albums')}">
+        <a href="#albums">Albums</a>
+      </li>
+      <li ng-class="{ active: isActive('/tracks')}">
+        <a href="#tracks">Songs</a>
+      </li>
+      <li ng-class="{ active: isActive('/genres')}">
+        <a href="#genres">Genres</a>
+      </li>
+      <li ng-class="{ active: isActive('/playlists')}">
+        <a href="#playlists">Playlists</a>
+      </li>
+      <li ng-class="{ active: isActive('/queue')}">
+        <a href="#queue">Queue</a>
+      </li>
+    </ul>
+  </div>
+  <!-- /sidebar -->
 
-    	<ul class="nav nav-pills nav-stacked">
-    		<li ng-class="{ active: isActive('/artists')}">
-    			<a href="#artists">Artists</a>
-    		</li>
-    		<li ng-class="{ active: isActive('/albums')}">
-    			<a href="#albums">Albums</a>
-    		</li>
-    		<li ng-class="{ active: isActive('/tracks')}">
-    			<a href="#tracks">Songs</a>
-    		</li>
-    		<li ng-class="{ active: isActive('/genres')}">
-    			<a href="#genres">Genres</a>
-    		</li>
-            <li ng-class="{ active: isActive('/playlists')}">
-                <a href="#playlists">Playlists</a>
-            </li>
-            <li ng-class="{ active: isActive('/queue')}">
-                <a href="#queue">Queue</a>
-            </li>
-    	</ul>
+  <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+    <!-- this is where content will be injected -->
+    <div ng-view></div>
+  </div>
+
+  <footer id="footer" class="navbar-fixed-bottom">
+    <div class="container-fluid">
+      <audio-player-controls></audio-player-controls>
     </div>
-    <!-- /sidebar -->
+  </footer>
 
-    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-    	<!-- angular templating -->
-    	<!-- this is where content will be injected -->
-    	<div ng-view></div>
-    </div>
+  <!-- build:js scripts/vendor.js -->
+  <!-- bower:js -->
+  <script src="bower_components/es5-shim/es5-shim.js"></script>
+  <script src="bower_components/json3/lib/json3.min.js"></script>
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-resource/angular-resource.js"></script>
+  <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+  <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+  <script src="bower_components/moment/moment.js"></script>
+  <script src="bower_components/underscore/underscore.js"></script>
+  <!-- endbower -->
+  <!-- endbuild -->
 
-    <footer id="footer" class="navbar-fixed-bottom">
-    	<div class="container-fluid">
-            <audio-player-controls></audio-player-controls>
-    	</div>
-    </footer>
+  <!-- build:js({.tmp,app}) scripts/scripts.js -->
+  <script src="scripts/app.js"></script>
 
-    <!-- build:js scripts/vendor.js -->
-    <!-- bower:js -->
-    <script src="bower_components/es5-shim/es5-shim.js"></script>
-    <script src="bower_components/json3/lib/json3.min.js"></script>
-    <script src="bower_components/angular/angular.js"></script>
-    <script src="bower_components/angular-resource/angular-resource.js"></script>
-    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
-    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-    <script src="bower_components/angular-route/angular-route.js"></script>
-    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-    <script src="bower_components/moment/moment.js"></script>
-    <script src="bower_components/underscore/underscore.js"></script>
-    <!-- endbower -->
-    <!-- endbuild -->
+  <script src="scripts/controllers/dashboard.js"></script>
+  <script src="scripts/controllers/leftnav.js"></script>
+  <script src="scripts/controllers/library.js"></script>
+  <script src="scripts/controllers/artists.js"></script>
+  <script src="scripts/controllers/artistdetail.js"></script>
+  <script src="scripts/controllers/albums.js"></script>
+  <script src="scripts/controllers/albumdetail.js"></script>
+  <script src="scripts/controllers/tracks.js"></script>
+  <script src="scripts/controllers/trackdetail.js"></script>
+  <script src="scripts/controllers/genres.js"></script>
+  <script src="scripts/controllers/playlists.js"></script>
+  <script src="scripts/controllers/playlistdetail.js"></script>
+  <script src="scripts/controllers/queue.js"></script>
 
-    <!-- build:js({.tmp,app}) scripts/scripts.js -->
-    <script src="scripts/app.js"></script>
+  <script src="scripts/services/artist.js"></script>
+  <script src="scripts/services/album.js"></script>
+  <script src="scripts/services/track.js"></script>
+  <script src="scripts/services/genre.js"></script>
+  <script src="scripts/services/library.js"></script>
+  <script src="scripts/services/artistalbum.js"></script>
+  <script src="scripts/services/albumtrack.js"></script>
+  <script src="scripts/services/playlist.js"></script>
+  <script src="scripts/services/playerqueue.js"></script>
 
-    <script src="scripts/controllers/dashboard.js"></script>
-    <script src="scripts/controllers/leftnav.js"></script>
-    <script src="scripts/controllers/library.js"></script>
-    <script src="scripts/controllers/artists.js"></script>
-    <script src="scripts/controllers/artistdetail.js"></script>
-    <script src="scripts/controllers/albums.js"></script>
-    <script src="scripts/controllers/albumdetail.js"></script>
-    <script src="scripts/controllers/tracks.js"></script>
-    <script src="scripts/controllers/trackdetail.js"></script>
-    <script src="scripts/controllers/genres.js"></script>
-    <script src="scripts/controllers/playlists.js"></script>
-    <script src="scripts/controllers/playlistdetail.js"></script>
-    <script src="scripts/controllers/queue.js"></script>
+  <script src="scripts/filters/duration.js"></script>
 
-    <script src="scripts/services/artist.js"></script>
-    <script src="scripts/services/album.js"></script>
-    <script src="scripts/services/track.js"></script>
-    <script src="scripts/services/genre.js"></script>
-    <script src="scripts/services/library.js"></script>
-    <script src="scripts/services/artistalbum.js"></script>
-    <script src="scripts/services/albumtrack.js"></script>
-    <script src="scripts/services/playlist.js"></script>
-    <script src="scripts/services/playerqueue.js"></script>
-
-    <script src="scripts/filters/duration.js"></script>
-
-    <script src="scripts/directives/audioplayercontrols.js"></script>
-    <script src="scripts/directives/trackactionmenu.js"></script>
-    <script src="scripts/directives/albumaction.js"></script>
-    <!-- endbuild -->
+  <script src="scripts/directives/audioplayercontrols.js"></script>
+  <script src="scripts/directives/trackactionmenu.js"></script>
+  <script src="scripts/directives/albumaction.js"></script>
+  <!-- endbuild -->
 
 </body>
 </html>
