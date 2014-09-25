@@ -29,7 +29,7 @@ A simple web app to stream music built using modern Java libraries and AngularJS
   * SoundCloud
   * GrooveShark
   * Spotify
-* Download tracks or albums
+* Download albums
 * Edit meta data of tracks/albums and remember to override when re-scanning (unless some kind of "force tag" option is set)
 * Smart meta-info from source (e.g., musicbrainz)
 * Implement search
