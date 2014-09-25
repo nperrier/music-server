@@ -10,9 +10,12 @@
 angular.module('musicApp')
   .controller('AlbumsCtrl', ['$scope', 'Album', function($scope, Album) {
 
-	$scope.albums = Album.query();
+    $scope.sortField = 'name';
+    $scope.reverse = true;
+    $scope.doneLoading = false;
 
-	$scope.sortField = 'name';
-	$scope.reverse = true;
-}]);
+	  $scope.albums = Album.query(function () {
+      $scope.doneLoading = true;
+    });
+  }]);
 

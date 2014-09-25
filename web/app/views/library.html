@@ -1,33 +1,48 @@
 <!-- library.html -->
 <div class="jumbotron text-center">
 
-  <h1>Libraries</h1>
+  <div ng-show="doneLoading" ng-cloak>
+    <div ng-show="libraries.length" ng-cloak>
 
-  <div class="table-responsive">
-    <table class="table">
-      <thead>
-        <tr>
-          <th ng-click="sortOrder = 'path'; reverse = !reverse">Library Path</th>
-          <th>Last Scanned</th>
-          <th/>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="l in libraries | orderBy:sortOrder:reverse">
-          <td>
-            {{l.path}}
-          </td>
-          <td>
-            {{ (l.lastIndexedDate ? l.lastIndexedDate : 'Never') | date : 'short' }}
-          </td>
-          <td>
-            <button class="btn btn-default scan-library" ng-click="scanLibrary(l)">Scan Now
-              <i class="glyphicon glyphicon-refresh"></i>
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      <h1>Libraries</h1>
+
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th ng-click="sortOrder = 'path'; reverse = !reverse">Library Path</th>
+              <th>Last Scanned</th>
+              <th/>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="l in libraries | orderBy:sortOrder:reverse">
+              <td>
+                {{l.path}}
+              </td>
+              <td>
+                {{ (l.lastIndexedDate ? l.lastIndexedDate : 'Never') | date : 'short' }}
+              </td>
+              <td>
+                <button class="btn btn-default scan-library" ng-click="scanLibrary(l)">Scan Now
+                  <i class="glyphicon glyphicon-refresh"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div ng-hide="libraries.length" ng-cloak>
+      <span class="glyphicon glyphicon-headphones" style="font-size: 200px"></span>
+      <h3>No libraries have been created yet</h3>
+    </div>
+  </div>
+
+  <!-- show this while data is being fetched from server -->
+  <div class="loading" ng-show="!doneLoading" ng-cloak>
+    Loading...
   </div>
 
   <form ng-submit="createLibrary(library)">

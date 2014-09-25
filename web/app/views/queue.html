@@ -1,50 +1,59 @@
 <!-- queue.html -->
 <div class="jumbotron text-center">
 
-  <h1>Queue</h1>
+  <div ng-show="tracks.length" ng-cloak>
 
-  <div class="table-condensed">
-    <table class="table">
-      <thead>
-        <tr>
-          <th/>
-          <th>Cover</th>
-          <th>Title</th>
-          <th>
-            <span class="glyphicon glyphicon-time"></span>
-          </th>
-          <th>Artist</th>
-          <th>Album</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="track-list-item" ng-repeat="t in tracks">
-          <td>
-            <span class="glyphicon glyphicon-headphones"></span>
-          </td>
-          <td>
-            <img class="coverart-thumb" ng-src="{{t.coverArtUrl}}"/>
-          </td>
-          <td>
-            <a ng-href="#/track/{{t.id}}" class="thumb">
-              {{t.name}}
-            </a>
-          </td>
-          <td>
-            {{t.length | duration}}
-          </td>
-          <td>
-            <a ng-href="#/artist/{{t.artist.id}}" class="thumb">
-              {{t.artist.name}}
-            </a>
-          </td>
-          <td>
-            <a ng-href="#/album/{{t.album.id}}" class="thumb">
-              {{t.album.name}}
-            </a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <h1>Queue</h1>
+
+    <div class="table-condensed">
+      <table class="table">
+        <thead>
+          <tr>
+            <th/>
+            <th>Cover</th>
+            <th>Title</th>
+            <th>
+              <span class="glyphicon glyphicon-time"></span>
+            </th>
+            <th>Artist</th>
+            <th>Album</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="track-list-item" ng-repeat="t in tracks">
+            <td>
+              <span class="glyphicon glyphicon-headphones"></span>
+            </td>
+            <td>
+              <img class="coverart-thumb" ng-src="{{t.coverArtUrl}}"/>
+            </td>
+            <td>
+              <a ng-href="#/track/{{t.id}}" class="thumb">
+                {{t.name}}
+              </a>
+            </td>
+            <td>
+              {{t.length | duration}}
+            </td>
+            <td>
+              <a ng-href="#/artist/{{t.artist.id}}" class="thumb">
+                {{t.artist.name}}
+              </a>
+            </td>
+            <td>
+              <a ng-href="#/album/{{t.album.id}}" class="thumb">
+                {{t.album.name}}
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
+
+  <div ng-hide="tracks.length" ng-cloak>
+    <span class="glyphicon glyphicon-headphones" style="font-size: 200px"></span>
+    <h3>Queue is empty</h3>
+  </div>
+
 </div>

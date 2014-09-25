@@ -33,7 +33,7 @@
 
     <div id="wrapper-right">
 
-        <div class="time">
+        <div class="time" ng-show="currentTrack">
             <span class="current-time" ng-model="currentTime">
                 {{( currentTime ? currentTime : 0 ) | duration:'seconds'}}
             </span>
@@ -43,7 +43,7 @@
             <input class="time-range" min="0" max="100" step="0.01" type="range" ng-model="currentPercentage" />
         </div>
 
-        <div class="volume">
+        <div class="volume" ng-show="currentTrack">
             <span id="volume-icon-low" class="glyphicon glyphicon-volume-down"></span>
             <span id="volume-icon-high" class="glyphicon glyphicon-volume-up"></span>
             <input class="volume-slider" min="0" max="1" step="0.01" type="range" ng-model="audio.volume" />

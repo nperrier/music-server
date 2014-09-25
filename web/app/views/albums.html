@@ -1,41 +1,51 @@
 <!-- albums.html -->
 <div class="jumbotron text-center">
 
-  <h1>Albums</h1>
+  <div ng-show="doneLoading" ng-cloak>
+    <div ng-show="albums.length" ng-cloak>
 
-  <div class="table-responsive">
-    <table class="table">
-      <thead>
-        <tr>
-          <th />
-          <th ng-click="sortOrder = 'name'; reverse = !reverse">Title</th>
-          <th ng-click="sortOrder = 'artist.name'; reverse = !reverse">Artist</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="a in albums | orderBy:sortOrder:reverse">
-          <td>
-            <img class="coverart-thumb" ng-src="{{a.coverArtUrl}}"/>
-          </td>
-          <td>
-            <a ng-href="#/album/{{a.id}}" class="thumb">
-              {{a.name}}
-            </a>
-            <album-action-menu album="a"></album-action-menu>
-          </td>
-          <td>
-            <a ng-href="#/artist/{{a.artist.id}}" class="thumb">
-              {{a.artist.name}}
-            </a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      <h1>Albums</h1>
+
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th />
+              <th ng-click="sortOrder = 'name'; reverse = !reverse">Title</th>
+              <th ng-click="sortOrder = 'artist.name'; reverse = !reverse">Artist</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="a in albums | orderBy:sortOrder:reverse">
+              <td>
+                <img class="coverart-thumb" ng-src="{{a.coverArtUrl}}"/>
+              </td>
+              <td>
+                <a ng-href="#/album/{{a.id}}" class="thumb">
+                  {{a.name}}
+                </a>
+                <album-action-menu album="a"></album-action-menu>
+              </td>
+              <td>
+                <a ng-href="#/artist/{{a.artist.id}}" class="thumb">
+                  {{a.artist.name}}
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div ng-hide="albums.length" ng-cloak>
+      <span class="glyphicon glyphicon-headphones" style="font-size: 200px"></span>
+      <h3>No albums found</h3>
+    </div>
   </div>
 
-<!--
-  <div>
-    {{albums | json}}
+  <!-- show this while data is being fetched from server -->
+  <div class="loading" ng-show="!doneLoading" ng-cloak>
+    Loading...
   </div>
--->
+
 </div>

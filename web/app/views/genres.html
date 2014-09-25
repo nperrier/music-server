@@ -1,23 +1,38 @@
-<!-- artists.html -->
+<!-- genres.html -->
 <div class="jumbotron text-center">
-	
-	<h1>Genres</h1>
 
-	<div class="table-responsive">
-		<table class="table">
-			<thead>
-				<tr>
-					<th ng-click="sortOrder = 'name'; reverse = !reverse">Genre</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="g in genres | orderBy:sortOrder:reverse">
-					<td>
-						{{g.name}}
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
+  <div ng-show="doneLoading" ng-cloak>
+    <div ng-show="genres.length">
+
+      <h1>Genres</h1>
+
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th ng-click="sortOrder = 'name'; reverse = !reverse">Genre</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="g in genres | orderBy:sortOrder:reverse">
+              <td>
+                {{g.name}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div ng-hide="genres.length">
+      <span class="glyphicon glyphicon-headphones" style="font-size: 200px"></span>
+      <h3>No genres found</h3>
+    </div>
+  </div>
+
+  <!-- show this while data is being fetched from server -->
+  <div class="loading" ng-show="!doneLoading" ng-cloak>
+    Loading...
+  </div>
 
 </div>

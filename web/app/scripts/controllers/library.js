@@ -8,26 +8,29 @@
  * Controller of the musicApp
  */
 angular.module('musicApp')
-  .controller('LibraryCtrl', ['$scope', '$log', '$routeParams', 'Library', function($scope, $log, $routeParams, Library) {
+  .controller('LibraryCtrl', ['$scope', '$log', '$routeParams', 'Library',
+    function($scope, $log, $routeParams, Library) {
 
-	$scope.libraries = Library.query();
-	$scope.sortField = 'path';
+      $scope.sortField = 'path';
+      $scope.doneLoading = false;
 
-	$scope.createLibrary = function(library) {
-		Library.save(library).$promise.then(function () {
-			// refresh the model so the UI updates after creating a new library
-		  $scope.libraries = Library.query();
-	  });
-	};
+      $scope.libraries = Library.query(function() {
+        $scope.doneLoading = true;
+      });
 
-	$scope.scanLibrary = function(library) {
-		$log.info('Requesting scan for library: ' + library);
+      $scope.createLibrary = function(library) {
+        Library.save(library, function (l) {
+          $scope.libraries.push(l);
+        });
+      };
 
-    Library.scan({ libraryId: library.id });
-	};
+      $scope.scanLibrary = function(library) {
+        $log.info('Requesting scan for library: ' + library);
 
-	$scope.removeLibrary = function(library) {
-		// TODO
-	};
+        Library.scan({ libraryId: library.id });
+      };
 
-}]);
+      $scope.removeLibrary = function(library) {
+        // TODO
+      };
+    }]);

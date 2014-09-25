@@ -1,49 +1,66 @@
-<!-- artists.html -->
+<!-- tracks.html -->
 <div class="jumbotron text-center">
 
-  <h1>Tracks</h1>
+  <div ng-show="doneLoading" ng-cloak>
+    <div ng-show="tracks.length" ng-cloak>
 
-  Search: <input ng-model="trackQuery">
+      <h1>Tracks</h1>
 
-  <div class="table-condensed">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Cover</th>
-          <th ng-click="sortOrder = 'name'; reverse = !reverse">Title</th>
-          <th ng-click="sortOrder = 'length'; reverse = !reverse">
-            <span class="glyphicon glyphicon-time"></span>
-          </th>
-          <th ng-click="sortOrder = 'artist.name'; reverse = !reverse">Artist</th>
-          <th ng-click="sortOrder = 'album.name'; reverse = !reverse">Album</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="track-list-item" ng-repeat="t in tracks | filter:trackQuery | orderBy:sortOrder:reverse">
-          <td>
-            <img class="coverart-thumb" ng-src="{{t.coverArtUrl}}"/>
-          </td>
-          <td>
-            <a ng-href="#/track/{{t.id}}" class="thumb">
-              {{t.name}}
-            </a>
-            <track-action-menu track="t"></track-action-menu>
-          </td>
-          <td>
-            {{t.length | duration}}
-          </td>
-          <td>
-            <a ng-href="#/artist/{{t.artist.id}}" class="thumb">
-              {{t.artist.name}}
-            </a>
-          </td>
-          <td>
-            <a ng-href="#/album/{{t.album.id}}" class="thumb">
-              {{t.album.name}}
-            </a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      Search: <input ng-model="trackQuery">
+
+      <div class="table-condensed">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Cover</th>
+              <th ng-click="sortOrder = 'name'; reverse = !reverse">Title</th>
+              <th ng-click="sortOrder = 'length'; reverse = !reverse">
+                <span class="glyphicon glyphicon-time"></span>
+              </th>
+              <th ng-click="sortOrder = 'artist.name'; reverse = !reverse">Artist</th>
+              <th ng-click="sortOrder = 'album.name'; reverse = !reverse">Album</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="track-list-item" ng-repeat="t in tracks | filter:trackQuery | orderBy:sortOrder:reverse">
+              <td>
+                <img class="coverart-thumb" ng-src="{{t.coverArtUrl}}"/>
+              </td>
+              <td>
+                <a ng-href="#/track/{{t.id}}" class="thumb">
+                  {{t.name}}
+                </a>
+                <track-action-menu track="t"></track-action-menu>
+              </td>
+              <td>
+                {{t.length | duration}}
+              </td>
+              <td>
+                <a ng-href="#/artist/{{t.artist.id}}" class="thumb">
+                  {{t.artist.name}}
+                </a>
+              </td>
+              <td>
+                <a ng-href="#/album/{{t.album.id}}" class="thumb">
+                  {{t.album.name}}
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div ng-hide="tracks.length" ng-cloak>
+      <span class="glyphicon glyphicon-headphones" style="font-size: 200px"></span>
+      <h3>No tracks found</h3>
+    </div>
+
   </div>
+
+  <!-- show this while data is being fetched from server -->
+  <div class="loading" ng-show="!doneLoading" ng-cloak>
+    Loading...
+  </div>
+
 </div>

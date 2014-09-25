@@ -1,25 +1,40 @@
 <!-- artists.html -->
 <div class="jumbotron text-center">
-	
-	<h1>Artists</h1>
 
-	<div class="table-responsive">
-		<table class="table">
-			<thead>
-				<tr>
-					<th ng-click="sortOrder = 'name'; reverse = !reverse">Artist</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="a in artists | orderBy:sortOrder:reverse">
-					<td>
-						<a ng-href="#/artist/{{a.id}}" class="thumb">
-							{{a.name}}
-						</a>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
+  <div ng-show="doneLoading" ng-cloak>
+    <div ng-show="artists.length" ng-cloak>
+
+      <h1>Artists</h1>
+
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th ng-click="sortOrder = 'name'; reverse = !reverse">Artist</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="a in artists | orderBy:sortOrder:reverse">
+              <td>
+                <a ng-href="#/artist/{{a.id}}" class="thumb">
+                  {{a.name}}
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div ng-hide="artists.length" ng-cloak>
+      <span class="glyphicon glyphicon-headphones" style="font-size: 200px"></span>
+      <h3>No artists found</h3>
+    </div>
+  </div>
+
+  <!-- show this while data is being fetched from server -->
+  <div class="loading" ng-show="!doneLoading" ng-cloak>
+    Loading...
+  </div>
 
 </div>

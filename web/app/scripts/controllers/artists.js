@@ -10,8 +10,11 @@
 angular.module('musicApp')
   .controller('ArtistsCtrl', ['$scope', 'Artist', function($scope, Artist) {
 
-	$scope.artists = Artist.query();
+    $scope.sortField = 'name';
+    $scope.reverse = true;
+    $scope.doneLoading = false;
 
-	$scope.sortField = 'name';
-	$scope.reverse = true;
-}]);
+    $scope.artists = Artist.query(function () {
+      $scope.doneLoading = true;
+    });
+  }]);

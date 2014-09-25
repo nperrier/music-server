@@ -1,27 +1,41 @@
 <!-- playlists.html -->
 <div class="jumbotron text-center">
 
-  <h1>Playlists</h1>
+  <div ng-show="doneLoading" ng-cloak>
+    <div ng-show="playlists.length" ng-cloak>
 
-  <div class="table-responsive">
-    <table class="table">
-      <thead>
-        <tr>
-          <th ng-click="sortOrder = 'name'; reverse = !reverse">Playlist</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr ng-repeat="p in playlists | orderBy:sortOrder:reverse">
-          <td>
-            <a ng-href="#/playlist/{{p.id}}" class="thumb">
-              {{p.name}}
-            </a>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+      <h1>Playlists</h1>
+
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th ng-click="sortOrder = 'name'; reverse = !reverse">Playlist</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="p in playlists | orderBy:sortOrder:reverse">
+              <td>
+                <a ng-href="#/playlist/{{p.id}}" class="thumb">
+                  {{p.name}}
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div ng-hide="playlists.length" ng-cloak>
+      <span class="glyphicon glyphicon-headphones" style="font-size: 200px"></span>
+      <h3>No playlists have been created yet</h3>
+    </div>
   </div>
 
+  <!-- show this while data is being fetched from server -->
+  <div class="loading" ng-show="!doneLoading" ng-cloak>
+    Loading...
+  </div>
 
   <form ng-submit="createPlaylist(playlist)">
     <legend>Create Playlist</legend>

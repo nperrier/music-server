@@ -10,8 +10,11 @@
 angular.module('musicApp')
   .controller('GenresCtrl', ['$scope', 'Genre', function($scope, Genre) {
 
-	$scope.genres = Genre.query();
+    $scope.sortField = 'name';
+    $scope.reverse = true;
+    $scope.doneLoading = false;
 
-	$scope.sortField = 'name';
-	$scope.reverse = true;
-}]);
+	  $scope.genres = Genre.query(function () {
+      $scope.doneLoading = true;
+    });
+  }]);
