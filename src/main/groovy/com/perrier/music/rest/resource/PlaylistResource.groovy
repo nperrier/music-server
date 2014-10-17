@@ -1,6 +1,7 @@
 package com.perrier.music.rest.resource
 
 import javax.ws.rs.Consumes
+import javax.ws.rs.DELETE
 import javax.ws.rs.GET
 import javax.ws.rs.POST
 import javax.ws.rs.Path
@@ -32,7 +33,7 @@ class PlaylistResource extends RestResource {
 
 		return PlaylistDtoMapper.build(playlists)
 	}
-	
+
 	@GET
 	@Path("{id}")
 	public PlaylistDto get(@PathParam("id") Long id) {
@@ -46,7 +47,7 @@ class PlaylistResource extends RestResource {
 		def output = PlaylistDtoMapper.build(playlist)
 		return output
 	}
-	
+
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createPlaylist(Playlist playlist) {
@@ -56,7 +57,23 @@ class PlaylistResource extends RestResource {
 		def playlistDto = PlaylistDtoMapper.build(playlist)
 		return Response.status(Response.Status.CREATED).entity(playlistDto).build()
 	}
-	
+
+	@DELETE
+	@Path("{id}")
+	public Response deletePlaylist(@PathParam("id") Long id) {
+
+		Playlist playlist = this.playlistProvider.findById(id, false /* no tracks */)
+
+		if (!playlist) {
+			throw new EntityNotFoundException("Playlist not found, id: " + id)
+		}
+
+		this.playlistProvider.delete(playlist)
+
+		def playlistDto = PlaylistDtoMapper.build(playlist)
+		return Response.status(Response.Status.NO_CONTENT).entity(playlistDto).build()
+	}
+
 	@GET
 	@Path("{id}/tracks")
 	public Collection<PlaylistTrackDto> getTracks(@PathParam("id") Long id) {

@@ -150,11 +150,9 @@ td {
   /* height: 40px; svg crops the width if aspect ratio is different */
 }
 
-.track-menu {
-  float: right;
-}
-
-.album-menu {
+.track-menu,
+.album-menu,
+.playlist-menu {
   float: right;
 }
 
@@ -167,4 +165,8 @@ td {
 
 .queue-remove {
   font-size: 10px;
+}
+
+.confirm-dialog {
+  padding: 10px;
 }

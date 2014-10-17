@@ -31,6 +31,10 @@ public class PlaylistProvider {
 		this.db.create(new PlaylistCreateQuery(playlist));
 	}
 
+	public void delete(Playlist playlist) throws DBException {
+		this.db.delete(new PlaylistDeleteQuery(playlist));
+	}
+
 	public void addTracksToPlaylist(Playlist playlist, List<Long> trackIds, Integer position) throws DBException {
 
 		this.db.beginTransaction();

@@ -22,6 +22,10 @@ angular.module('musicApp')
         method: 'POST',
         params: { name: '@name' }
       },
+      delete: {
+        method: 'DELETE',
+        params: { playlistId: '@playlistId' }
+      },
       getTracks: {
         url: 'api/playlist/:playlistId/tracks',
         method: 'GET',

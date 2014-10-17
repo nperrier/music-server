@@ -10,7 +10,7 @@
         <table class="table">
           <thead>
             <tr>
-              <th ng-click="sortOrder = 'name'; reverse = !reverse">Playlist</th>
+              <th ng-click="sortOrder = 'name'; reverse = !reverse">Name</th>
             </tr>
           </thead>
           <tbody>
@@ -19,6 +19,7 @@
                 <a ng-href="#/playlist/{{p.id}}" class="thumb">
                   {{p.name}}
                 </a>
+                <playlist-action-menu></playlist-action-menu>
               </td>
             </tr>
           </tbody>
