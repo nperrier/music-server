@@ -68,12 +68,12 @@ angular.module('musicApp')
       return track;
     };
 
-    self.getCurrent = function() {
+    self.getCurrentIndex = function() {
       if (self.queue.length === 0) {
         return null; // no tracks!
       }
 
-      return self.queue[self.current];
+      return self.current;
     };
 
     self.getNext = function() {

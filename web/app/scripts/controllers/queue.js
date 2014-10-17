@@ -14,11 +14,11 @@ angular.module('musicApp')
     $scope.tracks = PlayerQueue.getTracks();
 
     // Indicate the "currently playing" Track in the view
-    $scope.isPlaying = function(trackId) {
-      var currentTrack = PlayerQueue.getCurrent();
+    $scope.isPlaying = function(trackIndex) {
+      var currentTrackIndex = PlayerQueue.getCurrentIndex();
       // currentTrack can be null
-      if (currentTrack) {
-        return currentTrack.id == trackId;
+      if (currentTrackIndex >= 0) {
+        return currentTrackIndex === trackIndex;
       }
       return false;
     };
