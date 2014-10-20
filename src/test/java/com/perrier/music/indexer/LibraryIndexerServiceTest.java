@@ -2,6 +2,7 @@ package com.perrier.music.indexer;
 
 import static org.junit.Assert.fail;
 
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -39,7 +40,7 @@ public class LibraryIndexerServiceTest extends MusicUnitTest {
 			}
 
 			@Override
-			public Void call() throws LibraryIndexerException {
+			public Boolean call() throws LibraryIndexerException {
 				try {
 					while (!Thread.currentThread().isInterrupted()) {
 						System.out.println("Sleeping 2 seconds...");
@@ -68,4 +69,49 @@ public class LibraryIndexerServiceTest extends MusicUnitTest {
 		}
 	}
 
+	@Test
+	public void test2() {
+
+		try {
+			this.libraryIndexerService.startAsync().awaitRunning(5, TimeUnit.SECONDS);
+		} catch (TimeoutException e) {
+			fail();
+		}
+
+		class TestTask extends LibraryIndexerTask {
+
+			public TestTask(Library library) {
+				super(library);
+			}
+
+			@Override
+			public Boolean call() throws LibraryIndexerException {
+				try {
+					while (!Thread.currentThread().isInterrupted()) {
+						System.out.println("Sleeping 2 seconds...");
+						Thread.sleep(2000);
+					}
+				} catch (InterruptedException e) {
+					System.out.println("Thread was interrupted!");
+				}
+
+				return null;
+			}
+		}
+		;
+
+		Future<Boolean> result = this.libraryIndexerService.submit(new TestTask(null));
+
+		try {
+			Thread.sleep(5000);
+
+			boolean wasCancelled = false;
+			while (!wasCancelled) {
+				wasCancelled = result.cancel(true);
+			}
+
+		} catch (InterruptedException e) {
+			fail();
+		}
+	}
 }

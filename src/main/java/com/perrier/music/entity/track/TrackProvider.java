@@ -1,6 +1,5 @@
 package com.perrier.music.entity.track;
 
-import java.util.Collections;
 import java.util.List;
 
 import com.google.inject.Inject;
@@ -35,8 +34,9 @@ public class TrackProvider {
 		return tracks;
 	}
 
-	public List<Track> findAllByLibraryId(Long id) {
-		return Collections.emptyList();
+	public List<Track> findAllByLibraryId(Long id) throws DBException {
+		List<Track> tracks = this.db.find(new TrackFindAllByLibraryIdQuery(id));
+		return tracks;
 	}
 
 	// TODO limit fetch size

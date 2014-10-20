@@ -11,7 +11,6 @@ import java.util.concurrent.Callable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Function;
 import com.google.common.collect.Maps;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
@@ -24,10 +23,16 @@ import com.perrier.music.entity.library.LibraryUpdateQuery;
 import com.perrier.music.entity.track.Track;
 import com.perrier.music.entity.track.TrackProvider;
 import com.perrier.music.indexer.event.ChangedTrackEvent;
-import com.perrier.music.indexer.event.ITrackEvent;
+import com.perrier.music.indexer.event.MissingTrackEvent;
 import com.perrier.music.indexer.event.UnknownTrackEvent;
 
-public class LibraryIndexerTask implements Callable<Void> {
+/**
+ * Scan the library for tracks to index
+ * 
+ * Returns true if task was cancelled, else false
+ * 
+ */
+public class LibraryIndexerTask implements Callable<Boolean> {
 
 	private static final Logger log = LoggerFactory.getLogger(LibraryIndexerTask.class);
 
@@ -37,6 +42,23 @@ public class LibraryIndexerTask implements Callable<Void> {
 	private IDatabase db;
 
 	private volatile boolean cancelScan = false;
+
+	/**
+	 * Wrapper on Track to keep track of scanned and non-scanned tracks
+	 */
+	private static class IndexedTrack {
+
+		private Track track;
+		private boolean scanned = false;
+
+		private IndexedTrack(Track track) {
+			this.track = track;
+		}
+
+		public void markScanned() {
+			this.scanned = true;
+		}
+	}
 
 	private static class MusicFileFilter implements FileFilter {
 
@@ -53,8 +75,7 @@ public class LibraryIndexerTask implements Callable<Void> {
 	private final Library library;
 
 	@AssistedInject
-	public LibraryIndexerTask(@Assisted
-	Library library) {
+	public LibraryIndexerTask(@Assisted Library library) {
 		this.library = library;
 	}
 
@@ -74,7 +95,7 @@ public class LibraryIndexerTask implements Callable<Void> {
 	}
 
 	@Override
-	public Void call() throws LibraryIndexerException {
+	public Boolean call() throws LibraryIndexerException {
 
 		File rootPath = new File(this.library.getPath());
 
@@ -82,18 +103,45 @@ public class LibraryIndexerTask implements Callable<Void> {
 			throw new LibraryIndexerException("Unable to index " + rootPath + ": directory doesn't exist or cannot read");
 		}
 
+		// TODO: Batch tracks instead of dumping them all into memory
 		// get all indexed files from db for path
-		List<Track> tracks = this.trackProvider.findAllByLibraryId(this.library.getId());
-		// Map<String, Date> pathToModDate = Maps.newHashMapWithExpectedSize(tracks.size());
-		Map<String, Track> pathToTrack = Maps.uniqueIndex(tracks, new Function<Track, String>() {
+		List<Track> tracks;
+		try {
+			tracks = this.trackProvider.findAllByLibraryId(this.library.getId());
+		} catch (DBException e) {
+			throw new LibraryIndexerException("Error retrieving tracks from library: " + this.library, e);
+		}
 
-			@Override
-			public String apply(Track track) {
-				return track.getPath();
-			}
-		});
+		// wrap all the tracks in a IndexedTrack for use later to determine which tracks were not indexed
+		// map the path to the Scannedtrack
+		Map<String, IndexedTrack> pathToTrack = Maps.newHashMapWithExpectedSize(tracks.size());
+		for (Track t : tracks) {
+			pathToTrack.put(t.getPath(), new IndexedTrack(t));
+		}
 
+		// when batched, loop through until batch is empty
+		// while(!this.cancelScan && !pathToTrack.keys().isEmpty()) {
 		this.scan(rootPath, pathToTrack);
+		// }
+
+		// we're done scanning the files on disk
+
+		// for any tracks that were not found on disk
+		// send MISSING_TRACK_EVENT for all tracks that were not visited
+		for (IndexedTrack idxTrack : pathToTrack.values()) {
+			// cut out early if we were cancelled
+			if (this.cancelScan) {
+				return true;
+			}
+			if (!idxTrack.scanned) {
+				this.bus.post(new MissingTrackEvent(idxTrack.track, this.library));
+			}
+		}
+
+		// cut out early if we were cancelled
+		if (this.cancelScan) {
+			return true;
+		}
 
 		// Update lastIndexedDate to now
 		try {
@@ -103,10 +151,11 @@ public class LibraryIndexerTask implements Callable<Void> {
 			throw new LibraryIndexerException("Error updating library: " + this.library, e);
 		}
 
-		return null;
+		// success!
+		return false;
 	}
 
-	private void scan(File dir, Map<String, Track> pathToTrack) {
+	private void scan(File dir, Map<String, IndexedTrack> pathToTrack) {
 
 		if (this.cancelScan) {
 			return;
@@ -150,26 +199,26 @@ public class LibraryIndexerTask implements Callable<Void> {
 		}
 	}
 
-	private void index(File file, Map<String, Track> pathToTrack) throws IOException {
+	private void index(File file, Map<String, IndexedTrack> pathToTrack) throws IOException {
 		log.debug("Indexing file: " + file);
 
 		String path = file.getCanonicalPath();
-		Track track = pathToTrack.get(path);
-		ITrackEvent event = null;
+		IndexedTrack idxTrack = pathToTrack.get(path);
 
-		if (track == null) {
+		if (idxTrack == null) {
 			// NEW
-			event = new UnknownTrackEvent(file, this.library);
+			this.bus.post(new UnknownTrackEvent(file, this.library));
 		} else {
 			Date fileDate = new Date(file.lastModified());
-			if (fileDate.after(track.getModificationDate())) {
+			if (fileDate.after(idxTrack.track.getModificationDate())) {
 				// CHANGED
-				event = new ChangedTrackEvent(track, this.library);
-				pathToTrack.remove(file);
+				this.bus.post(new ChangedTrackEvent(idxTrack.track, this.library));
+			} else {
+				// NO CHANGE: do nothing
 			}
-		}
 
-		this.bus.post(event);
+			idxTrack.markScanned();
+		}
 	}
 
 	@Override

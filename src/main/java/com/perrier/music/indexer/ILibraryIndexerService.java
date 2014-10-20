@@ -6,6 +6,6 @@ import com.google.common.util.concurrent.Service;
 
 public interface ILibraryIndexerService extends Service {
 
-	Future<Void> submit(LibraryIndexerTask task);
+	Future<Boolean> submit(LibraryIndexerTask task);
 
 }

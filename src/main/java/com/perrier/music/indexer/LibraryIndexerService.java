@@ -27,9 +27,10 @@ public class LibraryIndexerService extends AbstractIdleService implements ILibra
 	}
 
 	@Override
-	public Future<Void> submit(LibraryIndexerTask task) {
+	public Future<Boolean> submit(LibraryIndexerTask task) {
 		try {
-			return this.executor.submit(task);
+			Future<Boolean> f = this.executor.submit(task);
+			return f;
 		} catch (RejectedExecutionException e) {
 			// TODO Consider throwing exception so caller can handle rejected executions
 			log.warn("Unable to submit task: already running: {}", task);
