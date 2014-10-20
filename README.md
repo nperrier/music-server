@@ -33,3 +33,5 @@ A simple web app to stream music built using modern Java libraries and AngularJS
 * Smart meta-info from source (e.g., musicbrainz)
 * Implement search: (client-side or server-side?)
 * Implement handling of changed metadata for media files in indexer
+* Add UI to add playlist to queue
+* Add ability to delete Library
