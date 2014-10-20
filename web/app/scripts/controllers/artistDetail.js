@@ -9,6 +9,10 @@
  */
 angular.module('musicApp')
   .controller('ArtistDetailCtrl', ['$scope', '$routeParams', 'Artist', 'ArtistAlbum', function($scope, $routeParams, Artist, ArtistAlbum) {
+
+	$scope.sortField = 'name';
+	$scope.reverse = false;
+
 	// Load artist from rest resource
 	Artist.get({ artistId: $routeParams.artistId }, function(artist) {
 		$scope.artist = artist;
@@ -19,6 +23,4 @@ angular.module('musicApp')
 		$scope.albums = albums;
 	});
 
-	$scope.sortField = 'name';
-	$scope.reverse = true;
 }]);

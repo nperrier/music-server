@@ -13,16 +13,16 @@
           <thead>
             <tr>
               <th>Cover</th>
-              <th ng-click="sortOrder = 'name'; reverse = !reverse">Title</th>
-              <th ng-click="sortOrder = 'length'; reverse = !reverse">
+              <th ng-click="sortField = 'name'; reverse = !reverse">Title</th>
+              <th ng-click="sortField = 'length'; reverse = !reverse">
                 <span class="glyphicon glyphicon-time"></span>
               </th>
-              <th ng-click="sortOrder = 'artist.name'; reverse = !reverse">Artist</th>
-              <th ng-click="sortOrder = 'album.name'; reverse = !reverse">Album</th>
+              <th ng-click="sortField = 'artist.name'; reverse = !reverse">Artist</th>
+              <th ng-click="sortField = 'album.name'; reverse = !reverse">Album</th>
             </tr>
           </thead>
           <tbody>
-            <tr class="track-list-item" ng-repeat="t in tracks | filter:trackQuery | orderBy:sortOrder:reverse">
+            <tr class="track-list-item" ng-repeat="t in tracks | filter:trackQuery | orderBy:sortField:reverse">
               <td>
                 <img class="coverart-thumb" ng-src="{{t.coverArtUrl}}"/>
               </td>

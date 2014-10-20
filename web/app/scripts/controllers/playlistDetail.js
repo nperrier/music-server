@@ -10,6 +10,9 @@
 angular.module('musicApp')
   .controller('PlaylistDetailCtrl', ['$scope', '$routeParams', 'Playlist', function($scope, $routeParams, Playlist) {
 
+    $scope.sortField = 'position';
+    $scope.reverse = false;
+
     Playlist.get({ playlistId: $routeParams.playlistId }, function(playlist) {
       $scope.playlist = playlist;
     });
@@ -18,6 +21,4 @@ angular.module('musicApp')
       $scope.tracks = tracks;
     });
 
-    $scope.sortField = 'position';
-    $scope.reverse = true;
   }]);

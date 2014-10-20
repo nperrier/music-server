@@ -10,13 +10,13 @@
         <table class="table">
           <thead>
             <tr>
-              <th ng-click="sortOrder = 'path'; reverse = !reverse">Library Path</th>
+              <th ng-click="sortField = 'path'; reverse = !reverse">Library Path</th>
               <th>Last Scanned</th>
               <th/>
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="l in libraries | orderBy:sortOrder:reverse">
+            <tr ng-repeat="l in libraries | orderBy:sortField:reverse">
               <td>
                 {{l.path}}
               </td>

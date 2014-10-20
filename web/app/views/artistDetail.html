@@ -11,12 +11,12 @@
 			<thead>
 				<tr>
 					<th />
-					<th ng-click="sortOrder = 'name'; reverse = !reverse">Title</th>
-					<th ng-click="sortOrder = 'year'; reverse = !reverse">Year</th>
+					<th ng-click="sortField = 'name'; reverse = !reverse">Title</th>
+					<th ng-click="sortField = 'year'; reverse = !reverse">Year</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="a in albums | orderBy:sortOrder:reverse">
+				<tr ng-repeat="a in albums | orderBy:sortField:reverse">
 					<td>
 						<img class="coverart-thumb" ng-src="{{a.coverArtUrl}}"/>
 					</td>

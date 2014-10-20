@@ -11,6 +11,9 @@ angular.module('musicApp')
   .controller('AlbumDetailCtrl', ['$scope', '$routeParams', 'Album', 'AlbumTrack',
     function($scope, $routeParams, Album, AlbumTrack) {
 
+	$scope.sortField = 'number';
+	$scope.reverse = false;
+
 	Album.get({ albumId: $routeParams.albumId }, function(album) {
 		$scope.album = album;
 	});
@@ -19,6 +22,4 @@ angular.module('musicApp')
 		$scope.tracks = tracks;
 	});
 
-	$scope.sortField = 'number';
-	$scope.reverse = true;
 }]);

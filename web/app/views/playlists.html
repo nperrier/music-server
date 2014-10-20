@@ -10,11 +10,11 @@
         <table class="table">
           <thead>
             <tr>
-              <th ng-click="sortOrder = 'name'; reverse = !reverse">Name</th>
+              <th ng-click="sortField = 'name'; reverse = !reverse">Name</th>
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="p in playlists | orderBy:sortOrder:reverse">
+            <tr ng-repeat="p in playlists | orderBy:sortField:reverse">
               <td>
                 <a ng-href="#/playlist/{{p.id}}" class="thumb">
                   {{p.name}}

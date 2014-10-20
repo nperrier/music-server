@@ -11,7 +11,7 @@ angular.module('musicApp')
   .controller('GenresCtrl', ['$scope', 'Genre', function($scope, Genre) {
 
     $scope.sortField = 'name';
-    $scope.reverse = true;
+    $scope.reverse = false;
     $scope.doneLoading = false;
 
 	  $scope.genres = Genre.query(function () {

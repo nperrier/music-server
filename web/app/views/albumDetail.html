@@ -10,15 +10,15 @@
 		<table class="table">
 			<thead>
 				<tr>
-					<th ng-click="sortOrder = 'number'; reverse = !reverse">#</th>
-					<th ng-click="sortOrder = 'name'; reverse = !reverse">Title</th>
-          <th ng-click="sortOrder = 'length'; reverse = !reverse">
+					<th ng-click="sortField = 'number'; reverse = !reverse">#</th>
+					<th ng-click="sortField = 'name'; reverse = !reverse">Title</th>
+          <th ng-click="sortField = 'length'; reverse = !reverse">
             <span class="glyphicon glyphicon-time"></span>
           </th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="t in tracks | orderBy:sortOrder:reverse">
+				<tr ng-repeat="t in tracks | orderBy:sortField:reverse">
 					<td>
 						{{t.number}}
 					</td>

@@ -11,7 +11,7 @@ angular.module('musicApp')
   .controller('AlbumsCtrl', ['$scope', 'Album', function($scope, Album) {
 
     $scope.sortField = 'name';
-    $scope.reverse = true;
+    $scope.reverse = false;
     $scope.doneLoading = false;
 
 	  $scope.albums = Album.query(function () {
