@@ -1,16 +1,13 @@
 package com.perrier.music.rest.resource
 
-import java.util.List
-
-import javax.ws.rs.Consumes
 import javax.ws.rs.GET
-import javax.ws.rs.POST
 import javax.ws.rs.Path
 import javax.ws.rs.PathParam
 import javax.ws.rs.Produces
-import javax.ws.rs.core.GenericEntity
+import javax.ws.rs.WebApplicationException
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
+import javax.ws.rs.core.StreamingOutput
 
 import com.google.inject.Inject
 import com.perrier.music.dto.album.AlbumDto
@@ -38,7 +35,7 @@ class AlbumResource extends RestResource {
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	def AlbumDto get(@PathParam("id") Long id) {
-		
+
 		Album album = this.albumProvider.findById(id)
 
 		if (album == null) {
@@ -51,12 +48,12 @@ class AlbumResource extends RestResource {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	def Collection<AlbumDto> getAll() {
-		
+
 		List<Album> albums = this.albumProvider.findAll()
 
 		return AlbumDtoMapper.build(albums)
 	}
-	
+
 	@GET
 	@Path("{id}/tracks")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -65,5 +62,41 @@ class AlbumResource extends RestResource {
 		List<Track> tracks = this.trackProvider.findAllByAlbumId(id)
 
 		return TrackDtoMapper.build(tracks)
+	}
+
+	@GET
+	@Path("download/{id}")
+	@Produces([
+		"application/zip",
+		"application/json"
+	])
+	public Response download(@PathParam("id") Long id) {
+
+		Album album = this.albumProvider.findById(id)
+
+		if (album == null) {
+			throw new EntityNotFoundException("Album not found, id: " + id)
+		}
+
+		// TODO: create zip of all tracks - name
+
+		StreamingOutput stream = new StreamingOutput() {
+					@Override
+					public void write(OutputStream os) throws IOException, WebApplicationException {
+						try {
+							// TODO: Stream zipped album file
+						}
+						catch (Exception e) {
+							throw new WebApplicationException(e)
+						}
+					}
+				}
+
+		def filename = album.artist.name + "-" + album.name + ".zip"
+
+		return Response.ok(stream)
+				.type("application/zip")
+				.header("Content-Disposition", "attachment; filename=\"" + filename + "\"")
+				.build()
 	}
 }

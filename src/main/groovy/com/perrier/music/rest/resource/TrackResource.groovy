@@ -91,8 +91,8 @@ public class TrackResource extends RestResource {
 		def filename = new File(track.getPath()).name
 
 		return Response.ok(stream)
-		.type("audio/mpeg")
-		.header("Content-Disposition", "attachment; filename=\"" + filename + "\"")
-		.build()
+				.type("audio/mpeg")
+				.header("Content-Disposition", "attachment; filename=\"" + filename + "\"")
+				.build()
 	}
 }

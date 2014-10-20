@@ -6,7 +6,7 @@ import javax.ws.rs.POST
 import javax.ws.rs.Path
 import javax.ws.rs.PathParam
 import javax.ws.rs.Produces
-import javax.ws.rs.core.MediaType  
+import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
 import com.google.inject.Inject
@@ -26,10 +26,10 @@ public class LibraryResource extends RestResource {
 	LibraryProvider libraryProvider
 
 	@Inject
-	ILibraryIndexerService indexerService;
+	ILibraryIndexerService indexerService
 
 	@Inject
-	ILibraryIndexerTaskFactory taskFactory;
+	ILibraryIndexerTaskFactory taskFactory
 
 	@GET
 	@Path("{id}")
@@ -78,7 +78,7 @@ public class LibraryResource extends RestResource {
 	@Path("{id}/scan")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response scan(@PathParam("id") Long id) {
-		
+
 		Library library = this.libraryProvider.findById(id)
 		if (!library) {
 			throw new EntityExistsException("Library does not exist")
