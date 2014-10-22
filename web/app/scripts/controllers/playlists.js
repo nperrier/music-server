@@ -8,7 +8,8 @@
  * Controller of the musicApp
  */
 angular.module('musicApp')
-  .controller('PlaylistsCtrl', ['$scope', '$log', 'Playlist', function ($scope, $log, Playlist) {
+  .controller('PlaylistsCtrl', ['$scope', '$log', 'Playlist', 'PlayerQueue',
+    function ($scope, $log, Playlist, PlayerQueue) {
 
     $scope.sortField = 'name';
     $scope.doneLoading = false;
@@ -29,6 +30,17 @@ angular.module('musicApp')
         // TODO: Might be better to simply remove the corresponding playlist object
         // from the Array instead of re-querying the entire list
         $scope.playlists = Playlist.query();
+      });
+    };
+
+    $scope.addPlaylistToQueue = function(playlist) {
+      $log.info('Add playlist to queue, id: ' + playlist.id);
+
+      $scope.tracks = Playlist.getTracks({ playlistId: playlist.id }, function(tracks) {
+        tracks.forEach(function(playlistTrack) {
+          $log.info('Add track to player queue, id: ' + playlistTrack.track.id);
+          PlayerQueue.addTrack(playlistTrack.track);
+        });
       });
     };
 

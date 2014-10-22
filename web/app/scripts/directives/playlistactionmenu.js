@@ -15,19 +15,15 @@ angular.module('musicApp')
       templateUrl: '/views/playlistactionmenu.html',
       // inherits scope from parent:
       scope: false,
-      // creates child scope:
-//       scope: true,
-      // isolate scope:
-//       scope: {
-//         playlist: '=',
-//         onDelete: '&'
-//       },
-//       link: function($scope, $elem, $attrs) {
-//         var p = $scope.p;
-//       },
       controller: function ($scope, $element) {
 
-        $scope.delete = function() {
+        // Add an Album to the player queue:
+        $scope.addToQueue = function(playlist) {
+          $log.info('Add playlist to player queue, id: ' + playlist.id);
+          $scope.addPlaylistToQueue(playlist);
+        };
+
+        $scope.delete = function () {
 
           var modalInstance = $modal.open({
             templateUrl: 'views/playlistdeletemodal.html',
