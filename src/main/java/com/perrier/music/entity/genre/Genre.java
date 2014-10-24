@@ -13,11 +13,9 @@ import com.perrier.music.entity.AbstractAuditableEntity;
 @Table(name = "genre")
 public class Genre extends AbstractAuditableEntity {
 
-	public static final String UNKNOWN_GENRE = "Unknown Genre";
-
 	private Long id;
 	private String name;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false)

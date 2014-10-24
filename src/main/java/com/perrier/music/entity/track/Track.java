@@ -24,8 +24,6 @@ import com.perrier.music.entity.library.Library;
 @Table(name = "track", uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "artist_id", "album_id" }) })
 public class Track extends AbstractAuditableEntity {
 
-	public static final String UNKNOWN_TRACK = "Unknown Track";
-
 	private Long id;
 	private String name;
 	private Integer number;
@@ -104,13 +102,13 @@ public class Track extends AbstractAuditableEntity {
 	}
 
 	@ManyToOne
-	@JoinColumn(name = "artist_id", nullable = false, insertable = true, updatable = true)
+	@JoinColumn(name = "artist_id", insertable = true, updatable = true)
 	public Artist getArtist() {
 		return this.artist;
 	}
 
 	@ManyToOne
-	@JoinColumn(name = "album_id", nullable = false, insertable = true, updatable = true)
+	@JoinColumn(name = "album_id", insertable = true, updatable = true)
 	public Album getAlbum() {
 		return this.album;
 	}

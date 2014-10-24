@@ -7,7 +7,13 @@ import com.perrier.music.entity.genre.Genre;
 
 public class GenreDtoMapper {
 
+	public static final GenreDto EMPTY_GENRE = new GenreDto();
+
 	public static GenreDto build(Genre genre) {
+
+		if (genre == null) {
+			return EMPTY_GENRE;
+		}
 
 		GenreDto dto = new GenreDto();
 		dto.setName(genre.getName());

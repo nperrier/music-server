@@ -28,8 +28,6 @@ import com.perrier.music.entity.track.Track;
 // })
 public class Artist extends AbstractAuditableEntity {
 
-	public static final String UNKNOWN_ARTIST = "Unknown Artist";
-
 	private Long id;
 	private String name;
 	private List<Track> tracks;

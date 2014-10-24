@@ -92,7 +92,7 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 
 			log.debug("Tag: {}", tag);
 
-			final Artist artist = this.addArtist(tag.getArtist());
+			Artist artist = this.addArtist(tag.getArtist());
 			Artist albumArtist = artist;
 
 			if (!StringUtils.isBlank(tag.getAlbumArtist()) && !tag.getArtist().equalsIgnoreCase(tag.getAlbumArtist())) {
@@ -104,7 +104,10 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 			final Track track = this.addTrack(artist, album, genre, tag.getTrack(), tag.getNumber(), tag.getLength(), tag
 					.getCoverArt(), file, event.getLibrary());
 
-			log.info("Track added: {}", track);
+			if (track != null) {
+				log.info("Track added: {}", track);
+			}
+
 		} catch (Exception e) {
 			log.error("Unable to handle unknown track event: {}", event, e);
 		}
@@ -128,7 +131,7 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 	private Genre addGenre(String name) {
 
 		if (StringUtils.isBlank(name)) {
-			name = Genre.UNKNOWN_GENRE;
+			return null;
 		}
 
 		try {
@@ -152,13 +155,17 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 	private Track addTrack(Artist artist, Album album, Genre genre, String name, Integer number, Long length,
 			BufferedImage image, File file, Library library) {
 
+		// track name MUST have a value
 		if (StringUtils.isBlank(name)) {
-			name = Track.UNKNOWN_TRACK;
+			log.error("Cannot add track: name was blank, file={}", file);
+			return null;
 		}
 
 		try {
-
-			Track track = this.db.find(new TrackFindByNameAndArtistIdAndAlbumIdQuery(name, artist.getId(), album.getId()));
+			Track track = null;
+			if (artist != null && album != null) {
+				track = this.db.find(new TrackFindByNameAndArtistIdAndAlbumIdQuery(name, artist.getId(), album.getId()));
+			}
 
 			if (track == null) {
 				track = new Track();
@@ -173,7 +180,7 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 				track.setPath(file.getCanonicalPath());
 
 				// Use albums covert art, otherwise use tracks
-				if (album.getCoverArt() != null) {
+				if (album != null && album.getCoverArt() != null) {
 					track.setCoverArt(album.getCoverArt());
 				} else {
 					if (image != null) {
@@ -196,17 +203,21 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 	private Album addAlbum(Artist artist, String name, Date year, BufferedImage image) {
 
 		if (StringUtils.isBlank(name)) {
-			name = Album.UNKNOWN_ALBUM;
+			return null;
 		}
 
 		try {
-			Album album = this.db.find(new AlbumFindByNameAndArtistIdQuery(name, artist.getId()));
+			Album album = null;
+			if (artist != null) {
+				album = this.db.find(new AlbumFindByNameAndArtistIdQuery(name, artist.getId()));
+			}
 
 			if (album == null) {
 				album = new Album();
 				album.setArtist(artist);
 				album.setName(name);
 				album.setYear(year);
+
 				if (image != null) {
 					album.setCoverArt(this.addCoverArt(image));
 				}
@@ -225,7 +236,7 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 	private Artist addArtist(String name) {
 
 		if (StringUtils.isBlank(name)) {
-			name = Artist.UNKNOWN_ARTIST;
+			return null;
 		}
 
 		try {

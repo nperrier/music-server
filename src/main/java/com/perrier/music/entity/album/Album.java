@@ -26,8 +26,6 @@ import com.perrier.music.entity.track.Track;
 // })
 public class Album extends AbstractAuditableEntity {
 
-	public static final String UNKNOWN_ALBUM = "Unknown Album";
-
 	private Long id;
 	private String name;
 	private Artist artist;

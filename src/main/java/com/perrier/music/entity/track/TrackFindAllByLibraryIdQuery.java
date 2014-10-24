@@ -17,6 +17,7 @@ public class TrackFindAllByLibraryIdQuery extends FindQuery<List<Track>> {
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public List<Track> query(Session session) throws DBException {
 
 		Query q = session.createQuery("select t from Track t where t.library.id = :id");
@@ -24,5 +25,4 @@ public class TrackFindAllByLibraryIdQuery extends FindQuery<List<Track>> {
 
 		return q.list();
 	}
-
 }
