@@ -26,117 +26,117 @@ repositories {
 }
 
 dependencies {
-	compile(
-			[group: 'javax.servlet', name: 'javax.servlet-api', version: '3.0.+'],
+    compile(
+            [group: 'javax.servlet', name: 'javax.servlet-api', version: '3.0.+'],
 
-			[group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.1.+'],
+            [group: 'org.codehaus.groovy', name: 'groovy-all', version: '2.1.+'],
 
-			// logback
-			[group: 'ch.qos.logback', name: 'logback-classic', version: '1.0.+'],
-			[group: 'ch.qos.logback', name: 'logback-core', version: '1.0.+'],
-			[group: 'ch.qos.logback', name: 'logback-access', version: '1.0.+'],
+            // logback
+            [group: 'ch.qos.logback', name: 'logback-classic', version: '1.0.+'],
+            [group: 'ch.qos.logback', name: 'logback-core', version: '1.0.+'],
+            [group: 'ch.qos.logback', name: 'logback-access', version: '1.0.+'],
 
-			// slf4j
-			[group: 'org.slf4j', name: 'slf4j-api', version: '1.7.+'],
-			[group: 'org.slf4j', name: 'jul-to-slf4j', version: '1.7.+'],
-			[group: 'org.slf4j', name: 'log4j-over-slf4j', version: '1.7.+'],
+            // slf4j
+            [group: 'org.slf4j', name: 'slf4j-api', version: '1.7.+'],
+            [group: 'org.slf4j', name: 'jul-to-slf4j', version: '1.7.+'],
+            [group: 'org.slf4j', name: 'log4j-over-slf4j', version: '1.7.+'],
 
-			// h2
-			[group: 'com.h2database', name: 'h2', version: '1.3+'],
+            // h2
+            [group: 'com.h2database', name: 'h2', version: '1.3+'],
 
-			// hibernate
-			[group: 'org.hibernate', name: 'hibernate-core', version: '4.2.15.Final'],
+            // hibernate
+            [group: 'org.hibernate', name: 'hibernate-core', version: '4.2.15.Final'],
 
-			// hibernate c3p0 connection pool
-			[group: 'org.hibernate', name: 'hibernate-c3p0', version: '4.2.15.Final'],
-			// hibernate second-level cache
-			// [group: 'org.hibernate', name: 'hibernate-ehcache', version: '4.2.15.Final'],
-			// [group: 'net.sf.ehcache', name: 'ehcache-core', version: '2.6.+'],
+            // hibernate c3p0 connection pool
+            [group: 'org.hibernate', name: 'hibernate-c3p0', version: '4.2.15.Final'],
+            // hibernate second-level cache
+            // [group: 'org.hibernate', name: 'hibernate-ehcache', version: '4.2.15.Final'],
+            // [group: 'net.sf.ehcache', name: 'ehcache-core', version: '2.6.+'],
 
-			// just needed for DDL generation
-			[group: 'org.hibernate', name: 'hibernate-tools', version: '4.0.0-CR1'],
-			// optional dependency needed for Hibernate
-			[group: 'javassist', name: 'javassist', version: '3.12.1.GA'],
-			// needed for joda Datetime
-			// [group: 'org.jadira.usertype',	name: 'usertype.spi', version: '3.1.0.CR10'],
+            // just needed for DDL generation
+            [group: 'org.hibernate', name: 'hibernate-tools', version: '4.0.0-CR1'],
+            // optional dependency needed for Hibernate
+            [group: 'javassist', name: 'javassist', version: '3.12.1.GA'],
+            // needed for joda Datetime
+            // [group: 'org.jadira.usertype',	name: 'usertype.spi', version: '3.1.0.CR10'],
 
-			// jetty
-			[group: 'org.eclipse.jetty', name: 'jetty-servlet', version: '8+'],
-			[group: 'org.eclipse.jetty', name: 'jetty-webapp', version: '8+'],
-			[group: 'org.eclipse.jetty', name: 'jetty-annotations', version: '8+'],
+            // jetty
+            [group: 'org.eclipse.jetty', name: 'jetty-servlet', version: '8+'],
+            [group: 'org.eclipse.jetty', name: 'jetty-webapp', version: '8+'],
+            [group: 'org.eclipse.jetty', name: 'jetty-annotations', version: '8+'],
 
-			// jersey
-			[group: 'com.sun.jersey', name: 'jersey-core', version: '1.17.+'],
-			[group: 'com.sun.jersey', name: 'jersey-server', version: '1.17.+'],
-			[group: 'com.sun.jersey', name: 'jersey-servlet', version: '1.17.+'],
-			[group: 'com.sun.jersey', name: 'jersey-bundle', version: '1.17.+'],
-			[group: 'com.sun.jersey.contribs', name: 'jersey-guice', version: '1.17.+'],
+            // jersey
+            [group: 'com.sun.jersey', name: 'jersey-core', version: '1.17.+'],
+            [group: 'com.sun.jersey', name: 'jersey-server', version: '1.17.+'],
+            [group: 'com.sun.jersey', name: 'jersey-servlet', version: '1.17.+'],
+            [group: 'com.sun.jersey', name: 'jersey-bundle', version: '1.17.+'],
+            [group: 'com.sun.jersey.contribs', name: 'jersey-guice', version: '1.17.+'],
 
-			// jackson
-			[group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.2.+'],
-			[group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.2.+'],
-			[group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.2.+'],
-			[group: 'com.fasterxml.jackson.jaxrs', name: 'jackson-jaxrs-json-provider', version: '2.2.+'],
+            // jackson
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.2.+'],
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.2.+'],
+            [group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.2.+'],
+            [group: 'com.fasterxml.jackson.jaxrs', name: 'jackson-jaxrs-json-provider', version: '2.2.+'],
 
-			// google libs
-			[group: 'com.google.inject', name: 'guice', version: '3.0'],
-			[group: 'com.google.inject.extensions', name: 'guice-assistedinject', version: '3.0'],
-			[group: 'com.google.inject.extensions', name: 'guice-servlet', version: '3.0'],
-			[group: 'com.google.guava', name: 'guava', version: '15.0'],
+            // google libs
+            [group: 'com.google.inject', name: 'guice', version: '3.0'],
+            [group: 'com.google.inject.extensions', name: 'guice-assistedinject', version: '3.0'],
+            [group: 'com.google.inject.extensions', name: 'guice-servlet', version: '3.0'],
+            [group: 'com.google.guava', name: 'guava', version: '15.0'],
 
-			[group: 'org', name: 'jaudiotagger', version: '2.0.+'],
+            [group: 'org', name: 'jaudiotagger', version: '2.0.+'],
 
-			//		 [ group: 'joda-time', name: 'joda-time', version: '2.3' ],
+            //		 [ group: 'joda-time', name: 'joda-time', version: '2.3' ],
 
-			[group: 'org.apache.commons', name: 'commons-lang3', version: '3.1'],
-			[group: 'org.apache.commons', name: 'commons-io', version: '1.3.+'],
-			[group: 'commons-codec', name: 'commons-codec', version: '1.9'],
+            [group: 'org.apache.commons', name: 'commons-lang3', version: '3.1'],
+            [group: 'org.apache.commons', name: 'commons-io', version: '1.3.+'],
+            [group: 'commons-codec', name: 'commons-codec', version: '1.9'],
 
-			// properties lib
-			// [group: 'org.aeonbits.owner', name: 'owner', version: '1.0.5'],
+            // properties lib
+            // [group: 'org.aeonbits.owner', name: 'owner', version: '1.0.5'],
 
-			// command line parser
-			[group: 'com.beust', name: 'jcommander', version: '1.+'],
+            // command line parser
+            [group: 'com.beust', name: 'jcommander', version: '1.+'],
 
-			// mime-type detector
-			[group: 'org.apache.tika', name: 'tika-core', version: '1.5']
-			)
-	testCompile(
-			[group: 'junit', name: 'junit', version: '4.+'],
-			[group: 'org.mockito', name: 'mockito-all', version: '1.9.+']
-			)
+            // mime-type detector
+            [group: 'org.apache.tika', name: 'tika-core', version: '1.5']
+    )
+    testCompile(
+            [group: 'junit', name: 'junit', version: '4.+'],
+            [group: 'org.mockito', name: 'mockito-all', version: '1.9.+']
+    )
 }
 
 // configure eclipse project generation plugin:
 eclipse {
-	// find gradle cache location
-	def gradleCache = null
-	for (o in configurations.compile) {
-		if (o.toString().indexOf(".gradle") != -1) {
-			// final def token = "filestore"
-			final def token = "files-2.1" // changed in 2.0?
-			def s = o.toString()
-			def idx = s.indexOf(token)
-			if (idx != -1) {
-				gradleCache = new File(s.substring(0, idx + token.length()))
-				break
-			}
-		}
-	}
+    // find gradle cache location
+    def gradleCache = null
+    for (o in configurations.compile) {
+        if (o.toString().indexOf(".gradle") != -1) {
+            // final def token = "filestore"
+            final def token = "files-2.1" // changed in 2.0?
+            def s = o.toString()
+            def idx = s.indexOf(token)
+            if (idx != -1) {
+                gradleCache = new File(s.substring(0, idx + token.length()))
+                break
+            }
+        }
+    }
 
-	// println "GRADLE_CACHE: " + gradleCache
-	assert gradleCache && gradleCache.exists()
+    // println "GRADLE_CACHE: " + gradleCache
+    // assert gradleCache && gradleCache.exists()
 
-	// Replace absolute paths with classpath variable GRADLE_CACHE
-	// MANUAL STEP: make sure GRADLE_CACHE is defined in:
-	// Eclipse -> Preferences -> Java -> Build Path -> Classpath Variables
-	pathVariables 'GRADLE_CACHE': gradleCache
+    // Replace absolute paths with classpath variable GRADLE_CACHE
+    // MANUAL STEP: make sure GRADLE_CACHE is defined in:
+    // Eclipse -> Preferences -> Java -> Build Path -> Classpath Variables
+    pathVariables 'GRADLE_CACHE': gradleCache
 }
 
 // println "projectDir: $projectDir"
 description = 'A personal music server'
 version = '0.1'
-sourceCompatibility = 1.6
+//sourceCompatibility = 1.6
 //targetCompatability = 1.6
 mainClassName = 'com.perrier.music.Core'
 
@@ -144,48 +144,48 @@ setEnvironment()
 loadConfig()
 
 def setEnvironment() {
-	if (!hasProperty('env')) {
-		ext.env = 'dev'
-	}
+    if (!hasProperty('env')) {
+        ext.env = 'dev'
+    }
 
-	println "Environment is set to $env"
+    println "Environment is set to $env"
 }
 
 def loadConfig() {
-	def configFile = file("conf/$env/config.groovy")
-	def config = new ConfigSlurper().parse(configFile.toURL())
-	ext.config = config
+    def configFile = file("conf/$env/config.groovy")
+    def config = new ConfigSlurper().parse(configFile.toURL())
+    ext.config = config
 }
 
 flyway {
-	driver = config.h2.driver
-	url = config.h2.url
-	user = config.h2.username
-	password = config.h2.password
+    driver = config.h2.driver
+    url = config.h2.url
+    user = config.h2.username
+    password = config.h2.password
 }
 
 jar {
-	manifest {
-		attributes(
-				'Implementation-Title': 'Music Server',
-				'Implementation-Version': version,
-				'Main-Class': mainClassName
-				)
-	}
+    manifest {
+        attributes(
+                'Implementation-Title': 'Music Server',
+                'Implementation-Version': version,
+                'Main-Class': mainClassName
+        )
+    }
 }
 
 test { // test framework package
-	exclude 'com/perrier/music/test/**'
+    exclude 'com/perrier/music/test/**'
 }
 
 run {
-	debug = config.debug ?: false
+    debug = config.debug ?: false
 }
 
 task devClean(type: Delete) {
-	description 'Deletes the dev directory used for testing the server'
-	
-	ant.delete (includeEmptyDirs: 'true') {
-		fileset(dir: file(config.appdir.root), includes: '**/*')
-	}
+    description 'Deletes the dev directory used for testing the server'
+
+    ant.delete(includeEmptyDirs: 'true') {
+        fileset(dir: file(config.appdir.root), includes: '**/*')
+    }
 }

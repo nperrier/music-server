@@ -10,8 +10,7 @@ public class ApplicationConfig implements IConfiguration {
 	@SuppressWarnings("rawtypes")
 	private final Map properties;
 
-	public ApplicationConfig(@SuppressWarnings("rawtypes")
-	Map props) {
+	public ApplicationConfig(@SuppressWarnings("rawtypes") Map props) {
 		this.properties = props;
 	}
 
@@ -20,7 +19,7 @@ public class ApplicationConfig implements IConfiguration {
 			Object p = this.properties.get(key);
 			if (BigDecimal.class.equals(p.getClass())) {
 				BigDecimal dec = (BigDecimal) p;
-				return Double.valueOf(dec.doubleValue());
+				return dec.doubleValue();
 			}
 		}
 		return null;

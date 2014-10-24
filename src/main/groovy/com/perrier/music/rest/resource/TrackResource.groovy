@@ -1,28 +1,17 @@
-
 package com.perrier.music.rest.resource
 
-import java.io.IOException
-import java.io.OutputStream
-import java.util.Collection
-
-import javax.ws.rs.WebApplicationException
-import javax.ws.rs.core.Response
-import javax.ws.rs.core.StreamingOutput
-import javax.ws.rs.Consumes
 import javax.ws.rs.GET
-import javax.ws.rs.POST
 import javax.ws.rs.Path
 import javax.ws.rs.PathParam
 import javax.ws.rs.Produces
+import javax.ws.rs.WebApplicationException
 import javax.ws.rs.core.MediaType
+import javax.ws.rs.core.Response
+import javax.ws.rs.core.StreamingOutput
 
 import com.google.inject.Inject
-
-import com.perrier.music.entity.TrackProvider
-import com.perrier.music.dto.album.AlbumDto
 import com.perrier.music.dto.track.TrackDto
 import com.perrier.music.dto.track.TrackDtoMapper
-import com.perrier.music.entity.artist.Artist
 import com.perrier.music.entity.track.Track
 import com.perrier.music.entity.track.TrackProvider
 import com.perrier.music.server.EntityNotFoundException
@@ -64,8 +53,8 @@ public class TrackResource extends RestResource {
 	@GET
 	@Path("download/{id}")
 	@Produces([
-		"audio/mpeg",
-		"application/json"
+			"audio/mpeg",
+			"application/json"
 	])
 	public Response download(@PathParam("id") Long id) {
 
@@ -76,17 +65,17 @@ public class TrackResource extends RestResource {
 		}
 
 		StreamingOutput stream = new StreamingOutput() {
-					@Override
-					public void write(OutputStream os) throws IOException, WebApplicationException {
-						try {
-							TrackStreamer streamer = new TrackStreamer(track)
-							streamer.writeStream(os)
-						}
-						catch (Exception e) {
-							throw new WebApplicationException(e)
-						}
-					}
+			@Override
+			public void write(OutputStream os) throws IOException, WebApplicationException {
+				try {
+					TrackStreamer streamer = new TrackStreamer(track)
+					streamer.writeStream(os)
 				}
+				catch (Exception e) {
+					throw new WebApplicationException(e)
+				}
+			}
+		}
 
 		def filename = new File(track.getPath()).name
 

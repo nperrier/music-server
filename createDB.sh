@@ -1,3 +1,3 @@
-. ~/.bashrc
+#!/bin/bash
 
 gradle --offline flywayClean flywayMigrate

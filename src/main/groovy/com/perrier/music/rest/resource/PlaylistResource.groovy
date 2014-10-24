@@ -24,7 +24,8 @@ import com.perrier.music.server.EntityNotFoundException
 @Produces(MediaType.APPLICATION_JSON)
 class PlaylistResource extends RestResource {
 
-	@Inject PlaylistProvider playlistProvider
+	@Inject
+	PlaylistProvider playlistProvider
 
 	@GET
 	def Collection<PlaylistDto> getAll() {
@@ -91,7 +92,8 @@ class PlaylistResource extends RestResource {
 	@POST
 	@Path("{id}/tracks")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addTracks(@PathParam("id") Long id, @QueryParam("position") Integer position, List<Long> playlistTrackIds) {
+	public Response addTracks(
+			@PathParam("id") Long id, @QueryParam("position") Integer position, List<Long> playlistTrackIds) {
 		// TODO: Wrap all this logic in a separate class that throws exceptions that the API translates to Response codes
 		// TODO validate the path before creating
 		Playlist playlist = this.playlistProvider.findById(id, true)

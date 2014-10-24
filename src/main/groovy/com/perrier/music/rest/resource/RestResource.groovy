@@ -1,7 +1,6 @@
-package com.perrier.music.rest.resource;
+package com.perrier.music.rest.resource
 
-import org.apache.tika.Tika;
-import org.apache.tika.mime.MimeTypes;
+import org.apache.tika.Tika
 
 public class RestResource {
 

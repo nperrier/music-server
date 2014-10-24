@@ -16,8 +16,6 @@ import com.perrier.music.dto.track.TrackDto
 import com.perrier.music.dto.track.TrackDtoMapper
 import com.perrier.music.entity.album.Album
 import com.perrier.music.entity.album.AlbumProvider
-import com.perrier.music.entity.artist.Artist
-import com.perrier.music.entity.artist.ArtistProvider
 import com.perrier.music.entity.track.Track
 import com.perrier.music.entity.track.TrackProvider
 import com.perrier.music.server.EntityNotFoundException
@@ -67,8 +65,8 @@ class AlbumResource extends RestResource {
 	@GET
 	@Path("download/{id}")
 	@Produces([
-		"application/zip",
-		"application/json"
+			"application/zip",
+			"application/json"
 	])
 	public Response download(@PathParam("id") Long id) {
 
@@ -81,16 +79,16 @@ class AlbumResource extends RestResource {
 		// TODO: create zip of all tracks - name
 
 		StreamingOutput stream = new StreamingOutput() {
-					@Override
-					public void write(OutputStream os) throws IOException, WebApplicationException {
-						try {
-							// TODO: Stream zipped album file
-						}
-						catch (Exception e) {
-							throw new WebApplicationException(e)
-						}
-					}
+			@Override
+			public void write(OutputStream os) throws IOException, WebApplicationException {
+				try {
+					// TODO: Stream zipped album file
 				}
+				catch (Exception e) {
+					throw new WebApplicationException(e)
+				}
+			}
+		}
 
 		def filename = album.artist.name + "-" + album.name + ".zip"
 

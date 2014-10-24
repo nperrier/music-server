@@ -17,7 +17,6 @@ import com.perrier.music.indexer.ILibraryIndexerTaskFactory
 import com.perrier.music.server.EntityExistsException
 import com.perrier.music.server.EntityNotFoundException
 
-
 @Path("api/library")
 @Produces(MediaType.APPLICATION_JSON)
 public class LibraryResource extends RestResource {

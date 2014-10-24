@@ -1,8 +1,6 @@
 
 package com.perrier.music.rest.resource
 
-import java.io.IOException
-
 import javax.ws.rs.GET
 import javax.ws.rs.Path
 import javax.ws.rs.PathParam
@@ -15,7 +13,6 @@ import com.google.inject.Inject
 import com.perrier.music.entity.track.Track
 import com.perrier.music.entity.track.TrackProvider
 import com.perrier.music.server.EntityNotFoundException
-import com.perrier.music.stream.StreamException
 import com.perrier.music.stream.TrackStreamer
 
 @Path("api/stream")
