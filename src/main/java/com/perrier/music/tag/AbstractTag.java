@@ -2,10 +2,6 @@ package com.perrier.music.tag;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,7 +23,7 @@ public abstract class AbstractTag implements ITag {
 	protected final String genre;
 	protected final Integer number;
 	protected final Long length;
-	protected final Date year;
+	protected final String year;
 	protected final BufferedImage coverArt;
 
 	protected AbstractTag(AbstractTagBuilder<? extends ITag> b) {
@@ -73,7 +69,7 @@ public abstract class AbstractTag implements ITag {
 	}
 
 	@Override
-	public Date getYear() {
+	public String getYear() {
 		return this.year;
 	}
 
@@ -85,22 +81,6 @@ public abstract class AbstractTag implements ITag {
 	@Override
 	public BufferedImage getCoverArt() {
 		return this.coverArt;
-	}
-
-	protected static Date setYear(String rawYear) {
-		log.debug("Tag year field: {}", rawYear);
-		Date year = null;
-
-		if (!StringUtils.isBlank(rawYear)) {
-			try {
-				DateFormat df = new SimpleDateFormat("yyyy");
-				year = df.parse(rawYear);
-			} catch (ParseException e) {
-				log.warn("Could not read year from tag, rawYear: {}", rawYear, e);
-			}
-		}
-
-		return year;
 	}
 
 	protected static BufferedImage setCoverArt(final Artwork artwork) {
@@ -160,7 +140,7 @@ public abstract class AbstractTag implements ITag {
 		private String genre;
 		private Integer number;
 		private Long length;
-		private Date year;
+		private String year;
 		private BufferedImage coverArt;
 
 		public AbstractTagBuilder<T> track(String track) {
@@ -198,7 +178,7 @@ public abstract class AbstractTag implements ITag {
 			return this;
 		}
 
-		public AbstractTagBuilder<T> year(Date year) {
+		public AbstractTagBuilder<T> year(String year) {
 			this.year = year;
 			return this;
 		}

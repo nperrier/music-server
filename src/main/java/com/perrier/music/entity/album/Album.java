@@ -1,6 +1,5 @@
 package com.perrier.music.entity.album;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -31,7 +30,7 @@ public class Album extends AbstractAuditableEntity {
 	private Artist artist;
 	private List<Track> tracks;
 	// private Genre genre;
-	private Date year;
+	private String year;
 	private String coverArt;
 
 	public Album() {
@@ -90,11 +89,11 @@ public class Album extends AbstractAuditableEntity {
 	// this.genre = genre;
 	// }
 
-	public Date getYear() {
+	public String getYear() {
 		return this.year;
 	}
 
-	public void setYear(Date year) {
+	public void setYear(String year) {
 		this.year = year;
 	}
 

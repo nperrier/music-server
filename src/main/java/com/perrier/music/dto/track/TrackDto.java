@@ -16,7 +16,7 @@ public class TrackDto extends AuditableDto {
 	private Long length;
 	private String coverArtUrl;
 	private String streamUrl;
-	private Date year;
+	private String year;
 	private Date fileModificationDate;
 
 	private ArtistDto artist;
@@ -47,11 +47,11 @@ public class TrackDto extends AuditableDto {
 		this.number = number;
 	}
 
-	public Date getYear() {
+	public String getYear() {
 		return this.year;
 	}
 
-	public void setYear(Date year) {
+	public void setYear(String year) {
 		this.year = year;
 	}
 

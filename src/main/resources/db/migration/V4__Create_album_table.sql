@@ -3,7 +3,7 @@
 create table album (
   id bigint not null auto_increment,
   name varchar(255) not null,
-  year timestamp,
+  year char(4),
   artist_id bigint,
   genre_id bigint,
   cover_art varchar(255),

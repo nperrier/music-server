@@ -20,6 +20,8 @@ import com.perrier.music.entity.artist.Artist;
 import com.perrier.music.entity.genre.Genre;
 import com.perrier.music.entity.library.Library;
 
+//import javax.persistence.ManyToOne;
+
 @Entity
 @Table(name = "track", uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "artist_id", "album_id" }) })
 public class Track extends AbstractAuditableEntity {
@@ -28,13 +30,14 @@ public class Track extends AbstractAuditableEntity {
 	private String name;
 	private Integer number;
 	private String path;
-	private Date year;
+	private String year;
 	private Long length;
 	private Artist artist;
 	private Album album;
 	private Genre genre;
 	private Library library;
 	private String coverArt;
+	private Boolean edited = false;
 	private Date fileModificationDate;
 
 	public Track() {
@@ -78,13 +81,12 @@ public class Track extends AbstractAuditableEntity {
 		this.number = number;
 	}
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(nullable = true)
-	public Date getYear() {
+	@Column(nullable = true, length = 4)
+	public String getYear() {
 		return this.year;
 	}
 
-	public void setYear(Date year) {
+	public void setYear(String year) {
 		this.year = year;
 	}
 
@@ -156,12 +158,21 @@ public class Track extends AbstractAuditableEntity {
 		this.coverArt = coverArt;
 	}
 
+	@Column(nullable = false)
+	public Boolean getEdited() {
+		return edited;
+	}
+
+	public void setEdited(Boolean edited) {
+		this.edited = edited;
+	}
+
 	@Override
 	public String toString() {
 		return "Track [id=" + this.id + ", name=" + this.name + ", number=" + this.number + ", path=" + this.path
 				+ ", year=" + this.year + ", length=" + this.length + ", artist=" + this.artist + ", album=" + this.album
-				+ ", genre=" + this.genre + ", library=" + this.library + ", coverArt=" + this.coverArt
-				+ ", fileModificationDate=" + this.fileModificationDate + "]";
+				+ ", genre=" + this.genre + ", library=" + this.library + ", coverArt=" + this.coverArt + ", edited="
+				+ this.edited + ", fileModificationDate=" + this.fileModificationDate + "]";
 	}
 
 }

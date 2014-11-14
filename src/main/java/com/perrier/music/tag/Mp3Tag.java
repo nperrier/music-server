@@ -75,7 +75,7 @@ public class Mp3Tag extends AbstractTag {
 		b.albumArtist(getID3v24TagValue(v2tag, FieldKey.ALBUM_ARTIST));
 		b.album(getID3v24TagValue(v2tag, FieldKey.ALBUM));
 		b.track(setTrack(getID3v24TagValue(v2tag, FieldKey.TITLE), f.getFile()));
-		b.year(setYear(v2tag.getFirst(ID3v24Frames.FRAME_ID_YEAR)));
+		b.year(v2tag.getFirst(ID3v24Frames.FRAME_ID_YEAR));
 		b.genre(v2tag.getFirst(ID3v24Frames.FRAME_ID_GENRE));
 		b.number(setTrackNumber(v2tag.getFirst(ID3v24Frames.FRAME_ID_TRACK)));
 		b.coverArt(setCoverArt(v2tag.getFirstArtwork()));
@@ -111,7 +111,7 @@ public class Mp3Tag extends AbstractTag {
 			b.artist(getID3v1TagValue(tag.getArtist()));
 			b.album(getID3v1TagValue(tag.getAlbum()));
 			b.track(setTrack(getID3v1TagValue(tag.getTitle()), f.getFile()));
-			b.year(setYear(getID3v1TagValue(tag.getYear())));
+			b.year(getID3v1TagValue(tag.getYear()));
 			b.genre(getID3v1TagValue(tag.getGenre()));
 			// ID3v1 tags have no track numbers
 			// ID3v1 tags have no cover art

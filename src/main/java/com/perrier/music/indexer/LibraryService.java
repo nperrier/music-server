@@ -22,7 +22,6 @@ import com.perrier.music.entity.album.AlbumFindByNameAndArtistIdQuery;
 import com.perrier.music.entity.artist.Artist;
 import com.perrier.music.entity.artist.ArtistCreateQuery;
 import com.perrier.music.entity.artist.ArtistFindByNameQuery;
-import com.perrier.music.entity.artist.TrackFindByNameAndArtistIdAndAlbumIdQuery;
 import com.perrier.music.entity.genre.Genre;
 import com.perrier.music.entity.genre.GenreCreateQuery;
 import com.perrier.music.entity.genre.GenreFindByNameQuery;
@@ -30,6 +29,7 @@ import com.perrier.music.entity.library.Library;
 import com.perrier.music.entity.track.Track;
 import com.perrier.music.entity.track.TrackCreateQuery;
 import com.perrier.music.entity.track.TrackDeleteQuery;
+import com.perrier.music.entity.track.TrackFindByNameAndArtistIdAndAlbumIdQuery;
 import com.perrier.music.indexer.event.ChangedTrackEvent;
 import com.perrier.music.indexer.event.MissingTrackEvent;
 import com.perrier.music.indexer.event.UnknownTrackEvent;
@@ -200,7 +200,7 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 		return null;
 	}
 
-	private Album addAlbum(Artist artist, String name, Date year, BufferedImage image) {
+	private Album addAlbum(Artist artist, String name, String year, BufferedImage image) {
 
 		if (StringUtils.isBlank(name)) {
 			return null;
