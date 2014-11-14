@@ -17,12 +17,6 @@ angular.module('musicApp')
       scope: false,
       controller: function ($scope, $element) {
 
-        // Add an Album to the player queue:
-        $scope.addToQueue = function(playlist) {
-          $log.info('Add playlist to player queue, id: ' + playlist.id);
-          $scope.addPlaylistToQueue(playlist);
-        };
-
         $scope.delete = function () {
 
           var modalInstance = $modal.open({

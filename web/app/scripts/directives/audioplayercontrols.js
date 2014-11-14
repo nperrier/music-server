@@ -6,7 +6,7 @@ angular.module('musicApp')
 
     return {
       restrict: 'E',
-      scope: {},
+      scope: {}, // isolate scope
       templateUrl: '/views/audioplayercontrols.html',
       controller: function($scope, $element) {
 
@@ -142,6 +142,7 @@ angular.module('musicApp')
         // Also stop the updating if paused
         // update display of things every .5 seconds
         // makes the time-scrubber work
+        // listen for events from 'timeupdate' on Audio() element?
         var timeUpdater = $interval(function() {
           if ($scope.currentTrack) {
             $scope.currentTime = $scope.audio.currentTime;

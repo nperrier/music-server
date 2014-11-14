@@ -7,26 +7,81 @@
  * # trackActionMenu
  */
 angular.module('musicApp')
-  .directive('trackActionMenu', ['$log', '$modal', 'Playlist', 'PlayerQueue',
-    function($log, $modal, Playlist, PlayerQueue) {
+  .directive('trackActionMenu', ['$log', '$modal', function($log, $modal) {
 
     return {
       restrict: 'E',
       templateUrl: '/views/trackactionmenu.html',
-      scope: {
-        track: '='
-      },
+      scope: false, // inherit from parent scope
       controller: function ($scope, $element) {
 
-        $scope.playlists = Playlist.query();
+        $scope.editTrack = function(track) {
 
-        // Add a track to the player queue:
-        $scope.addTrackToQueue = function(track) {
-          $log.info('Add track to player queue, id: ' + track.id);
-          PlayerQueue.addTrack(track);
+          var modalInstance = $modal.open({
+            templateUrl: 'views/edittrack.html',
+            backdrop: false,
+            resolve: {
+              track: function () {
+                return $scope.track;
+              }
+            },
+            controller: function ($scope, $modalInstance, track) {
+
+              // private
+              var createTrackModel = function (track) {
+              // TODO: need to consider null artist/album/etc..
+              return {
+                  name: track.name,
+                  artist: track.artist.name,
+                  album: track.album.name,
+                  genre: track.genre.name,
+                  year: track.year,
+                  number: track.number,
+                  coverArtUrl: track.coverArtUrl
+                };
+              };
+
+              $scope.track = createTrackModel(track);
+              // save our original track in order to reset form and check for changes
+              $scope.originalTrack = angular.copy($scope.track);
+
+              $scope.save = function (track) {
+                // TODO: Need to add client-side validation
+                $modalInstance.close(track);
+              };
+
+              $scope.cancel = function () {
+                $modalInstance.dismiss('cancelled');
+              };
+
+              $scope.reset = function () {
+                $scope.track = angular.copy($scope.originalTrack);
+                // $scope.editTrackForm.$setPristine();
+                this.editTrackForm.$setPristine();
+              };
+
+              $scope.isUnchanged = function(track) {
+                var isEqual = angular.equals(track, $scope.originalTrack);
+                //$log.info("equal?: " + isEqual);
+                if (isEqual) {
+                  this.editTrackForm.$setPristine();
+                }
+                return isEqual;
+              };
+            }
+          });
+
+          modalInstance.result.then(
+            function (track) {
+               $scope.updateTrack($scope.track.id, track);
+            },
+            function (reason) {
+              $log.info('Modal dismissed: ' + reason);
+            }
+          );
         };
 
-        $scope.addTrackToPlaylist = function (track) {
+        $scope.selectPlaylist = function (track) {
 
           var modalInstance = $modal.open({
             templateUrl: 'views/playlistsmodal.html',
@@ -58,8 +113,7 @@ angular.module('musicApp')
           modalInstance.result.then(
             function (playlist) {
               $scope.selected = playlist;
-              Playlist.addTracks({ playlistId: playlist.id }, [ track.id ]);
-              $log.info('Add track.id: ' + track.id + ' to playlist.id: ' + playlist.id);
+              $scope.addTrackToPlaylist(track, playlist);
             },
             function (reason) {
               $log.info('Modal dismissed: ' + reason);

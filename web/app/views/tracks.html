@@ -22,27 +22,27 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="track-list-item" ng-repeat="t in tracks | filter:trackQuery | orderBy:sortField:reverse">
+            <tr class="track-list-item" ng-repeat="track in tracks | filter:trackQuery | orderBy:sortField:reverse">
               <td>
-                <img class="coverart-thumb" ng-src="{{t.coverArtUrl}}"/>
+                <img class="coverart-thumb" ng-src="{{track.coverArtUrl}}"/>
               </td>
               <td>
-                <a ng-href="#/track/{{t.id}}" class="thumb">
-                  {{t.name}}
+                <a ng-href="#/track/{{track.id}}" class="thumb">
+                  {{track.name}}
                 </a>
-                <track-action-menu track="t"></track-action-menu>
+                <track-action-menu></track-action-menu>
               </td>
               <td>
-                {{t.length | duration}}
+                {{track.length | duration}}
               </td>
               <td>
-                <a ng-href="#/artist/{{t.artist.id}}" class="thumb">
-                  {{t.artist.name}}
+                <a ng-href="#/artist/{{track.artist.id}}" class="thumb">
+                  {{track.artist.name}}
                 </a>
               </td>
               <td>
-                <a ng-href="#/album/{{t.album.id}}" class="thumb">
-                  {{t.album.name}}
+                <a ng-href="#/album/{{track.album.id}}" class="thumb">
+                  {{track.album.name}}
                 </a>
               </td>
             </tr>

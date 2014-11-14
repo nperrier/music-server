@@ -18,6 +18,10 @@ angular.module('musicApp')
       get: {
         method: 'GET',
         params: { trackId: '@trackId' }
+      },
+      update: {
+        method: 'PUT',
+        params: { track: '@track' }
       }
     });
   }]);
