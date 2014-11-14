@@ -1,4 +1,4 @@
-package com.perrier.music.entity.artist;
+package com.perrier.music.entity.track;
 
 import org.hibernate.Query;
 import org.hibernate.Session;

@@ -5,14 +5,17 @@ import java.util.List;
 import com.google.inject.Inject;
 import com.perrier.music.db.DBException;
 import com.perrier.music.db.IDatabase;
+import com.perrier.music.dto.track.TrackUpdateDto;
 
 public class TrackProvider {
 
 	private final IDatabase db;
+	private final ITrackUpdaterFactory trackUpdaterFactory;
 
 	@Inject
-	public TrackProvider(IDatabase db) {
+	public TrackProvider(IDatabase db, ITrackUpdaterFactory trackUpdaterFactory) {
 		this.db = db;
+		this.trackUpdaterFactory = trackUpdaterFactory;
 	}
 
 	public Track findById(long id) throws DBException {
@@ -43,5 +46,10 @@ public class TrackProvider {
 	public List<Track> findAll() throws DBException {
 		List<Track> tracks = this.db.find(new TrackFindAllQuery());
 		return tracks;
+	}
+
+	public void update(Track track, TrackUpdateDto trackUpdateDto) throws DBException {
+		TrackUpdater updater = trackUpdaterFactory.create(track);
+		updater.handleUpdates(trackUpdateDto);
 	}
 }

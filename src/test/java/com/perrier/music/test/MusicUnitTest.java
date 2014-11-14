@@ -7,6 +7,6 @@ import org.mockito.runners.MockitoJUnitRunner;
  * Base class for unit tests
  */
 @RunWith(MockitoJUnitRunner.class)
-public class MusicUnitTest {
+public abstract class MusicUnitTest {
 
 }

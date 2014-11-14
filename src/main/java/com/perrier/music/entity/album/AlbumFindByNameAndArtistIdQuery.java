@@ -9,9 +9,18 @@ import com.perrier.music.db.FindQuery;
 public class AlbumFindByNameAndArtistIdQuery extends FindQuery<Album> {
 
 	private final String name;
-	private final long artistId;
+	private final Long artistId;
 
-	public AlbumFindByNameAndArtistIdQuery(String name, long artistId) {
+	/**
+	 * Album with no artist constructor
+	 * 
+	 * @param name
+	 */
+	public AlbumFindByNameAndArtistIdQuery(String name) {
+		this(name, null);
+	}
+
+	public AlbumFindByNameAndArtistIdQuery(String name, Long artistId) {
 		this.name = name;
 		this.artistId = artistId;
 	}

@@ -1,6 +1,8 @@
 package com.perrier.music.rest.resource
 
+import javax.ws.rs.Consumes
 import javax.ws.rs.GET
+import javax.ws.rs.PUT
 import javax.ws.rs.Path
 import javax.ws.rs.PathParam
 import javax.ws.rs.Produces
@@ -12,8 +14,10 @@ import javax.ws.rs.core.StreamingOutput
 import com.google.inject.Inject
 import com.perrier.music.dto.track.TrackDto
 import com.perrier.music.dto.track.TrackDtoMapper
+import com.perrier.music.dto.track.TrackUpdateDto
 import com.perrier.music.entity.track.Track
 import com.perrier.music.entity.track.TrackProvider
+import com.perrier.music.server.EntityExistsException
 import com.perrier.music.server.EntityNotFoundException
 import com.perrier.music.stream.TrackStreamer
 
@@ -48,6 +52,22 @@ public class TrackResource extends RestResource {
 		List<Track> tracks = this.trackProvider.findAll()
 
 		return TrackDtoMapper.build(tracks)
+	}
+
+	@PUT
+	@Path("{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response updateTrack(@PathParam("id") Long id, TrackUpdateDto trackUpdateDto) {
+
+		Track track = this.trackProvider.findById(id)
+		if (!track) {
+			throw new EntityExistsException("Track does not exist")
+		}
+
+		this.trackProvider.update(track, trackUpdateDto)
+
+		return Response.status(Response.Status.CREATED).entity(originalTrack).build()
 	}
 
 	@GET

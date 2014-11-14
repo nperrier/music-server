@@ -24,7 +24,7 @@ public class CoverArtServiceTest extends MusicUnitTest {
 	private CoverArtService coverArtService;
 
 	@Test
-	public void testNotNull() {
+	public void shouldConstruct() {
 		assertNotNull(this.coverArtService);
 	}
 
