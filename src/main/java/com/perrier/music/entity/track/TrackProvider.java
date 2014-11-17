@@ -48,8 +48,8 @@ public class TrackProvider {
 		return tracks;
 	}
 
-	public void update(Track track, TrackUpdateDto trackUpdateDto) throws DBException {
+	public Track update(Track track, TrackUpdateDto trackUpdateDto) throws DBException {
 		TrackUpdater updater = trackUpdaterFactory.create(track);
-		updater.handleUpdates(trackUpdateDto);
+		return updater.handleUpdates(trackUpdateDto);
 	}
 }

@@ -50,7 +50,7 @@ public class TrackUpdater {
 		this.track = track;
 	}
 
-	public void handleUpdates(TrackUpdateDto trackUpdateDto) throws DBException {
+	public Track handleUpdates(TrackUpdateDto trackUpdateDto) throws DBException {
 
 		TrackArtistUpdater trackArtistUpdater = trackArtistUpdaterFactory.create(track);
 		UpdateResult<Artist> artist = trackArtistUpdater.handleUpdate(trackUpdateDto.getArtist());
@@ -113,5 +113,8 @@ public class TrackUpdater {
 		}
 
 		// TODO: coverArt changes
+		// TODO: After updating the track, remove any orphaned entities
+
+		return track;
 	}
 }

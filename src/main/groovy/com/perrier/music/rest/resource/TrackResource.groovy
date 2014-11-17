@@ -65,9 +65,9 @@ public class TrackResource extends RestResource {
 			throw new EntityExistsException("Track does not exist")
 		}
 
-		this.trackProvider.update(track, trackUpdateDto)
+		Track updatedTrack = this.trackProvider.update(track, trackUpdateDto)
 
-		return Response.status(Response.Status.CREATED).entity(originalTrack).build()
+		return Response.status(Response.Status.CREATED).entity(updatedTrack).build()
 	}
 
 	@GET
