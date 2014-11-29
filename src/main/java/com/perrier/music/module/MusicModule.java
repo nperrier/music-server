@@ -1,8 +1,7 @@
 package com.perrier.music.module;
 
 import com.google.common.eventbus.EventBus;
-import com.google.inject.Binder;
-import com.google.inject.Module;
+import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.perrier.music.coverart.CoverArtService;
@@ -29,32 +28,33 @@ import com.perrier.music.indexer.LibraryService;
 import com.perrier.music.server.IServer;
 import com.perrier.music.server.JettyHttpServer;
 
-public class MusicModule implements Module {
+public class MusicModule extends AbstractModule {
 
 	@Override
-	public void configure(Binder binder) {
-		binder.bind(IDatabase.class).to(HibernateDatabase.class).asEagerSingleton();
-		binder.bind(IServer.class).to(JettyHttpServer.class).asEagerSingleton();
-		binder.bind(IDBConfiguration.class).to(HibernateConfiguration.class);
-		binder.bind(ILibraryIndexerService.class).to(LibraryIndexerService.class).in(Singleton.class);
-		binder.bind(ILibraryService.class).to(LibraryService.class).in(Singleton.class);
-		binder.bind(ICoverArtService.class).to(CoverArtService.class).in(Singleton.class);
+	public void configure() {
 
-		binder.install(new FactoryModuleBuilder().build(ILibraryIndexerTaskFactory.class));
+		bind(IDatabase.class).to(HibernateDatabase.class).asEagerSingleton();
+		bind(IServer.class).to(JettyHttpServer.class).asEagerSingleton();
+		bind(IDBConfiguration.class).to(HibernateConfiguration.class);
+		bind(ILibraryIndexerService.class).to(LibraryIndexerService.class).in(Singleton.class);
+		bind(ILibraryService.class).to(LibraryService.class).in(Singleton.class);
+		bind(ICoverArtService.class).to(CoverArtService.class).in(Singleton.class);
 
-		binder.install(new FactoryModuleBuilder().build(ITrackUpdaterFactory.class));
-		binder.install(new FactoryModuleBuilder().build(ITrackArtistUpdaterFactory.class));
-		binder.install(new FactoryModuleBuilder().build(ITrackAlbumUpdaterFactory.class));
-		binder.install(new FactoryModuleBuilder().build(ITrackGenreUpdaterFactory.class));
+		install(new FactoryModuleBuilder().build(ILibraryIndexerTaskFactory.class));
 
-		binder.bind(EventBus.class).in(Singleton.class);
+		install(new FactoryModuleBuilder().build(ITrackUpdaterFactory.class));
+		install(new FactoryModuleBuilder().build(ITrackArtistUpdaterFactory.class));
+		install(new FactoryModuleBuilder().build(ITrackAlbumUpdaterFactory.class));
+		install(new FactoryModuleBuilder().build(ITrackGenreUpdaterFactory.class));
 
-		binder.bind(ArtistProvider.class).in(Singleton.class);
-		binder.bind(AlbumProvider.class).in(Singleton.class);
-		binder.bind(TrackProvider.class).in(Singleton.class);
-		binder.bind(LibraryProvider.class).in(Singleton.class);
-		binder.bind(GenreProvider.class).in(Singleton.class);
-		binder.bind(PlaylistProvider.class).in(Singleton.class);
+		bind(EventBus.class).in(Singleton.class);
+
+		bind(ArtistProvider.class).in(Singleton.class);
+		bind(AlbumProvider.class).in(Singleton.class);
+		bind(TrackProvider.class).in(Singleton.class);
+		bind(LibraryProvider.class).in(Singleton.class);
+		bind(GenreProvider.class).in(Singleton.class);
+		bind(PlaylistProvider.class).in(Singleton.class);
 
 	}
 }

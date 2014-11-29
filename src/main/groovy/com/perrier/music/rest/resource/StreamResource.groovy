@@ -1,4 +1,3 @@
-
 package com.perrier.music.rest.resource
 
 import javax.ws.rs.GET
@@ -24,10 +23,9 @@ public class StreamResource extends RestResource {
 	@GET
 	@Path("{id}")
 	@Produces([
-		"audio/mpeg",
-		"application/json"
+			"audio/mpeg",
+			"application/json"
 	])
-	//@Produces("audio/mpeg")
 	public Response get(@PathParam("id") Long id) {
 
 		Track track = this.trackProvider.findById(id)
@@ -37,17 +35,17 @@ public class StreamResource extends RestResource {
 		}
 
 		StreamingOutput stream = new StreamingOutput() {
-					@Override
-					public void write(OutputStream os) throws IOException, WebApplicationException {
-						try {
-							TrackStreamer streamer = new TrackStreamer(track)
-							streamer.writeStream(os)
-						}
-						catch (Exception e) {
-							throw new WebApplicationException(e)
-						}
-					}
+			@Override
+			public void write(OutputStream os) throws IOException, WebApplicationException {
+				try {
+					TrackStreamer streamer = new TrackStreamer(track)
+					streamer.writeStream(os)
 				}
+				catch (Exception e) {
+					throw new WebApplicationException(e)
+				}
+			}
+		}
 
 		return Response.ok(stream).type("audio/mpeg").build()
 	}

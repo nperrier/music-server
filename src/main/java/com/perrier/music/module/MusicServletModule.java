@@ -16,17 +16,16 @@ public class MusicServletModule extends ServletModule {
 	protected void configureServlets() {
 
 		// hook Jersey into Guice Servlet
-		this.bind(GuiceContainer.class);
+		bind(GuiceContainer.class);
 
 		// hook Jackson into Jersey as the POJO <-> JSON mapper
-		this.bind(JacksonJsonProvider.class).in(Scopes.SINGLETON);
-		this.bind(DefaultExceptionMapper.class).in(Scopes.SINGLETON);
-		
-		ImmutableMap<String, String> settings = ImmutableMap.of(
-				JSONConfiguration.FEATURE_POJO_MAPPING, "true",
+		bind(JacksonJsonProvider.class).in(Scopes.SINGLETON);
+		bind(DefaultExceptionMapper.class).in(Scopes.SINGLETON);
+
+		ImmutableMap<String, String> settings = ImmutableMap.of(JSONConfiguration.FEATURE_POJO_MAPPING, "true",
 				PackagesResourceConfig.PROPERTY_PACKAGES, "com.perrier.music.rest.resource",
 				ServletContainer.PROPERTY_WEB_PAGE_CONTENT_REGEX, "/.*\\.(jpg|ico|png|gif|html|id|txt|css|js)");
-		this.filter("/*").through(GuiceContainer.class, settings);
+		filter("/*").through(GuiceContainer.class, settings);
 	}
 
 }
