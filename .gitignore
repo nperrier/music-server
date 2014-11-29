@@ -1,7 +1,19 @@
-.DS_Store
+
+# Build files
 *.class
 /.gradle
 /build
 /dev
 /bin
+
+# IDE files
 *.sublime-project
+/.idea
+/*.iml
+/.classpath
+/.project
+/.settings
+
+# OS files
+.DS_Store
+Thumbs.db
