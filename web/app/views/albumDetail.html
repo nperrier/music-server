@@ -18,18 +18,18 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="t in tracks | orderBy:sortField:reverse">
+				<tr ng-repeat="track in tracks | orderBy:sortField:reverse">
 					<td>
-						{{t.number}}
+						{{track.number}}
 					</td>
 					<td>
-            <a ng-href="#/track/{{t.id}}" class="thumb">
-              {{t.name}}
+            <a ng-href="#/track/{{track.id}}" class="thumb">
+              {{track.name}}
             </a>
-            <track-action-menu track="t"></track-action-menu>
+            <track-action-menu track="track"></track-action-menu>
           </td>
           <td>
-            {{t.length | duration}}
+            {{track.length | duration}}
           </td>
 				</tr>
 			</tbody>
