@@ -42,6 +42,11 @@ public class TrackProvider {
 		return tracks;
 	}
 
+	public List<Track> findAllByGenreId(Long id) throws DBException {
+		List<Track> tracks = this.db.find(new TracksFindAllByGenreIdQuery(id));
+		return tracks;
+	}
+
 	// TODO limit fetch size
 	public List<Track> findAll() throws DBException {
 		List<Track> tracks = this.db.find(new TrackFindAllQuery());

@@ -5,7 +5,9 @@
 var musicApp = angular.module('musicApp', [
 	'ui.bootstrap',
 	'ngRoute',
-	'ngResource'
+	'ngResource',
+  'ngAnimate',
+  'angularSpinner'
 ]);
 
 musicApp.config(['$routeProvider', function($routeProvider) {
@@ -60,6 +62,11 @@ musicApp.config(['$routeProvider', function($routeProvider) {
 		controller: 'GenresCtrl'
 	})
 
+	.when('/genre/:genreId', {
+		templateUrl: 'views/genretracks.html',
+		controller: 'GenreTracksCtrl'
+	})
+
 	.when('/playlists', {
 		templateUrl: 'views/playlists.html',
 		controller: 'PlaylistsCtrl'
@@ -79,4 +86,3 @@ musicApp.config(['$routeProvider', function($routeProvider) {
 		redirectTo: '/dashboard'
 	});
 }]);
-
