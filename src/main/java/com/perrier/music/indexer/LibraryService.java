@@ -26,6 +26,7 @@ import com.perrier.music.entity.genre.Genre;
 import com.perrier.music.entity.genre.GenreCreateQuery;
 import com.perrier.music.entity.genre.GenreFindByNameQuery;
 import com.perrier.music.entity.library.Library;
+import com.perrier.music.entity.playlist.PlaylistTrackDeleteQuery;
 import com.perrier.music.entity.track.Track;
 import com.perrier.music.entity.track.TrackCreateQuery;
 import com.perrier.music.entity.track.TrackDeleteQuery;
@@ -72,12 +73,17 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 
 		Track track = event.getTrack();
 		try {
+			this.db.beginTransaction();
 			// TODO: What else should be cleaned up?
+			this.db.delete(new PlaylistTrackDeleteQuery(track.getId()));
 			this.db.delete(new TrackDeleteQuery(track));
+			this.db.commit();
 
 			log.info("Track removed: {}", track);
 		} catch (Exception e) {
 			log.error("Unable to handle missing track event: {}", event, e);
+		} finally {
+			this.db.endTransaction();
 		}
 	}
 
