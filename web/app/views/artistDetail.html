@@ -15,17 +15,18 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="a in albums | orderBy:sortField:reverse">
+				<tr ng-repeat="album in albums | orderBy:sortField:reverse">
 					<td>
-						<img class="coverart-thumb" ng-src="{{a.coverArtUrl}}"/>
+						<img class="coverart-thumb" ng-src="{{album.coverArtUrl}}"/>
 					</td>
 					<td>
-						<a ng-href="#/album/{{a.id}}" class="thumb">
-							{{a.name}}
+						<a ng-href="#/album/{{album.id}}" class="thumb">
+							{{album.name}}
 						</a>
+						<album-action-menu></album-action-menu>
 					</td>
 					<td>
-						{{a.year | date : 'yyyy'}}
+						{{album.year | date : 'yyyy'}}
 					</td>
 				</tr>
 			</tbody>
