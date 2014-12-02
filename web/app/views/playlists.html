@@ -6,11 +6,9 @@
 </div>
 
 <div class="page-content jumbotron" ng-class="{'fade-start': !doneLoading, 'fade-in': doneLoading}">
-
   <div class="container">
-    <div ng-if="playlists.length" ng-cloak>
-      <h1>Playlists</h1>
 
+    <div ng-if="playlists.length" ng-cloak>
       <div class="table-condensed">
         <table class="table table-condensed table-hover">
           <thead>
@@ -38,7 +36,6 @@
     </div>
 
   </div>
-
 </div>
 
 <!-- show this while data is being fetched from server -->

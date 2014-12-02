@@ -1,6 +1,6 @@
 <!-- library.html -->
 <div class="page-toolbar">
-  <button class="btn btn-default" ng-click="addLibrary()">
+  <button class="btn btn-default" ng-click="createLibraryDialog()">
     Add Library
   </button>
 </div>
@@ -39,17 +39,6 @@
       <span class="glyphicon glyphicon-headphones" style="font-size: 200px"></span>
       <h3>No libraries have been created yet</h3>
     </div>
-
-    <form ng-submit="createLibrary(library)">
-      <legend>Create Library</legend>
-
-      <div class="input-group library-create-input">
-        <input ng-model="library.path" required id="path" name="path" type="text" size="50" placeholder="/your/music/library" class="form-control">
-        <span class="input-group-btn">
-          <button class="btn btn-default">Add Library</button>
-        </span>
-      </div>
-    </form>
 
   </div>
 </div>

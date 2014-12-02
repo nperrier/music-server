@@ -8,8 +8,8 @@
  * Controller of the musicApp
  */
 angular.module('musicApp')
-  .controller('LibraryCtrl', ['$scope', '$log', '$routeParams', 'Library',
-    function($scope, $log, $routeParams, Library) {
+  .controller('LibraryCtrl', ['$scope', '$log', '$modal', '$routeParams', 'Library',
+    function($scope, $log, $modal, $routeParams, Library) {
 
       $scope.sortField = 'path';
       $scope.doneLoading = false;
@@ -33,4 +33,33 @@ angular.module('musicApp')
       $scope.removeLibrary = function(library) {
         // TODO
       };
-    }]);
+
+      $scope.createLibraryDialog = function(library) {
+
+        var modalInstance = $modal.open({
+          templateUrl: 'views/librarycreatemodal.html',
+          backdrop: false,
+          resolve: {},
+          controller: function ($scope, $modalInstance) {
+
+            $scope.save = function (library) {
+              // TODO: Need to add client-side validation
+              $modalInstance.close(library);
+            };
+
+            $scope.cancel = function () {
+              $modalInstance.dismiss('cancelled');
+            };
+          }
+        });
+
+        modalInstance.result.then(
+          function (library) {
+            $scope.createLibrary(library);
+          },
+          function (reason) {
+            $log.info('Modal dismissed: ' + reason);
+          }
+        );
+      };
+  }]);
