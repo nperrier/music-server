@@ -1,39 +1,50 @@
 <!-- albumdetail.html -->
+<div class="jumbotron">
+  <div class="container-fluid">
 
-<div class="jumbotron text-center">
+    <div class="row album-info">
+      <div class="col-md-4 album-cover">
+        <img class="coverart-medium img-responsive" ng-src="{{album.coverArtUrl}}"/>
+      </div>
 
-	<img class="coverart-medium" ng-src="{{album.coverArtUrl}}"/>
+      <div class="col-md-8 album-detail">
+        <h1>{{album.name}}<br>
+          <small>{{album.artist.name}}</small>
+        </h1>
+      </div>
+    </div>
 
-	<h1>{{album.artist.name}} - {{album.name}}</h1>
+    <div class="row">
+      <div class="col-lg-12">
 
-	<div class="table-responsive">
-		<table class="table">
-			<thead>
-				<tr>
-					<th ng-click="sortField = 'number'; reverse = !reverse">#</th>
-					<th ng-click="sortField = 'name'; reverse = !reverse">Title</th>
-          <th ng-click="sortField = 'length'; reverse = !reverse">
-            <span class="glyphicon glyphicon-time"></span>
-          </th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr ng-repeat="track in tracks | orderBy:sortField:reverse">
-					<td>
-						{{track.number}}
-					</td>
-					<td>
-            <a ng-href="#/track/{{track.id}}" class="thumb">
-              {{track.name}}
-            </a>
-            <track-action-menu track="track"></track-action-menu>
-          </td>
-          <td>
-            {{track.length | duration}}
-          </td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
+        <table class="table table-condensed table-hover">
+          <thead>
+            <tr>
+              <th ng-click="sortField = 'number'; reverse = !reverse">#</th>
+              <th ng-click="sortField = 'name'; reverse = !reverse">Title</th>
+              <th ng-click="sortField = 'length'; reverse = !reverse">
+                <span class="glyphicon glyphicon-time"></span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="track in tracks | orderBy:sortField:reverse">
+              <td>
+               {{track.number}}
+              </td>
+              <td>
+                {{track.name}}
+                <track-action-menu track="track"></track-action-menu>
+              </td>
+              <td>
+                {{track.length | duration}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
+      </div>
+    </div>
+
+  </div>
 </div>

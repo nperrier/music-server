@@ -1,17 +1,17 @@
 <!-- playlistsmodal.html -->
 
 <div class="modal-header">
-    <h3 class="modal-title">Select a Playlist</h3>
+  <h3 class="modal-title">Select a Playlist</h3>
 </div>
 
 <div class="modal-body">
-    <ul>
-        <li ng-repeat="p in playlists">
-            <a ng-click="selected.playlist = p; ok()">{{ p.name }}</a>
-        </li>
-    </ul>
+  <ul>
+    <li ng-repeat="p in playlists">
+      <a ng-click="selected.playlist = p; ok()">{{ p.name }}</a>
+    </li>
+  </ul>
 </div>
 
 <div class="modal-footer">
-    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+  <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
 </div>

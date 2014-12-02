@@ -1,40 +1,33 @@
 <!-- genres.html -->
-<div class="jumbotron text-center">
+<div class="jumbotron" ng-class="{'fade-start': !doneLoading, 'fade-in': doneLoading}">
+  <div class="container">
 
-  <div ng-show="doneLoading" ng-cloak>
-    <div ng-show="genres.length">
-
-      <h1>Genres</h1>
-
-      <div class="table-responsive">
-        <table class="table">
-          <thead>
-            <tr>
-              <th ng-click="sortField = 'name'; reverse = !reverse">Genre</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr ng-repeat="g in genres | orderBy:sortField:reverse">
-              <td>
-                <a ng-href="#/genre/{{g.id}}">
-                  {{g.name}}
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <div ng-if="genres.length" ng-cloak>
+      <table class="table table-condensed table-hover">
+        <thead>
+          <tr>
+            <th ng-click="sortField = 'name'; reverse = !reverse">Genre</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="g in genres | orderBy:sortField:reverse">
+            <td>
+              <a ng-href="#/genre/{{g.id}}">
+                {{g.name}}
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
-    <div ng-hide="genres.length">
+    <div class="text-center" ng-if="genres.length == 0" ng-cloak>
       <span class="glyphicon glyphicon-headphones" style="font-size: 200px"></span>
       <h3>No genres found</h3>
     </div>
-  </div>
 
-  <!-- show this while data is being fetched from server -->
-  <div class="loading" ng-show="!doneLoading" ng-cloak>
-    Loading...
   </div>
-
 </div>
+
+<!-- show this while data is being fetched from server -->
+<span spinner-key="spinner-loading" spinner-start-active="true" us-spinner="{radius:40, length: 20, width: 8, lines: 13}"></span>

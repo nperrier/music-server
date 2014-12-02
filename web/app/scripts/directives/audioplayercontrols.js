@@ -16,6 +16,16 @@ angular.module('musicApp')
         $scope.currentPercentage = 0;
         $scope.duration = 0;
 
+        /* For some reason angular won't allow ng-model='audio.volume' anymore */
+        $scope.audioVolume = {
+          volume: function(val) {
+            if (angular.isDefined(val)) {
+              $scope.audio.volume = val;
+            }
+            return $scope.audio.volume;
+          }
+        };
+
         $scope.previous = function() {
           var track = PlayerQueue.getPrevious();
 

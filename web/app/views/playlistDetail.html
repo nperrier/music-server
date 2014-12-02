@@ -1,11 +1,10 @@
 <!-- playlistdetail.html -->
+<div class="jumbotron">
+  <div class="container">
 
-<div class="jumbotron text-center">
+    <h2>{{playlist.name}}</h2>
 
-  <h1>{{playlist.name}}</h1>
-
-  <div class="table-condensed">
-    <table class="table">
+    <table class="table table-condensed table-hover">
       <thead>
         <tr>
           <th ng-click="sortField = 'position'; reverse = !reverse">Position</th>
@@ -27,9 +26,7 @@
             <img class="coverart-thumb" ng-src="{{pt.track.coverArtUrl}}"/>
           </td>
           <td>
-            <a ng-href="#/track/{{pt.track.id}}" class="thumb">
-              {{pt.track.name}}
-            </a>
+            {{pt.track.name}}
           </td>
           <td>
             {{pt.track.length | duration}}
@@ -47,5 +44,6 @@
         </tr>
       </tbody>
     </table>
+
   </div>
 </div>

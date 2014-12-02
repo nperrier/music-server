@@ -1,14 +1,15 @@
 <!-- queue.html -->
-<div id="page-toolbar"></div>
+<div class="page-toolbar">
+  <button ng-disabled="tracks.length == 0" class="btn btn-default" ng-click="clearQueue()">
+    Clear Queue
+  </button>
+</div>
 
-<div class="jumbotron text-center">
+<div class="page-content jumbotron">
+  <div class="container">
 
-  <div ng-show="tracks.length" ng-cloak>
-
-    <h1>Queue</h1>
-
-    <div class="table-condensed">
-      <table class="table">
+    <div ng-if="tracks.length" ng-cloak>
+      <table class="table table-condensed table-hover">
         <thead>
           <tr>
             <th/>
@@ -57,11 +58,11 @@
         </tbody>
       </table>
     </div>
-  </div>
 
-  <div ng-hide="tracks.length" ng-cloak>
-    <span class="glyphicon glyphicon-headphones" style="font-size: 200px"></span>
-    <h3>Queue is empty</h3>
-  </div>
+    <div class="text-center" ng-if="tracks.length == 0" ng-cloak>
+      <span class="glyphicon glyphicon-headphones" style="font-size: 200px"></span>
+      <h3>No tracks found</h3>
+    </div>
 
+  </div>
 </div>

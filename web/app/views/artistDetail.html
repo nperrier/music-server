@@ -1,13 +1,12 @@
 <!-- artistdetail.html -->
-
-<div class="jumbotron text-center">
+<div class="jumbotron">
 
 	<h1>{{artist.name}}</h1>
 
 	<h2>Albums</h2>
 
-	<div class="table-responsive">
-		<table class="table">
+	<div ng-if="albums.length" ng-cloak>
+		<table class="table table-condensed table-hover">
 			<thead>
 				<tr>
 					<th />
@@ -32,4 +31,9 @@
 			</tbody>
 		</table>
 	</div>
+
+	<div ng-if="albums.length == 0">
+		No albums
+	</div>
+
 </div>

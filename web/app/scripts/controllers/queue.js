@@ -24,9 +24,14 @@ angular.module('musicApp')
     };
 
     $scope.remove = function(track, position) {
-      $log.info('remove track.id: ' + track.id + ' at position: ' + position);
+      $log.info('Removing track.id: ' + track.id + ' at position: ' + position);
       PlayerQueue.removeTrack(position);
-    }
+    };
+
+    $scope.clearQueue = function() {
+      $log.info('Removing all tracks');
+      PlayerQueue.clear();
+    };
 
     // This should update the view
     $rootScope.$on('track.added', function() {

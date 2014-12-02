@@ -9,17 +9,19 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/vendor/assets/font
  * Variables
  */
 
-$header-height: 50px;
-$footer-height: 60px;
+ $header-height: 50px;
+ $footer-height: 60px;
+ $cover-thumb-height: 40px;
 
 /*
  * Base structure
  */
 
-/* Move down content because we have a fixed navbar that is 50px tall */
+ /* Move down content because we have a fixed navbar that is 50px tall */
 body {
   padding-top: $header-height;
   overflow: hidden;
+  background-color: white;
 }
 
 td {
@@ -27,20 +29,24 @@ td {
 }
 
 /*
- * Global add-ons
+ * Bootstrap overrides
  */
 
-.sub-header {
-  padding-bottom: 10px;
-  border-bottom: 1px solid #eee;
+.jumbotron {
+  margin-bottom: 0px;
+  background-color: white;
+}
+
+.table tbody tr {
+  height: $cover-thumb-height + 10px + 1px; /* cover-img + padding + border */
 }
 
 /*
  * Sidebar
  */
 
-/* Hide for mobile, show later */
-.sidebar {
+ /* Hide for mobile, show later */
+ .sidebar {
   display: none;
 }
 
@@ -83,7 +89,6 @@ td {
 
 .main {
   position: absolute;
-  padding: 20px;
   top: $header-height;
   bottom: $footer-height;
   /* need these rule to allow scrolling */
@@ -92,13 +97,13 @@ td {
 
 @media (min-width: 768px) {
   .main {
-    padding-right: 40px;
-    padding-left: 40px;
+    padding-right: 0px;
+    padding-left: 0px;
   }
 }
 
 .main .page-header {
-  margin-top: 0;
+  margin-top: 0px;
 }
 
 /*
@@ -111,7 +116,7 @@ td {
 }
 
 .placeholders h4 {
-  margin-bottom: 0;
+  margin-bottom: 0px;
 }
 
 .placeholder {
@@ -137,7 +142,7 @@ td {
 }
 
 .coverart-thumb {
-  width: 40px;
+  width: $cover-thumb-height;
   /* height: 40px; svg crops the width if aspect ratio is different */
 }
 
@@ -177,13 +182,27 @@ td {
   vertical-align: top;
 }
 
+.page-toolbar {
+  position: fixed;
+  background-color: #e5e5e5;
+  height: 50px;
+  top: 50px;
+  width: 100%;
+  z-index: 10;
+  padding: 8px 20px;
+}
+
+.page-content {
+  margin-top: 50px;
+}
+
 /* angular styles */
 
 /*
   Allow angular.js to be loaded in body, hiding cloaked elements until
   templates compile.  The !important is important given that there may be
   other selectors that are more specific or come later and might alter display.
- */
+*/
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
 }
@@ -196,3 +215,33 @@ td {
 #editTrackForm input.ng-dirty {
   background-color: yellow;
 }
+
+.fade-start {
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.fade-in {
+  -webkit-transition: 0.5s linear all;
+  -moz-transition: 0.5s linear all;
+  -o-transition: 0.5s linear all;
+  transition: 0.5s linear all;
+}
+
+/*
+.album-info {
+  overflow: hidden;
+}
+
+.album-detail {
+  float: left;
+  padding: 20px;
+  margin: 10px;
+  position: relative;
+}
+
+.album-cover {
+  float: left;
+}
+*/

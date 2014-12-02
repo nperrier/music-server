@@ -1,51 +1,44 @@
 <!-- albums.html -->
-<div class="jumbotron text-center">
+<div class="jumbotron" ng-class="{'fade-start': !doneLoading, 'fade-in': doneLoading}">
+  <div class="container">
 
-  <div ng-show="doneLoading" ng-cloak>
-    <div ng-show="albums.length" ng-cloak>
-
-      <h1>Albums</h1>
-
-      <div class="table-responsive">
-        <table class="table">
-          <thead>
-            <tr>
-              <th />
-              <th ng-click="sortField = 'name'; reverse = !reverse">Title</th>
-              <th ng-click="sortField = 'artist.name'; reverse = !reverse">Artist</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr ng-repeat="album in albums | orderBy:sortField:reverse">
-              <td>
-                <img class="coverart-thumb" ng-src="{{album.coverArtUrl}}"/>
-              </td>
-              <td>
-                <a ng-href="#/album/{{album.id}}" class="thumb">
-                  {{album.name}}
-                </a>
-                <album-action-menu></album-action-menu>
-              </td>
-              <td>
-                <a ng-href="#/artist/{{album.artist.id}}" class="thumb">
-                  {{album.artist.name}}
-                </a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <div ng-if="albums.length" ng-cloak>
+      <table class="table table-condensed table-hover">
+        <thead>
+          <tr>
+            <th />
+            <th ng-click="sortField = 'name'; reverse = !reverse">Title</th>
+            <th ng-click="sortField = 'artist.name'; reverse = !reverse">Artist</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="album in albums | orderBy:sortField:reverse">
+            <td>
+              <img class="coverart-thumb" ng-src="{{album.coverArtUrl}}"/>
+            </td>
+            <td>
+              <a ng-href="#/album/{{album.id}}" class="thumb">
+                {{album.name}}
+              </a>
+              <album-action-menu></album-action-menu>
+            </td>
+            <td>
+              <a ng-href="#/artist/{{album.artist.id}}" class="thumb">
+                {{album.artist.name}}
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
-    <div ng-hide="albums.length" ng-cloak>
+    <div class="text-center" ng-if="albums.length == 0" ng-cloak>
       <span class="glyphicon glyphicon-headphones" style="font-size: 200px"></span>
       <h3>No albums found</h3>
     </div>
-  </div>
 
-  <!-- show this while data is being fetched from server -->
-  <div class="loading" ng-show="!doneLoading" ng-cloak>
-    Loading...
   </div>
-
 </div>
+
+<!-- show this while data is being fetched from server -->
+<span spinner-key="spinner-loading" spinner-start-active="true" us-spinner="{radius:40, length: 20, width: 8, lines: 13}"></span>

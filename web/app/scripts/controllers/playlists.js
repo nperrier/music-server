@@ -8,13 +8,14 @@
  * Controller of the musicApp
  */
 angular.module('musicApp')
-  .controller('PlaylistsCtrl', ['$scope', '$log', 'Playlist', 'PlayerQueue',
-    function ($scope, $log, Playlist, PlayerQueue) {
+  .controller('PlaylistsCtrl', ['$scope', '$log', 'Playlist', 'PlayerQueue', 'usSpinnerService',
+    function ($scope, $log, Playlist, PlayerQueue, usSpinnerService) {
 
     $scope.sortField = 'name';
     $scope.doneLoading = false;
 
     $scope.playlists = Playlist.query(function() {
+      usSpinnerService.stop('spinner-loading');
       $scope.doneLoading = true;
     });
 

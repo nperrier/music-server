@@ -10,7 +10,7 @@
 angular.module('musicApp')
   .service('PlayerQueue', ['$log', '$rootScope', function($log, $rootScope) {
 
-    var self = this;
+  var self = this;
 
     self.queue = []; // a list of tracks, incrementing from 0..total
     self.current = -1; // the index of the currently playing track
@@ -19,6 +19,16 @@ angular.module('musicApp')
       // add track to end of queue:
       return self.insertTrack(track, self.queue.length);
     };
+
+    self.addTracks = function(tracks) {
+      tracks.forEach(function(track) {
+        var success = self.insertTrack(track, self.queue.length);
+        if (!success) {
+          return false;
+        }
+      });
+      return true;
+    }
 
     self.insertTrack = function(track, position) {
 
@@ -68,7 +78,18 @@ angular.module('musicApp')
       return track;
     };
 
-    self.getCurrentIndex = function() {
+    self.clear = function () {
+      if (self.queue.length !== 0) {
+        // this is how you clear an array with external references in javascript
+        // a definitive "WTF?" ladies and gentlemen...
+        self.queue.length = 0;
+        self.current = -1;
+        // The player must be informed that the current track was removed
+        $rootScope.$emit('track.removed');
+      }
+    }
+
+    self.getCurrentIndex = function () {
       if (self.queue.length === 0) {
         return null; // no tracks!
       }
