@@ -6,7 +6,9 @@
       <div class="now-playing" ng-show="currentTrack">
         <b>Now Playing:</b>
         <img class="coverart-thumb" ng-src="{{currentTrack.coverArtUrl}}" />
-        {{currentTrack.artist.name}} - {{currentTrack.name}}
+        <a ng-href="#/artist/{{currentTrack.artist.id}}" class="thumb">
+          {{currentTrack.artist.name}}
+        </a> - {{currentTrack.name}}
       </div>
     </div>
   </div>
