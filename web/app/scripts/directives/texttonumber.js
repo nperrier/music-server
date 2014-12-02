@@ -16,7 +16,7 @@ angular.module('musicApp')
           // var parsed = Number(value);
           // return !isNaN(parsed) ? parsed: value;
           // return _.isNumber(value) ? parseInt(value, 10) : value;
-          if (value == null) {
+          if (value === null) {
             return null;
           }
 

@@ -1,5 +1,4 @@
 'use strict';
-/* global _ */
 
 /**
  * @ngdoc directive
@@ -30,12 +29,12 @@ angular.module('musicApp')
 
               // private
               var createAlbumModel = function (album) {
-              // TODO: need to consider null artist/album/etc..
-              return {
-                  name: album.name,
-                  artist: album.artist.name,
-                  year: album.year
-                };
+                // TODO: need to consider null artist/album/etc..
+                return {
+                    name: album.name,
+                    artist: album.artist.name,
+                    year: album.year
+                  };
               };
 
               $scope.album = createAlbumModel(album);
@@ -68,7 +67,7 @@ angular.module('musicApp')
 
           modalInstance.result.then(
             function (album) {
-               $scope.updateTrack($scope.album.id, album);
+              $scope.updateTrack($scope.album.id, album);
             },
             function (reason) {
               $log.info('Modal dismissed: ' + reason);
@@ -118,5 +117,6 @@ angular.module('musicApp')
         };
       }
     };
-  }]);
+  }
+]);
 

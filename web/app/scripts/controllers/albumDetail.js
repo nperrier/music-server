@@ -25,7 +25,7 @@ angular.module('musicApp')
 	});
 
   $scope.updateTrack = function(trackId, trackInfo) {
-    $log.info("updateTrack, trackId: " + trackId);
+    $log.info('updateTrack, trackId: ' + trackId);
     Track.update({ trackId: trackId }, trackInfo, function (track) {
       // do something after updating
     });

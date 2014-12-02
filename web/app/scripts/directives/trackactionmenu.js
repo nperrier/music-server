@@ -29,16 +29,16 @@ angular.module('musicApp')
 
               // private
               var createTrackModel = function (track) {
-              // TODO: need to consider null artist/album/etc..
-              return {
-                  name: track.name,
-                  artist: track.artist.name,
-                  album: track.album.name,
-                  genre: track.genre.name,
-                  year: track.year,
-                  number: track.number,
-                  coverArtUrl: track.coverArtUrl
-                };
+                // TODO: need to consider null artist/album/etc..
+                return {
+                    name: track.name,
+                    artist: track.artist.name,
+                    album: track.album.name,
+                    genre: track.genre.name,
+                    year: track.year,
+                    number: track.number,
+                    coverArtUrl: track.coverArtUrl
+                  };
               };
 
               $scope.track = createTrackModel(track);
@@ -73,7 +73,7 @@ angular.module('musicApp')
 
           modalInstance.result.then(
             function (track) {
-               $scope.updateTrack($scope.track.id, track);
+              $scope.updateTrack($scope.track.id, track);
             },
             function (reason) {
               $log.info('Modal dismissed: ' + reason);

@@ -1,6 +1,4 @@
 'use strict';
-/* global moment */
-/* global _ */
 
 /**
  * @ngdoc filter

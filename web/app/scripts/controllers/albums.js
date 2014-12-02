@@ -38,10 +38,9 @@ angular.module('musicApp')
       $log.info('Add album to player queue, id: ' + album.id);
 
       AlbumTrack.get({ albumId: album.id }, function(tracks) {
-         var trackIds = _.pluck(tracks, 'id');
+        var trackIds = _.pluck(tracks, 'id');
         $log.info('Add track ids: ' + trackIds + ' to player queue');
         PlayerQueue.addTracks(tracks);
       });
     };
   }]);
-

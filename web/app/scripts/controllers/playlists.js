@@ -7,7 +7,7 @@
  * # PlaylistsCtrl
  * Controller of the musicApp
  */
- angular.module('musicApp')
+angular.module('musicApp')
   .controller('PlaylistsCtrl', ['$scope', '$log', '$modal', 'Playlist', 'PlayerQueue', 'usSpinnerService',
     function ($scope, $log, $modal, Playlist, PlayerQueue, usSpinnerService) {
 

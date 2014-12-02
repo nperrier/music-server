@@ -10,7 +10,7 @@
 angular.module('musicApp')
   .service('PlayerQueue', ['$log', '$rootScope', function($log, $rootScope) {
 
-  var self = this;
+    var self = this;
 
     self.queue = []; // a list of tracks, incrementing from 0..total
     self.current = -1; // the index of the currently playing track
@@ -28,7 +28,7 @@ angular.module('musicApp')
         }
       });
       return true;
-    }
+    };
 
     self.insertTrack = function(track, position) {
 
@@ -87,7 +87,7 @@ angular.module('musicApp')
         // The player must be informed that the current track was removed
         $rootScope.$emit('track.removed');
       }
-    }
+    };
 
     self.getCurrentIndex = function () {
       if (self.queue.length === 0) {
