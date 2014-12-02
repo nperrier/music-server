@@ -1,6 +1,6 @@
 <!-- playlists.html -->
 <div class="page-toolbar">
-  <button class="btn btn-default" ng-click="createPlaylist()">
+  <button class="btn btn-default" ng-click="createPlaylistDialog()">
     Add Playlist
   </button>
 </div>
@@ -9,7 +9,6 @@
 
   <div class="container">
     <div ng-if="playlists.length" ng-cloak>
-
       <h1>Playlists</h1>
 
       <div class="table-condensed">
@@ -39,15 +38,6 @@
     </div>
 
   </div>
-
-  <form ng-submit="createPlaylist(playlist)">
-    <div class="input-group library-create-input">
-      <input ng-model="playlist.name" required id="name" name="name" type="text" size="50" placeholder="Enter a name for the playst" class="form-control">
-      <span class="input-group-btn">
-        <button class="btn btn-default">Add Playlist</button>
-      </span>
-    </div>
-  </form>
 
 </div>
 

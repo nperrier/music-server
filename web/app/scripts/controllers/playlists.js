@@ -7,9 +7,9 @@
  * # PlaylistsCtrl
  * Controller of the musicApp
  */
-angular.module('musicApp')
-  .controller('PlaylistsCtrl', ['$scope', '$log', 'Playlist', 'PlayerQueue', 'usSpinnerService',
-    function ($scope, $log, Playlist, PlayerQueue, usSpinnerService) {
+ angular.module('musicApp')
+ .controller('PlaylistsCtrl', ['$scope', '$log', '$modal', 'Playlist', 'PlayerQueue', 'usSpinnerService',
+  function ($scope, $log, $modal, Playlist, PlayerQueue, usSpinnerService) {
 
     $scope.sortField = 'name';
     $scope.doneLoading = false;
@@ -19,8 +19,8 @@ angular.module('musicApp')
       $scope.doneLoading = true;
     });
 
-	  $scope.createPlaylist = function(playlist) {
-		  Playlist.save(playlist, function (p) {
+    $scope.createPlaylist = function(playlist) {
+      Playlist.save(playlist, function (p) {
         $scope.playlists.push(p);
       });
     };
@@ -43,6 +43,35 @@ angular.module('musicApp')
           PlayerQueue.addTrack(playlistTrack.track);
         });
       });
+    };
+
+    $scope.createPlaylistDialog = function() {
+
+      var modalInstance = $modal.open({
+        templateUrl: 'views/playlistcreatemodal.html',
+        backdrop: false,
+        resolve: {},
+        controller: function ($scope, $modalInstance) {
+
+          $scope.save = function (playlist) {
+            // TODO: Need to add client-side validation
+            $modalInstance.close(playlist);
+          };
+
+          $scope.cancel = function () {
+            $modalInstance.dismiss('cancelled');
+          };
+        }
+      });
+
+      modalInstance.result.then(
+        function (playlist) {
+          $scope.createPlaylist(playlist);
+        },
+        function (reason) {
+          $log.info('Modal dismissed: ' + reason);
+        }
+      );
     };
 
   }]);
