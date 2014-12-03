@@ -7,6 +7,7 @@
 
 # IDE files
 *.sublime-project
+*.sublime-workspace
 /.idea
 /*.iml
 /.classpath
