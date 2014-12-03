@@ -52,11 +52,6 @@ musicApp.config(['$routeProvider', function($routeProvider) {
 		controller: 'TracksCtrl'
 	})
 
-	.when('/track/:trackId', {
-		templateUrl: 'views/trackdetail.html',
-		controller: 'TrackDetailCtrl'
-	})
-
 	.when('/genres', {
 		templateUrl: 'views/genres.html',
 		controller: 'GenresCtrl'
