@@ -3,7 +3,6 @@
 *.class
 /.gradle
 /build
-/dev
 /bin
 
 # IDE files
