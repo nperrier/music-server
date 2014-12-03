@@ -182,10 +182,10 @@ run {
 	debug = config.debug ?: false
 }
 
-task devClean(type: Delete) {
+task devClean(type: Delete) << {
 	description 'Deletes the dev directory used for testing the server'
 
 	ant.delete(includeEmptyDirs: 'true') {
-		fileset(dir: file(config.appdir.root), includes: '**/*')
+		fileset(dir: file('dev'), includes: '**/*')
 	}
 }
