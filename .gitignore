@@ -8,8 +8,8 @@
 # IDE files
 *.sublime-project
 *.sublime-workspace
-/.idea
-/*.iml
+#/.idea
+#/*.iml
 /.classpath
 /.project
 /.settings
