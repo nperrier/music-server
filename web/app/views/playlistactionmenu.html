@@ -1,14 +1,16 @@
 <!-- BEGIN: playlist-action-menu -->
-<div class="dropdown playlist-menu">
-  <button class="dropdown-toggle" data-toggle="dropdown">
+<div class="btn-group playlist-menu" dropdown>
+  <button class="dropdown-toggle" dropdown-toggle>
     <span class="glyphicon glyphicon-th-list"></span>
   </button>
   <ul class="dropdown-menu">
     <li>
-      <a href dropdown-toggle ng-click="addPlaylistToQueue(p)" class="thumb">
+      <a href ng-click="addPlaylistToQueue(p)" class="thumb">
         Add To Queue
       </a>
-      <a href dropdown-toggle ng-click="delete()" class="thumb">
+    </li>
+    <li>
+      <a href ng-click="delete()" class="thumb">
         Delete
       </a>
     </li>
