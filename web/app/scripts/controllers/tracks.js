@@ -8,8 +8,8 @@
  * Controller of the musicApp
  */
 angular.module('musicApp')
-  .controller('TracksCtrl', ['$scope', '$log', 'Track', 'Playlist', 'PlayerQueue', 'usSpinnerService',
-    function($scope, $log, Track, Playlist, PlayerQueue, usSpinnerService) {
+  .controller('TracksCtrl', ['$scope', '$log', '$timeout', 'Track', 'Playlist', 'PlayerQueue', 'usSpinnerService',
+    function($scope, $log, $timeout, Track, Playlist, PlayerQueue, usSpinnerService) {
 
     $scope.sortField = 'name';
     $scope.reverse = false;
@@ -17,6 +17,13 @@ angular.module('musicApp')
 
     // this is needed for the track-action-menu modal
     $scope.playlists = Playlist.query();
+
+    // wait 1.5 seconds before showing spinner
+    $timeout(function () {
+      if (!$scope.doneLoading) {
+        usSpinnerService.spin('spinner-loading');
+      }
+    }, 1500);
 
     $scope.tracks = Track.query(function () {
       usSpinnerService.stop('spinner-loading');
