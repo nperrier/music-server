@@ -11,6 +11,9 @@
     <option name="pathToConfigFileJava" value="$PROJECT_DIR$/../c42_crashplan_core/c42_utils/docs/eclipse/C42Formatter.xml" />
     <option name="selectedJavaProfile" value="C42Formatter" />
   </component>
+  <component name="EntryPointsManager">
+    <entry_points version="2.0" />
+  </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
     <OptionsSetting value="true" id="Remove" />
