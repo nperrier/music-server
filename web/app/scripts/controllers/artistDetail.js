@@ -16,14 +16,10 @@ angular.module('musicApp')
       $scope.reverse = false;
 
       // Load artist from rest resource
-      Artist.get({ artistId: $routeParams.artistId }, function(artist) {
-        $scope.artist = artist;
-      });
+      $scope.artist = Artist.get({ artistId: $routeParams.artistId });
 
       // Load albums from rest resource
-      ArtistAlbum.get({ artistId: $routeParams.artistId }, function(albums) {
-        $scope.albums = albums;
-      });
+      $scope.albums = ArtistAlbum.get({ artistId: $routeParams.artistId });
 
       // this is needed for the album-action-menu modal
       $scope.playlists = Playlist.query();
