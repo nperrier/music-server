@@ -1,28 +1,25 @@
 <!doctype html>
-
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<html class="no-js">
 
 <head>
+  <title></title>
   <meta charset="utf-8">
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width">
 
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-  <!-- build:css styles/vendor.css -->
+  <!-- build:css(.) styles/vendor.css -->
   <!-- bower:css -->
   <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
+  <link rel="stylesheet" href="bower_components/bootstrap-css-only/css/bootstrap.css" />
   <!-- endbower -->
   <!-- endbuild -->
 
   <!-- build:css(.tmp) styles/main.css -->
   <link rel="stylesheet" href="styles/main.css">
-  <!-- endbuild -->
-
   <link rel="stylesheet" href="styles/audioplayercontrols.css">
+  <!-- endbuild -->
 
 </head>
 
@@ -98,62 +95,69 @@
     </div>
   </footer>
 
-  <!-- build:js scripts/vendor.js -->
-  <!-- bower:js -->
-  <script src="bower_components/es5-shim/es5-shim.js"></script>
-  <script src="bower_components/json3/lib/json3.min.js"></script>
-  <script src="bower_components/angular/angular.js"></script>
-  <script src="bower_components/angular-resource/angular-resource.js"></script>
-  <script src="bower_components/angular-cookies/angular-cookies.js"></script>
-  <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-  <script src="bower_components/angular-route/angular-route.js"></script>
-  <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-  <script src="bower_components/moment/moment.js"></script>
-  <script src="bower_components/underscore/underscore.js"></script>
-  <script src="bower_components/angular-animate/angular-animate.js"></script>
-  <script src="bower_components/spin.js/spin.js"></script>
-  <script src="bower_components/angular-spinner/angular-spinner.js"></script>
-  <!-- endbower -->
-  <!-- endbuild -->
 
-  <!-- build:js({.tmp,app}) scripts/scripts.js -->
-  <script src="scripts/app.js"></script>
+  <!-- build:js(.) scripts/oldieshim.js -->
+    <!--[if lt IE 9]>
+    <script src="bower_components/es5-shim/es5-shim.js"></script>
+    <script src="bower_components/json3/lib/json3.js"></script>
+    <![endif]-->
+    <!-- endbuild -->
 
-  <script src="scripts/controllers/dashboard.js"></script>
-  <script src="scripts/controllers/leftnav.js"></script>
-  <script src="scripts/controllers/library.js"></script>
-  <script src="scripts/controllers/artists.js"></script>
-  <script src="scripts/controllers/artistdetail.js"></script>
-  <script src="scripts/controllers/albums.js"></script>
-  <script src="scripts/controllers/albumdetail.js"></script>
-  <script src="scripts/controllers/tracks.js"></script>
-  <script src="scripts/controllers/trackdetail.js"></script>
-  <script src="scripts/controllers/genres.js"></script>
-  <script src="scripts/controllers/genretracks.js"></script>
-  <script src="scripts/controllers/playlists.js"></script>
-  <script src="scripts/controllers/playlistdetail.js"></script>
-  <script src="scripts/controllers/queue.js"></script>
+    <!-- build:js(.) scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/moment/moment.js"></script>
+    <script src="bower_components/underscore/underscore.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/spin.js/spin.js"></script>
+    <script src="bower_components/angular-spinner/angular-spinner.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-touch/angular-touch.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
 
-  <script src="scripts/services/artist.js"></script>
-  <script src="scripts/services/album.js"></script>
-  <script src="scripts/services/track.js"></script>
-  <script src="scripts/services/genre.js"></script>
-  <script src="scripts/services/genretrack.js"></script>
-  <script src="scripts/services/library.js"></script>
-  <script src="scripts/services/artistalbum.js"></script>
-  <script src="scripts/services/albumtrack.js"></script>
-  <script src="scripts/services/playlist.js"></script>
-  <script src="scripts/services/playerqueue.js"></script>
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="scripts/app.js"></script>
 
-  <script src="scripts/filters/duration.js"></script>
+    <script src="scripts/controllers/dashboard.js"></script>
+    <script src="scripts/controllers/leftnav.js"></script>
+    <script src="scripts/controllers/library.js"></script>
+    <script src="scripts/controllers/artists.js"></script>
+    <script src="scripts/controllers/artistdetail.js"></script>
+    <script src="scripts/controllers/albums.js"></script>
+    <script src="scripts/controllers/albumdetail.js"></script>
+    <script src="scripts/controllers/tracks.js"></script>
+    <script src="scripts/controllers/trackdetail.js"></script>
+    <script src="scripts/controllers/genres.js"></script>
+    <script src="scripts/controllers/genretracks.js"></script>
+    <script src="scripts/controllers/playlists.js"></script>
+    <script src="scripts/controllers/playlistdetail.js"></script>
+    <script src="scripts/controllers/queue.js"></script>
 
-  <script src="scripts/directives/audioplayercontrols.js"></script>
-  <script src="scripts/directives/trackactionmenu.js"></script>
-  <script src="scripts/directives/albumactionmenu.js"></script>
-  <script src="scripts/directives/playlistactionmenu.js"></script>
-  <script src="scripts/directives/emptytonull.js"></script>
-  <script src="scripts/directives/texttonumber.js"></script>
-  <!-- endbuild -->
+    <script src="scripts/services/artist.js"></script>
+    <script src="scripts/services/album.js"></script>
+    <script src="scripts/services/track.js"></script>
+    <script src="scripts/services/genre.js"></script>
+    <script src="scripts/services/genretrack.js"></script>
+    <script src="scripts/services/library.js"></script>
+    <script src="scripts/services/artistalbum.js"></script>
+    <script src="scripts/services/albumtrack.js"></script>
+    <script src="scripts/services/playlist.js"></script>
+    <script src="scripts/services/playerqueue.js"></script>
 
-</body>
-</html>
+    <script src="scripts/filters/duration.js"></script>
+
+    <script src="scripts/directives/audioplayercontrols.js"></script>
+    <script src="scripts/directives/trackactionmenu.js"></script>
+    <script src="scripts/directives/albumactionmenu.js"></script>
+    <script src="scripts/directives/playlistactionmenu.js"></script>
+    <script src="scripts/directives/emptytonull.js"></script>
+    <script src="scripts/directives/texttonumber.js"></script>
+    <!-- endbuild -->
+
+  </body>
+  </html>
