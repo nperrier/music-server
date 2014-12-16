@@ -28,7 +28,8 @@ angular.module('musicApp')
         $log.info('Add album.id: ' + album.id + ' to playlist.id: ' + playlist.id);
 
         AlbumTrack.get({ albumId: album.id }, function(tracks) {
-          var trackIds = _.pluck(tracks, 'id');
+          var orderedTracks = _.sortBy(tracks, function(t) { return t.number; });
+          var trackIds = _.pluck(orderedTracks, 'id');
           $log.info('Add track ids: ' + trackIds + ' to playlist.id: ' + playlist.id);
           Playlist.addTracks({ playlistId: playlist.id }, trackIds);
         });
@@ -39,9 +40,8 @@ angular.module('musicApp')
         $log.info('Add album to player queue, id: ' + album.id);
 
         AlbumTrack.get({ albumId: album.id }, function(tracks) {
-          var trackIds = _.pluck(tracks, 'id');
-          $log.info('Add track ids: ' + trackIds + ' to player queue');
-          PlayerQueue.addTracks(tracks);
+          var orderedTracks = _.sortBy(tracks, function(t) { return t.number; });
+          PlayerQueue.addTracks(orderedTracks);
         });
       };
     }
