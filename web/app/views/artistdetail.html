@@ -4,38 +4,44 @@
 
 		<h1>{{artist.name}}</h1>
 
-		<h2>Albums</h2>
-
 		<div ng-if="albums.length" ng-cloak>
-			<table class="table table-condensed table-hover">
-				<thead>
-					<tr>
-						<th />
-						<th ng-click="sortField = 'name'; reverse = !reverse">Title</th>
-						<th ng-click="sortField = 'year'; reverse = !reverse">Year</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr ng-repeat="album in albums | orderBy:sortField:reverse">
-						<td>
-							<img class="coverart-thumb" ng-src="{{album.coverArtUrl}}"/>
-						</td>
-						<td>
-							<a ng-href="#/album/{{album.id}}" class="thumb">
-								{{album.name}}
-							</a>
-							<album-action-menu></album-action-menu>
-						</td>
-						<td>
-							{{album.year | date : 'yyyy'}}
-						</td>
-					</tr>
-				</tbody>
-			</table>
+
+			<h2>Albums</h2>
+
+			<div ng-if="albums.length" ng-cloak>
+				<table class="table table-condensed table-hover">
+					<thead>
+						<tr>
+							<th />
+							<th ng-click="sortField = 'name'; reverse = !reverse">Title</th>
+							<th ng-click="sortField = 'year'; reverse = !reverse">Year</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="album in albums | orderBy:sortField:reverse">
+							<td>
+								<img class="coverart-thumb" ng-src="{{album.coverArtUrl}}"/>
+							</td>
+							<td>
+								<a ng-href="#/album/{{album.id}}">
+									{{album.name}}
+								</a>
+								<album-action-menu></album-action-menu>
+							</td>
+							<td>
+								{{album.year | date : 'yyyy'}}
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
 
-		<div ng-if="albums.length == 0">
-			No albums
+		<div>
+			<a ng-href="#/artist/{{artist.id}}/tracks">
+				All tracks
+			</a>
 		</div>
+
 	</div>
 </div>

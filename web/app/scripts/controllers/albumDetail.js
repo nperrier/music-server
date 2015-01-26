@@ -13,6 +13,21 @@ angular.module('musicApp')
 
 	$scope.sortField = 'number';
 	$scope.reverse = false;
+  $scope.variousArtists = false; /* whether the album is a 'Various Artists' */
+
+  /* TODO: compare by artist.name? */
+  var isVariousArtists = function(tracks) {
+    if (tracks.length) {
+      var artist = tracks[0].artist
+      for (var i = 0; i < tracks.length; i++) {
+        if (artist.id !== tracks[i].artist.id) {
+          $log.debug('artist.id: ' + artist.id + ' <=> ' + tracks[i].artist.id);
+          return true;
+        }
+      }
+    }
+    return false;
+  };
 
   $scope.playlists = Playlist.query();
 
@@ -22,6 +37,7 @@ angular.module('musicApp')
 
 	AlbumTrack.get({ albumId: $routeParams.albumId }, function(tracks) {
 		$scope.tracks = tracks;
+    $scope.variousArtists = isVariousArtists(tracks);
 	});
 
   $scope.updateTrack = function(trackId, trackInfo) {

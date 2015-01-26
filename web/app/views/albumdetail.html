@@ -22,6 +22,7 @@
             <tr>
               <th ng-click="sortField = 'number'; reverse = !reverse">#</th>
               <th ng-click="sortField = 'name'; reverse = !reverse">Title</th>
+              <th ng-if="variousArtists" ng-click="sortField = 'artist.name'; reverse = !reverse">Artist</th>
               <th ng-click="sortField = 'length'; reverse = !reverse">
                 <span class="glyphicon glyphicon-time"></span>
               </th>
@@ -36,6 +37,10 @@
                 {{track.name}}
                 <track-action-menu track="track"></track-action-menu>
               </td>
+              <td ng-if="variousArtists">
+                <a ng-href="#/artist/{{track.artist.id}}" class="thumb">
+                  {{track.artist.name}}
+                </a>
               <td>
                 {{track.length | duration}}
               </td>

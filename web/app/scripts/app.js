@@ -37,6 +37,11 @@ musicApp.config(['$routeProvider', function($routeProvider) {
 		controller: 'ArtistDetailCtrl'
 	})
 
+	.when('/artist/:artistId/tracks', {
+		templateUrl: 'views/artisttracks.html',
+		controller: 'ArtistTrackCtrl'
+	})
+
 	.when('/albums', {
 		templateUrl: 'views/albums.html',
 		controller: 'AlbumsCtrl'
