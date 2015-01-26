@@ -14,6 +14,11 @@ import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.id3.ID3v1Tag;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.ID3v24Tag;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.DateTimeFormatterBuilder;
+import org.joda.time.format.DateTimeParser;
+import org.joda.time.format.ISODateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,6 +31,36 @@ import org.slf4j.LoggerFactory;
 public class Mp3Tag extends AbstractTag {
 
 	private static final Logger log = LoggerFactory.getLogger(Mp3Tag.class);
+
+	/**
+	 * The timestamp fields are based on a subset of ISO 8601
+	 *
+	 * Valid timestamps are:
+	 *
+	 * <ul>
+	 * <li>yyyy</li>
+	 * <li>yyyy-MM</li>
+	 * <li>yyyy-MM-dd</li>
+	 * <li>yyyy-MM-ddTHH</li>
+	 * <li>yyyy-MM-ddTHH:mm</li>
+	 * <li>yyyy-MM-ddTHH:mm:ss</li>
+	 * </ul>
+	 *
+	 * All time stamps are UTC
+	 */
+	private static final DateTimeFormatter YEAR_FORMATTER;
+
+	static {
+		DateTimeParser[] parsers = { ISODateTimeFormat.year().getParser(), //
+				ISODateTimeFormat.yearMonth().getParser(), //
+				ISODateTimeFormat.yearMonthDay().getParser(), //
+				ISODateTimeFormat.dateHour().getParser(), //
+				ISODateTimeFormat.dateHourMinute().getParser(), //
+				ISODateTimeFormat.dateHourMinuteSecond().getParser() //
+		};
+
+		YEAR_FORMATTER = new DateTimeFormatterBuilder().append(null, parsers).toFormatter();
+	};
 
 	private Mp3Tag(Builder builder) {
 		super(builder);
@@ -75,10 +110,26 @@ public class Mp3Tag extends AbstractTag {
 		b.albumArtist(getID3v24TagValue(v2tag, FieldKey.ALBUM_ARTIST));
 		b.album(getID3v24TagValue(v2tag, FieldKey.ALBUM));
 		b.track(setTrack(getID3v24TagValue(v2tag, FieldKey.TITLE), f.getFile()));
-		b.year(v2tag.getFirst(ID3v24Frames.FRAME_ID_YEAR));
+
+		String rawYear = getID3v24TagValue(v2tag, FieldKey.YEAR);
+		try {
+			b.year(parseYear(rawYear));
+		} catch (Exception e) {
+			log.warn("Unable to parse year: file={}, year={}", f, rawYear);
+		}
+
 		b.genre(v2tag.getFirst(ID3v24Frames.FRAME_ID_GENRE));
 		b.number(setTrackNumber(v2tag.getFirst(ID3v24Frames.FRAME_ID_TRACK)));
 		b.coverArt(setCoverArt(v2tag.getFirstArtwork()));
+	}
+
+	private static String parseYear(String rawTimestampField) throws Exception {
+		if (rawTimestampField == null) {
+			return null;
+		}
+
+		DateTime dateTime = YEAR_FORMATTER.parseDateTime(rawTimestampField);
+		return Integer.toString(dateTime.getYear());
 	}
 
 	private static String setTrack(String track, File file) {
