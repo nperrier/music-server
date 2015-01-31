@@ -19,12 +19,15 @@ import com.perrier.music.db.IDatabase;
 import com.perrier.music.entity.album.Album;
 import com.perrier.music.entity.album.AlbumCreateQuery;
 import com.perrier.music.entity.album.AlbumFindByNameAndArtistIdQuery;
+import com.perrier.music.entity.album.AlbumProvider;
 import com.perrier.music.entity.artist.Artist;
 import com.perrier.music.entity.artist.ArtistCreateQuery;
 import com.perrier.music.entity.artist.ArtistFindByNameQuery;
+import com.perrier.music.entity.artist.ArtistProvider;
 import com.perrier.music.entity.genre.Genre;
 import com.perrier.music.entity.genre.GenreCreateQuery;
 import com.perrier.music.entity.genre.GenreFindByNameQuery;
+import com.perrier.music.entity.genre.GenreProvider;
 import com.perrier.music.entity.library.Library;
 import com.perrier.music.entity.playlist.PlaylistTrackDeleteQuery;
 import com.perrier.music.entity.track.Track;
@@ -44,12 +47,19 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 	private final IDatabase db;
 	private final EventBus bus;
 	private final ICoverArtService coverArtService;
+	private final GenreProvider genreProvider;
+	private final AlbumProvider albumProvider;
+	private final ArtistProvider artistProvider;
 
 	@Inject
-	public LibraryService(IDatabase db, EventBus bus, ICoverArtService coverArtService) {
+	public LibraryService(IDatabase db, EventBus bus, ICoverArtService coverArtService, GenreProvider genreProvider,
+			AlbumProvider albumProvider, ArtistProvider artistProvider) {
 		this.db = db;
 		this.bus = bus;
 		this.coverArtService = coverArtService;
+		this.genreProvider = genreProvider;
+		this.albumProvider = albumProvider;
+		this.artistProvider = artistProvider;
 	}
 
 	@Override
@@ -74,9 +84,40 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 		Track track = event.getTrack();
 		try {
 			this.db.beginTransaction();
-			// TODO: What else should be cleaned up?
+
+			// delete tracks from playlist
+			// NOTE: keeping playlist, even though it will be empty
 			this.db.delete(new PlaylistTrackDeleteQuery(track.getId()));
+
+			// delete the track
 			this.db.delete(new TrackDeleteQuery(track));
+
+			// delete genre if they have no more tracks
+			if (track.getGenre() != null) {
+				boolean genreDeleted = genreProvider.deleteIfOrphaned(track.getGenre());
+				if (genreDeleted) {
+					log.info("Genre removed: {}", track.getGenre());
+				}
+			}
+
+			// delete album if no more tracks associated with it
+			if (track.getAlbum() != null) {
+				boolean albumDeleted = albumProvider.deleteIfOrphaned(track.getAlbum());
+				if (albumDeleted) {
+					log.info("Album removed: {}", track.getAlbum());
+				}
+			}
+
+			// delete artist if they have no more tracks
+			if (track.getArtist() != null) {
+				boolean artistDeleted = artistProvider.deleteIfOrphaned(track.getArtist());
+				if (artistDeleted) {
+					log.info("Artist removed: {}", track.getArtist());
+				}
+			}
+
+			// TODO: delete cover art if no more associations to it
+
 			this.db.commit();
 
 			log.info("Track removed: {}", track);

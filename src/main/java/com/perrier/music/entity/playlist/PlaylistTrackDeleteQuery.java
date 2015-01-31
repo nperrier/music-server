@@ -16,7 +16,7 @@ public class PlaylistTrackDeleteQuery extends DeleteQuery {
 
 	@Override
 	public void query(Session session) throws DBException {
-		Query q = session.createQuery("delete from PlaylistTrack where trackId = :trackId");
+		Query q = session.createQuery("delete PlaylistTrack where track.id = :trackId");
 		q.setLong("trackId", this.trackId);
 		q.executeUpdate();
 	}
