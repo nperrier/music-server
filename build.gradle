@@ -12,7 +12,6 @@ buildscript {
 apply plugin: 'flyway'
 apply plugin: 'java'
 apply plugin: 'groovy'
-apply plugin: 'eclipse'
 apply plugin: 'application'
 
 defaultTasks 'build'
@@ -105,32 +104,6 @@ dependencies {
 			[group: 'junit', name: 'junit', version: '4.+'],
 			[group: 'org.mockito', name: 'mockito-all', version: '1.9.+']
 	)
-}
-
-// configure eclipse project generation plugin:
-eclipse {
-	// find gradle cache location
-	def gradleCache = null
-	for (o in configurations.compile) {
-		if (o.toString().indexOf(".gradle") != -1) {
-			// final def token = "filestore"
-			final def token = "files-2.1" // changed in 2.0?
-			def s = o.toString()
-			def idx = s.indexOf(token)
-			if (idx != -1) {
-				gradleCache = new File(s.substring(0, idx + token.length()))
-				break
-			}
-		}
-	}
-
-	// println "GRADLE_CACHE: " + gradleCache
-	// assert gradleCache && gradleCache.exists()
-
-	// Replace absolute paths with classpath variable GRADLE_CACHE
-	// MANUAL STEP: make sure GRADLE_CACHE is defined in:
-	// Eclipse -> Preferences -> Java -> Build Path -> Classpath Variables
-	pathVariables 'GRADLE_CACHE': gradleCache
 }
 
 // println "projectDir: $projectDir"
