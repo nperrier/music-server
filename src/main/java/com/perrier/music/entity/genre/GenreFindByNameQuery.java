@@ -17,7 +17,7 @@ public class GenreFindByNameQuery extends FindQuery<Genre> {
 	@Override
 	public Genre query(Session session) throws DBException {
 
-		Query q = session.createQuery("from Genre where name = :name");
+		Query q = session.createQuery("from Genre where name = lower(:name)");
 		q.setString("name", name);
 
 		return (Genre) q.uniqueResult();

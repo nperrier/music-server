@@ -27,8 +27,7 @@ public class AlbumFindByNameAndArtistIdQuery extends FindQuery<Album> {
 
 	@Override
 	public Album query(Session session) throws DBException {
-
-		Query q = session.createQuery("from Album where name = :name and artist.id = :artistId");
+		Query q = session.createQuery("from Album where name = lower(:name) and artist.id = :artistId");
 		q.setString("name", this.name);
 		q.setLong("artistId", this.artistId);
 
