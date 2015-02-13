@@ -16,7 +16,7 @@ public class ArtistFindByNameQuery extends FindQuery<Artist> {
 
 	@Override
 	public Artist query(Session session) throws DBException {
-		Query q = session.createQuery("from Artist where name = lower(:name)");
+		Query q = session.createQuery("from Artist where lower(name) = lower(:name)");
 		q.setString("name", name);
 
 		return (Artist) q.uniqueResult();

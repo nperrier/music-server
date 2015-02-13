@@ -22,7 +22,7 @@ public class TrackFindByNameAndArtistIdAndAlbumIdQuery extends FindQuery<Track> 
 	public Track query(Session session) throws DBException {
 		Query q = session.createQuery("" //
 				+ "from Track " //
-				+ "where name = lower(:name) " //
+				+ "where lower(name) = lower(:name) " //
 				+ "and artist.id = :artistId " //
 				+ "and album.id = :albumId");
 		q.setString("name", this.name);
