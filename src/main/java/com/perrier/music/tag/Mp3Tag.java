@@ -3,6 +3,8 @@ package com.perrier.music.tag;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -14,6 +16,7 @@ import org.jaudiotagger.tag.TagField;
 import org.jaudiotagger.tag.id3.ID3v1Tag;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.ID3v24Tag;
+import org.jaudiotagger.tag.reference.GenreTypes;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormatterBuilder;
@@ -31,6 +34,7 @@ import org.slf4j.LoggerFactory;
 public class Mp3Tag extends AbstractTag {
 
 	private static final Logger log = LoggerFactory.getLogger(Mp3Tag.class);
+	private static final Pattern GENRE_ID_TO_NAME_PATTERN = Pattern.compile("^\\(?(\\d+)\\)?$");
 
 	/**
 	 * The timestamp fields are based on a subset of ISO 8601
@@ -72,34 +76,59 @@ public class Mp3Tag extends AbstractTag {
 		boolean hasTag = false;
 
 		try {
-			MP3File f = (MP3File) AudioFileIO.read(file);
-			Builder b = new Builder();
+			MP3File mp3File = (MP3File) AudioFileIO.read(file);
+			Builder tagBuilder = new Builder();
 
-			if (f.hasID3v1Tag()) {
-				parseID3v1Tag(f, b);
+			if (mp3File.hasID3v1Tag()) {
+				parseID3v1Tag(mp3File, tagBuilder);
 				hasTag = true;
 			}
 
-			if (f.hasID3v2Tag()) {
-				parseID3v2Tag(f, b);
+			if (mp3File.hasID3v2Tag()) {
+				parseID3v2Tag(mp3File, tagBuilder);
 				hasTag = true;
 			}
 
 			// if the file had no tags at all, we just set the track name to the file name
 			if (!hasTag) {
-				b.track(FilenameUtils.removeExtension(file.getName()));
+				tagBuilder.track(FilenameUtils.removeExtension(file.getName()));
 			}
 
 			// Set the length of the track
-			setLength(f, b);
+			setLength(mp3File, tagBuilder);
 
-			tag = b.build();
+			tag = tagBuilder.build();
 
 		} catch (Exception e) {
 			log.error("Error parsing MP3 tag", e);
 		}
 
 		return tag;
+	}
+
+	/**
+	 * ID3v1 tags used a numeric id for the genre. Some software (looking at you iTunes) uses the numeric value in ID3v2
+	 * tags as well, even though they are supposed to be actual genre names.
+	 * 
+	 * To be nice, we'll check if genre field is a number (i.e.: 52 = House) and return the real genre name, otherwise
+	 * return the existing value. The number can also be wrapped in parentheses
+	 * 
+	 * @param rawGenre
+	 * @return
+	 */
+	private static String setGenre(String rawGenre) {
+		String genreName = rawGenre;
+
+		Matcher m = GENRE_ID_TO_NAME_PATTERN.matcher(genreName);
+		if (m.matches()) {
+			int genreId = Integer.parseInt(m.group(1));
+			String realGenre = GenreTypes.getInstanceOf().getValueForId(genreId);
+			if (realGenre != null) {
+				genreName = realGenre;
+			}
+		}
+
+		return genreName;
 	}
 
 	private static void parseID3v2Tag(MP3File f, Builder b) {
@@ -118,7 +147,7 @@ public class Mp3Tag extends AbstractTag {
 			log.warn("Unable to parse year: file={}, year={}", f, rawYear);
 		}
 
-		b.genre(v2tag.getFirst(ID3v24Frames.FRAME_ID_GENRE));
+		b.genre(setGenre(getID3v24TagValue(v2tag, FieldKey.GENRE)));
 		b.number(setTrackNumber(v2tag.getFirst(ID3v24Frames.FRAME_ID_TRACK)));
 		b.coverArt(setCoverArt(v2tag.getFirstArtwork()));
 	}
@@ -163,7 +192,7 @@ public class Mp3Tag extends AbstractTag {
 			b.album(getID3v1TagValue(tag.getAlbum()));
 			b.track(setTrack(getID3v1TagValue(tag.getTitle()), f.getFile()));
 			b.year(getID3v1TagValue(tag.getYear()));
-			b.genre(getID3v1TagValue(tag.getGenre()));
+			b.genre(setGenre(getID3v1TagValue(tag.getGenre())));
 			// ID3v1 tags have no track numbers
 			// ID3v1 tags have no cover art
 
