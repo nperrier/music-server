@@ -16,7 +16,7 @@ appender("CONSOLE", ConsoleAppender) {
 }
 
 // logpath is set by a system property
-//def logpath = System.getProperty("log_path")
+def logpath = System.getProperty("log_path")
 //println logpath
 
 appender("FILE", FileAppender) {
