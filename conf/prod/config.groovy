@@ -1,14 +1,14 @@
 appdir {
-	root = 'dev'
+	root = '.'
 	covers = 'covers'
 	db = 'db'
 	log = 'log'
-	webapp = 'web/app'
-	resources = 'src/main/resources' // this is only needed for the nocover.svg file
+	webapp = 'web'
+	resources = 'resources' // this is only needed for the nocover.svg file
 }
 
 log {
-	configfile = 'conf/dev/logback.groovy'
+	configfile = 'conf/logback.groovy'
 }
 
 h2 {
@@ -20,7 +20,7 @@ h2 {
 }
 
 server {
-	port = 8080
+	port = 8000
 	resource.base = appdir.webapp
 }
 

@@ -1,16 +1,24 @@
 package com.perrier.music;
 
-import groovy.util.ConfigObject;
-import groovy.util.ConfigSlurper;
-
 import java.io.File;
-import java.util.HashMap;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Map;
 
+import org.flywaydb.core.Flyway;
+import org.flywaydb.core.api.MigrationInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
+
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.util.ContextInitializer;
+import ch.qos.logback.core.joran.spi.JoranException;
+import ch.qos.logback.core.util.StatusPrinter;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
+import com.google.common.collect.Maps;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -23,7 +31,12 @@ import com.perrier.music.module.MusicModule;
 import com.perrier.music.module.MusicServletModule;
 import com.perrier.music.server.IServer;
 
+import groovy.util.ConfigObject;
+import groovy.util.ConfigSlurper;
+
 public class Core {
+
+	private static final Logger log = LoggerFactory.getLogger(Core.class);
 
 	private Injector injector;
 	private IDatabase db;
@@ -39,7 +52,7 @@ public class Core {
 		String configFile = cmds.configFile;
 		if (configFile == null) {
 			// Default config
-			configFile = "conf/dev/config.groovy";
+			configFile = "conf/config.groovy";
 		}
 
 		Core core = new Core();
@@ -52,17 +65,42 @@ public class Core {
 		public String configFile;
 	}
 
-	private static void configureLogging() {
+	private void configureLogging() {
 		// Some third-party libraries (Jersey, JAudioTagger) use java.util.logging
 		// Bridge to slf4
 		SLF4JBridgeHandler.removeHandlersForRootLogger();
 		SLF4JBridgeHandler.install();
+
+		String appDir = this.config.getRequiredString(ApplicationProperties.APP_ROOT);
+		String logDir = this.config.getRequiredString(ApplicationProperties.LOG_DIR);
+		String logPath = appDir + File.separator + logDir;
+		System.setProperty("log_path", logPath);
+
+		// Load logback config
+		LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
+		ContextInitializer contextInitializer = new ContextInitializer(loggerContext);
+		// Clear any previous logback configuration:
+		loggerContext.reset();
+
+		try {
+			// Dynamically load a logback.groovy file:
+			File logConfigFile = new File(this.config.getRequiredString(ApplicationProperties.LOG_CONFIGFILE));
+			URL logConfigUrl = logConfigFile.toURI().toURL();
+			contextInitializer.configureByResource(logConfigUrl);
+		} catch (JoranException e) {
+			e.printStackTrace();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+
+		StatusPrinter.printInCaseOfErrorsOrWarnings(loggerContext);
 	}
 
 	public void init(String configFile) throws Exception {
-		configureLogging();
 		this.configAppProperties(configFile);
 		this.createAppDirectories();
+		this.configureLogging();
+		this.createDatabase();
 		this.createInjector();
 		this.startServices();
 	}
@@ -71,14 +109,14 @@ public class Core {
 	private void configAppProperties(String configFile) throws Exception {
 
 		// config
-		Map<String, Object> appConfig = new HashMap<String, Object>();
+		Map<String, Object> appConfig = Maps.newHashMap();
 
 		// Set defaults first
 		File appRoot = new File(System.getProperty("user.home") + File.separator + ".perrier");
 		appConfig.put(ApplicationProperties.APP_ROOT.getKey(), appRoot.getAbsolutePath());
 
-		File coverArtRoot = new File(appRoot.getAbsolutePath() + File.separator + "covers");
-		appConfig.put(ApplicationProperties.COVERS_DIR.getKey(), coverArtRoot.getAbsolutePath());
+		File coverArtDir = new File(appRoot.getAbsolutePath() + File.separator + "covers");
+		appConfig.put(ApplicationProperties.COVERS_DIR.getKey(), coverArtDir.getAbsolutePath());
 
 		appConfig.putAll(loadConfigFromFile(configFile));
 
@@ -88,16 +126,35 @@ public class Core {
 	private void createAppDirectories() throws Exception {
 
 		File appRoot = new File(this.config.getRequiredString(ApplicationProperties.APP_ROOT));
-
 		if (!appRoot.exists() && !appRoot.mkdir()) {
 			throw new Exception("Unable to create application root: " + appRoot);
 		}
 
-		File coverRoot = new File(this.config.getRequiredString(ApplicationProperties.COVERS_DIR));
-
-		if (!coverRoot.exists() && !coverRoot.mkdir()) {
-			throw new Exception("Unable to create cover root: " + appRoot);
+		File coverDir = new File(appRoot, this.config.getRequiredString(ApplicationProperties.COVERS_DIR));
+		if (!coverDir.exists() && !coverDir.mkdir()) {
+			throw new Exception("Unable to create cover dir: " + coverDir);
 		}
+
+		File logDir = new File(appRoot, this.config.getRequiredString(ApplicationProperties.LOG_DIR));
+		if (!logDir.exists() && !logDir.mkdir()) {
+			throw new Exception("Unable to create log dir: " + logDir);
+		}
+	}
+
+	public void createDatabase() throws Exception {
+		Flyway flyway = new Flyway();
+
+		String url = this.config.getRequiredString(ApplicationProperties.URL);
+		String username = this.config.getRequiredString(ApplicationProperties.USERNAME);
+		String password = this.config.getRequiredString(ApplicationProperties.PASSWORD);
+
+		flyway.setDataSource(url, username, password);
+
+		flyway.migrate();
+
+		MigrationInfo info = flyway.info().current();
+
+		log.info("DB version: " + info.getVersion());
 	}
 
 	public void createInjector() throws Exception {

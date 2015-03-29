@@ -1,5 +1,7 @@
 package com.perrier.music.config;
 
+import java.util.List;
+
 public interface IConfiguration {
 
 	Integer getOptionalInteger(OptionalProperty<Integer> op);
@@ -12,4 +14,5 @@ public interface IConfiguration {
 
 	Boolean getOptionalBoolean(OptionalProperty<Boolean> showSql);
 
+	List getOptionalList(OptionalProperty<List> op);
 }

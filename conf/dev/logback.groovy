@@ -1,17 +1,29 @@
-
 import static ch.qos.logback.classic.Level.DEBUG
 import static ch.qos.logback.classic.Level.INFO
-import static ch.qos.logback.classic.Level.OFF
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder
 import ch.qos.logback.classic.jul.LevelChangePropagator
 import ch.qos.logback.core.ConsoleAppender
+import ch.qos.logback.core.FileAppender
 
 // Reset Java logging
 context = new LevelChangePropagator()
 context.resetJUL = true
 
-appender("STDOUT", ConsoleAppender) {
-	encoder(PatternLayoutEncoder) { pattern = "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" }
+appender("CONSOLE", ConsoleAppender) {
+	encoder(PatternLayoutEncoder) {
+		pattern = "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+	}
+}
+
+// logpath is set by a system property
+//def logpath = System.getProperty("log_path")
+//println logpath
+
+appender("FILE", FileAppender) {
+	file = "${logpath}/music-server.log"
+	encoder(PatternLayoutEncoder) {
+		pattern = "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+	}
 }
 
 logger("com.perrier.music", DEBUG)
@@ -24,4 +36,4 @@ logger("org.eclipse.jetty", ERROR)
 logger("org.jaudiotagger", ERROR)
 logger("com.mchange.v2", ERROR)
 
-root(INFO, ["STDOUT"])
+root(INFO, ["CONSOLE", "FILE"])

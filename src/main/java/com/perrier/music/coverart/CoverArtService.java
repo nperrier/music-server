@@ -148,8 +148,11 @@ public class CoverArtService extends AbstractIdleService implements ICoverArtSer
 
 		String extension = this.config.getOptionalString(ARTWORK_FORMAT);
 		String imgPath = this.generateImagePath(scaledImg);
-		String cacheRoot = this.config.getRequiredString(ApplicationProperties.COVERS_DIR);
-		File imageFile = new File(cacheRoot + File.separator + imgPath + "." + extension);
+
+		String coverDir = this.config.getRequiredString(ApplicationProperties.COVERS_DIR);
+		String appRoot = this.config.getRequiredString(ApplicationProperties.APP_ROOT);
+
+		File imageFile = new File(appRoot + File.separator + coverDir + File.separator + imgPath + "." + extension);
 		ImageIO.write(scaledImg, extension, imageFile);
 
 		return imageFile.getAbsolutePath();

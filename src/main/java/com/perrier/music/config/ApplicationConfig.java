@@ -43,7 +43,7 @@ public class ApplicationConfig implements IConfiguration {
 
 		if (this.properties.containsKey(key)) {
 			Object p = this.properties.get(key);
-			if (p.getClass().equals(type)) {
+			if (p.getClass().equals(type) || type.isAssignableFrom(type)) {
 				return type.cast(p);
 			}
 		}
@@ -71,6 +71,15 @@ public class ApplicationConfig implements IConfiguration {
 	@Override
 	public Boolean getOptionalBoolean(OptionalProperty<Boolean> op) {
 		return this.getOptionalBoolean(op.getKey(), op.getDefaultValue());
+	}
+
+	@Override
+	public List getOptionalList(OptionalProperty<List> op) {
+		return this.getOptionalList(op.getKey(), op.getDefaultValue());
+	}
+
+	private List getOptionalList(String key, List keyDefault) {
+		return this.getOptionalForType(key, keyDefault, List.class);
 	}
 
 	private Boolean getOptionalBoolean(String key, Boolean keyDefault) {

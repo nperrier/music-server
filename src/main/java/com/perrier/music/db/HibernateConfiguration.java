@@ -12,9 +12,9 @@ import org.hibernate.service.ServiceRegistryBuilder;
 
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
+import com.perrier.music.ApplicationProperties;
 import com.perrier.music.config.IConfiguration;
 import com.perrier.music.config.OptionalProperty;
-import com.perrier.music.config.Property;
 import com.perrier.music.entity.album.Album;
 import com.perrier.music.entity.artist.Artist;
 import com.perrier.music.entity.genre.Genre;
@@ -27,9 +27,6 @@ public class HibernateConfiguration implements IDBConfiguration {
 
 	private final IConfiguration config;
 
-	public static final Property<String> URL = new Property<String>("h2.url");
-	public static final Property<String> USERNAME = new Property<String>("h2.username");
-	public static final Property<String> PASSWORD = new Property<String>("h2.password");
 	public static final OptionalProperty<Boolean> SHOW_SQL = new OptionalProperty<Boolean>("h2.showSql", false);
 
 	@Inject
@@ -72,9 +69,9 @@ public class HibernateConfiguration implements IDBConfiguration {
 
 		hibernateConfig.setProperty(Environment.DRIVER, Driver.class.getName());
 		hibernateConfig.setProperty(Environment.DIALECT, H2Dialect.class.getName());
-		hibernateConfig.setProperty(Environment.URL, this.config.getRequiredString(URL));
-		hibernateConfig.setProperty(Environment.USER, this.config.getRequiredString(USERNAME));
-		hibernateConfig.setProperty(Environment.PASS, this.config.getRequiredString(PASSWORD));
+		hibernateConfig.setProperty(Environment.URL, this.config.getRequiredString(ApplicationProperties.URL));
+		hibernateConfig.setProperty(Environment.USER, this.config.getRequiredString(ApplicationProperties.USERNAME));
+		hibernateConfig.setProperty(Environment.PASS, this.config.getRequiredString(ApplicationProperties.PASSWORD));
 
 		hibernateConfig.setProperty(Environment.AUTOCOMMIT, "true");
 		hibernateConfig.setProperty(Environment.SHOW_SQL, this.config.getOptionalBoolean(SHOW_SQL).toString());
