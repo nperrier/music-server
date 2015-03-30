@@ -117,6 +117,10 @@ public class Mp3Tag extends AbstractTag {
 	 * @return
 	 */
 	private static String setGenre(String rawGenre) {
+		if (rawGenre == null) {
+			return null;
+		}
+
 		String genreName = rawGenre;
 
 		Matcher m = GENRE_ID_TO_NAME_PATTERN.matcher(genreName);
