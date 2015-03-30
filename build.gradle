@@ -129,7 +129,7 @@ def setEnvironment() {
 
 def loadConfig() {
 	def configFile = file("conf/$env/config.groovy")
-	def config = new ConfigSlurper().parse(configFile.toURL())
+	def config = new ConfigSlurper().parse(configFile.toURI().toURL())
 	ext.config = config
 }
 
