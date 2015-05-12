@@ -8,7 +8,7 @@ appdir {
 }
 
 log {
-	configfile = appdir.root + '/conf/dev/logback.groovy'
+	configfile = 'conf/dev/logback.groovy'
 }
 
 h2 {
