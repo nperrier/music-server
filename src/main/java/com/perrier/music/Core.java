@@ -87,9 +87,7 @@ public class Core {
 			File logConfigFile = new File(this.config.getRequiredString(ApplicationProperties.LOG_CONFIGFILE));
 			URL logConfigUrl = logConfigFile.toURI().toURL();
 			contextInitializer.configureByResource(logConfigUrl);
-		} catch (JoranException e) {
-			e.printStackTrace();
-		} catch (MalformedURLException e) {
+		} catch (JoranException | MalformedURLException e) {
 			e.printStackTrace();
 		}
 
