@@ -58,7 +58,7 @@ public class TrackGenreUpdaterTest extends MusicUnitTest {
 		verify(db, never()).create(isA(GenreCreateQuery.class));
 		verify(db, never()).update(isA(GenreUpdateQuery.class));
 
-		assertFalse(result.getChanged());
+		assertFalse(result.isCreatedOrDeleted());
 		assertNull(result.getUpdate());
 	}
 
@@ -72,7 +72,7 @@ public class TrackGenreUpdaterTest extends MusicUnitTest {
 		verify(db, never()).create(isA(GenreCreateQuery.class));
 		verify(db, never()).update(isA(GenreUpdateQuery.class));
 
-		assertFalse(result.getChanged());
+		assertFalse(result.isCreatedOrDeleted());
 		assertNotNull(result.getUpdate());
 
 		assertEquals(genre.getId(), result.getUpdate().getId());
@@ -89,7 +89,7 @@ public class TrackGenreUpdaterTest extends MusicUnitTest {
 		verify(db, never()).create(isA(GenreCreateQuery.class));
 		verify(db, never()).update(isA(GenreUpdateQuery.class));
 
-		assertFalse(result.getChanged());
+		assertFalse(result.isCreatedOrDeleted());
 		assertNotNull(result.getUpdate());
 
 		assertEquals(genre.getId(), result.getUpdate().getId());
@@ -112,7 +112,7 @@ public class TrackGenreUpdaterTest extends MusicUnitTest {
 		verify(db).update(isA(GenreUpdateQuery.class));
 
 		// track has not changed, just the genre's name (genreId is still the same for track)
-		assertFalse(result.getChanged());
+		assertFalse(result.isCreatedOrDeleted());
 		assertNotNull(result.getUpdate());
 
 		assertEquals(updatedGenre.getName(), result.getUpdate().getName());
@@ -130,7 +130,7 @@ public class TrackGenreUpdaterTest extends MusicUnitTest {
 
 		verify(db).create(isA(GenreCreateQuery.class));
 
-		assertTrue(result.getChanged());
+		assertTrue(result.isCreatedOrDeleted());
 		assertNotNull(result.getUpdate());
 
 		assertEquals(genre.getId(), result.getUpdate().getId());
@@ -152,7 +152,7 @@ public class TrackGenreUpdaterTest extends MusicUnitTest {
 
 		verify(db).create(isA(GenreCreateQuery.class));
 
-		assertTrue(result.getChanged());
+		assertTrue(result.isCreatedOrDeleted());
 		assertNotNull(result.getUpdate());
 
 		assertEquals(newGenre.getId(), result.getUpdate().getId());
@@ -174,7 +174,7 @@ public class TrackGenreUpdaterTest extends MusicUnitTest {
 		verify(db, never()).create(isA(GenreCreateQuery.class));
 		verify(db, never()).update(isA(GenreUpdateQuery.class));
 
-		assertTrue(result.getChanged());
+		assertTrue(result.isCreatedOrDeleted());
 		assertNotNull(result.getUpdate());
 
 		assertEquals(newGenre.getId(), result.getUpdate().getId());
@@ -191,7 +191,7 @@ public class TrackGenreUpdaterTest extends MusicUnitTest {
 		verify(db, never()).create(isA(GenreCreateQuery.class));
 		verify(db, never()).update(isA(GenreUpdateQuery.class));
 
-		assertTrue(result.getChanged());
+		assertTrue(result.isCreatedOrDeleted());
 		assertNull(result.getUpdate());
 	}
 }

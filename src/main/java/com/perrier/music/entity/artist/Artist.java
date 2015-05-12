@@ -38,6 +38,22 @@ public class Artist extends AbstractAuditableEntity {
 	public Artist() {
 	}
 
+	public static Artist copy(Artist a) {
+		if (a == null) {
+			return null;
+		}
+
+		Artist artist = new Artist();
+		artist.setId(a.getId());
+		artist.setName(a.getName());
+		artist.setTracks(a.getTracks());
+		artist.setAlbums(a.getAlbums());
+		artist.setCreationDate(a.getCreationDate());
+		artist.setModificationDate(a.getModificationDate());
+
+		return artist;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false)

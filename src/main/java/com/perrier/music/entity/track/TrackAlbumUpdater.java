@@ -1,7 +1,6 @@
 package com.perrier.music.entity.track;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.commons.lang3.StringUtils.trimToEmpty;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +13,15 @@ import com.perrier.music.entity.album.AlbumCreateQuery;
 import com.perrier.music.entity.album.AlbumFindByNameAndArtistIdQuery;
 import com.perrier.music.entity.album.AlbumUpdateQuery;
 import com.perrier.music.entity.artist.Artist;
+import com.perrier.music.entity.track.AbstractTrackUpdater.UpdateResult.Change;
 
+/**
+ * TODO: Creating a new album should associate the cover art with the album
+ * 
+ * TODO: Need to figure out how to handle changes when tracks album artist != track artist
+ * 
+ * (i.e., various artists or artist for track is not the same as the album artist)
+ */
 public class TrackAlbumUpdater extends AbstractTrackUpdater<Album> {
 
 	private static final Logger log = LoggerFactory.getLogger(TrackArtistUpdater.class);
@@ -27,51 +34,58 @@ public class TrackAlbumUpdater extends AbstractTrackUpdater<Album> {
 		this.artistUpdate = artistUpdate;
 	}
 
-	public UpdateResult<Album> handleUpdate(String albumName) throws DBException {
-
-		// normalize input
-		albumName = trimToEmpty(albumName);
-		albumName = albumName.replaceAll("\\s+", " "); // collapse an extra spaces
-
+	public UpdateResult<Album> handleUpdate(String albumNameInput) throws DBException {
+		String albumName = normalizeInput(albumNameInput);
 		Album trackAlbum = track.getAlbum();
+		Change change = determineChange(albumName, trackAlbum);
+		UpdateResult updateResult = doChange(albumName, trackAlbum, change);
 
-		boolean create = false;
-		boolean update = false;
-		boolean remove = false;
+		return updateResult;
+	}
+
+	private Change determineChange(String albumName, Album trackAlbum) {
+		Change change = Change.NONE;
+		boolean artistChanged = artistUpdate.isCreatedOrDeleted();
 
 		if (trackAlbum == null) {
 			if (!isBlank(albumName)) {
 				log.debug("Added new album to track, albumName={}, trackAlbum={}", albumName, track);
-				create = true;
+				change = Change.CREATED;
 			}
 		} else if (isBlank(albumName)) {
 			log.debug("Removing album from track, albumName={}, track={}", trackAlbum.getName(), track);
-			remove = true;
+			change = Change.DELETED;
 		} else if (!trackAlbum.getName().equals(albumName)) {
 			// Check if changes are superficial (e.g., capitalization)
-			if (trackAlbum.getName().equalsIgnoreCase(albumName) && !artistUpdate.getChanged()) {
+			if (trackAlbum.getName().equalsIgnoreCase(albumName) && !artistChanged) {
 				log.debug("Updating album for track, newAlbumName={}, track={}", albumName, track);
-				update = true;
+				change = Change.UPDATED;
 			}
 			// But if the artist changed or the changes were not superficial, we will have to create a new album
 			else {
 				log.debug("Changing album for track, newAlbumName={}, track={}", albumName, track);
-				create = true;
+				change = Change.CREATED;
 			}
-		} else if (artistUpdate.getChanged()) {
+		} else if (artistChanged) {
 			// the album wasn't changed, but the artist might have, so we have to change the album
 			// to associate it with the new artist value
 			log.debug("Album didn't change, but the artist did.  Changing the album artist, artist={}, track={}",
 					artistUpdate, track);
-			create = true;
+			change = Change.CREATED;
 		}
 
+		return change;
+	}
+
+	private UpdateResult doChange(String albumName, Album trackAlbum, Change change) throws DBException {
+		Album originalAlbum = Album.copy(trackAlbum);
 		Album albumUpdate = trackAlbum;
 
-		if (create) {
+		switch (change) {
+		case CREATED:
 			Artist artist = track.getArtist();
 
-			if (artistUpdate.getChanged()) {
+			if (artistUpdate.isCreatedOrDeleted()) {
 				artist = artistUpdate.getUpdate();
 			}
 
@@ -87,16 +101,21 @@ public class TrackAlbumUpdater extends AbstractTrackUpdater<Album> {
 				albumUpdate.setArtist(artist);
 				albumUpdate = this.db.create(new AlbumCreateQuery(albumUpdate));
 			}
-		} else if (update) {
+			break;
+		case UPDATED:
 			albumUpdate.setName(albumName);
 			albumUpdate = this.db.update(new AlbumUpdateQuery(albumUpdate));
-		} else if (remove) {
+			break;
+		case DELETED:
 			albumUpdate = null;
+			break;
+		case NONE:
+			// noop
+			break;
+		default:
+			throw new RuntimeException("Unknown change type: " + change);
 		}
 
-		// not including 'update' because 'changed' here means the 'association to track' changed
-		final boolean changed = (create || remove);
-
-		return new UpdateResult<Album>(albumUpdate, changed);
+		return new UpdateResult<Album>(originalAlbum, albumUpdate, change);
 	}
 }

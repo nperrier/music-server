@@ -1,7 +1,6 @@
 package com.perrier.music.entity.track;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.commons.lang3.StringUtils.trimToEmpty;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +12,7 @@ import com.perrier.music.entity.genre.Genre;
 import com.perrier.music.entity.genre.GenreCreateQuery;
 import com.perrier.music.entity.genre.GenreFindByNameQuery;
 import com.perrier.music.entity.genre.GenreUpdateQuery;
+import com.perrier.music.entity.track.AbstractTrackUpdater.UpdateResult.Change;
 
 public class TrackGenreUpdater extends AbstractTrackUpdater<Genre> {
 
@@ -23,56 +23,67 @@ public class TrackGenreUpdater extends AbstractTrackUpdater<Genre> {
 		super(track);
 	}
 
-	public UpdateResult<Genre> handleUpdate(String genreName) throws DBException {
-
-		// normalize input
-		genreName = trimToEmpty(genreName);
-		genreName = genreName.replaceAll("\\s+", " "); // collapse an extra spaces
-
+	public UpdateResult<Genre> handleUpdate(String trackGenreName) throws DBException {
+		String genreName = normalizeInput(trackGenreName);
 		Genre trackGenre = track.getGenre();
+		Change change = determineChange(genreName, trackGenre);
+		UpdateResult updateResult = doChange(genreName, trackGenre, change);
 
-		boolean create = false;
-		boolean update = false;
-		boolean remove = false;
+		return updateResult;
+	}
+
+	private Change determineChange(String genreName, Genre trackGenre) {
+		Change change = Change.NONE;
 
 		if (trackGenre == null) {
 			if (!isBlank(genreName)) {
 				log.debug("Added new genre to track, genreName={}, track={}", genreName, track);
-				create = true;
+				change = Change.CREATED;
 			}
 		} else if (isBlank(genreName)) {
 			log.debug("Removing genre from track, genreName={}, track={}", trackGenre.getName(), track);
-			remove = true;
+			change = Change.DELETED;
 		} else if (!trackGenre.getName().equals(genreName)) {
 			// Checks if changes are superficial (e.g., capitalization)
 			if (trackGenre.getName().equalsIgnoreCase(genreName)) {
 				log.debug("Updating genre for track, newGenreName={}, track={}", genreName, track);
-				update = true;
+				change = Change.UPDATED;
 			} else {
 				log.debug("Changing genre for track, newGenreName={}, track={}", genreName, track);
-				create = true;
+				change = Change.CREATED;
 			}
 		}
 
+		return change;
+	}
+
+	private UpdateResult doChange(String genreName, Genre trackGenre, Change change) throws DBException {
+		Genre originalGenre = Genre.copy(trackGenre);
 		Genre genreUpdate = trackGenre;
 
-		if (create) {
+		switch (change) {
+		case CREATED:
 			genreUpdate = this.db.find(new GenreFindByNameQuery(genreName));
 			if (genreUpdate == null) {
 				genreUpdate = new Genre();
 				genreUpdate.setName(genreName);
 				genreUpdate = this.db.create(new GenreCreateQuery(genreUpdate));
 			}
-		} else if (update) {
+			break;
+		case UPDATED:
 			genreUpdate.setName(genreName);
 			genreUpdate = this.db.update(new GenreUpdateQuery(genreUpdate));
-		} else if (remove) {
+			break;
+		case DELETED:
 			genreUpdate = null;
+			break;
+		case NONE:
+			// noop
+			break;
+		default:
+			throw new RuntimeException("Unknown change type: " + change);
 		}
 
-		// not including 'update' because 'changed' here means the 'association to track' changed
-		final boolean changed = (create || remove);
-
-		return new UpdateResult<Genre>(genreUpdate, changed);
+		return new UpdateResult<Genre>(originalGenre, genreUpdate, change);
 	}
 }

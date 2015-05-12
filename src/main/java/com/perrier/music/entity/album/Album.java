@@ -36,6 +36,29 @@ public class Album extends AbstractAuditableEntity {
 	public Album() {
 	}
 
+	/**
+	 * Creates a shallow copy of this Album. This is really only needed for deleting an album.
+	 * 
+	 * @return
+	 */
+	public static Album copy(Album a) {
+		if (a == null) {
+			return null;
+		}
+
+		Album album = new Album();
+		album.setId(a.getId());
+		album.setName(a.getName());
+		album.setYear(a.getYear());
+		album.setArtist(a.getArtist());
+		album.setCoverArt(a.getCoverArt());
+		album.setTracks(a.getTracks());
+		album.setCreationDate(a.getCreationDate());
+		album.setModificationDate(a.getModificationDate());
+
+		return album;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false)

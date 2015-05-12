@@ -16,6 +16,23 @@ public class Genre extends AbstractAuditableEntity {
 	private Long id;
 	private String name;
 
+	public Genre() {
+	}
+
+	public static Genre copy(Genre g) {
+		if (g == null) {
+			return null;
+		}
+
+		Genre genre = new Genre();
+		genre.setId(g.getId());
+		genre.setName(g.getName());
+		genre.setCreationDate(g.getCreationDate());
+		genre.setModificationDate(g.getModificationDate());
+
+		return genre;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false)

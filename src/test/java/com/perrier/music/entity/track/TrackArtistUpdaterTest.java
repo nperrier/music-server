@@ -58,7 +58,7 @@ public class TrackArtistUpdaterTest extends MusicUnitTest {
 		verify(db, never()).create(isA(ArtistCreateQuery.class));
 		verify(db, never()).update(isA(ArtistUpdateQuery.class));
 
-		assertFalse(result.getChanged());
+		assertFalse(result.isCreatedOrDeleted());
 		assertNull(result.getUpdate());
 	}
 
@@ -72,7 +72,7 @@ public class TrackArtistUpdaterTest extends MusicUnitTest {
 		verify(db, never()).create(isA(ArtistCreateQuery.class));
 		verify(db, never()).update(isA(ArtistUpdateQuery.class));
 
-		assertFalse(result.getChanged());
+		assertFalse(result.isCreatedOrDeleted());
 		assertNotNull(result.getUpdate());
 
 		assertEquals(artist.getId(), result.getUpdate().getId());
@@ -89,7 +89,7 @@ public class TrackArtistUpdaterTest extends MusicUnitTest {
 		verify(db, never()).create(isA(ArtistCreateQuery.class));
 		verify(db, never()).update(isA(ArtistUpdateQuery.class));
 
-		assertFalse(result.getChanged());
+		assertFalse(result.isCreatedOrDeleted());
 		assertNotNull(result.getUpdate());
 
 		assertEquals(artist.getId(), result.getUpdate().getId());
@@ -112,7 +112,7 @@ public class TrackArtistUpdaterTest extends MusicUnitTest {
 		verify(db).update(isA(ArtistUpdateQuery.class));
 
 		// track has not changed, just the artist's name (artistId is still the same for track)
-		assertFalse(result.getChanged());
+		assertFalse(result.isCreatedOrDeleted());
 		assertNotNull(result.getUpdate());
 
 		assertEquals(updatedArtist.getId(), result.getUpdate().getId());
@@ -130,7 +130,7 @@ public class TrackArtistUpdaterTest extends MusicUnitTest {
 
 		verify(db).create(isA(ArtistCreateQuery.class));
 
-		assertTrue(result.getChanged());
+		assertTrue(result.isCreatedOrDeleted());
 		assertNotNull(result.getUpdate());
 
 		assertEquals(artist.getId(), result.getUpdate().getId());
@@ -152,7 +152,7 @@ public class TrackArtistUpdaterTest extends MusicUnitTest {
 
 		verify(db).create(isA(ArtistCreateQuery.class));
 
-		assertTrue(result.getChanged());
+		assertTrue(result.isCreatedOrDeleted());
 		assertNotNull(result.getUpdate());
 
 		assertEquals(newArtist.getId(), result.getUpdate().getId());
@@ -174,7 +174,7 @@ public class TrackArtistUpdaterTest extends MusicUnitTest {
 		verify(db, never()).create(isA(ArtistCreateQuery.class));
 		verify(db, never()).update(isA(ArtistUpdateQuery.class));
 
-		assertTrue(result.getChanged());
+		assertTrue(result.isCreatedOrDeleted());
 		assertNotNull(result.getUpdate());
 
 		assertEquals(newArtist.getId(), result.getUpdate().getId());
@@ -191,7 +191,7 @@ public class TrackArtistUpdaterTest extends MusicUnitTest {
 		verify(db, never()).create(isA(ArtistCreateQuery.class));
 		verify(db, never()).update(isA(ArtistUpdateQuery.class));
 
-		assertTrue(result.getChanged());
+		assertTrue(result.isCreatedOrDeleted());
 		assertNull(result.getUpdate());
 	}
 }

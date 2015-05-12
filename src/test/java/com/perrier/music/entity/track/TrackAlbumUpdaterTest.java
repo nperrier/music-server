@@ -65,7 +65,7 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 		verify(db, never()).create(isA(AlbumCreateQuery.class));
 		verify(db, never()).update(isA(AlbumUpdateQuery.class));
 
-		assertFalse(result.getChanged());
+		assertFalse(result.isCreatedOrDeleted());
 		assertNull(result.getUpdate());
 	}
 
@@ -73,14 +73,14 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 	public void shouldDoNothingIfTrackHasAlbumAndInputIsSame() throws Exception {
 
 		when(track.getAlbum()).thenReturn(album); // original track had album
-		when(artistUpdate.getChanged()).thenReturn(false);
+		when(artistUpdate.isCreatedOrDeleted()).thenReturn(false);
 
 		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate("the college dropout");
 
 		verify(db, never()).create(isA(AlbumCreateQuery.class));
 		verify(db, never()).update(isA(AlbumUpdateQuery.class));
 
-		assertFalse(result.getChanged());
+		assertFalse(result.isCreatedOrDeleted());
 		assertSame(album, result.getUpdate());
 	}
 
@@ -94,7 +94,7 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 		verify(db, never()).create(isA(AlbumCreateQuery.class));
 		verify(db, never()).update(isA(AlbumUpdateQuery.class));
 
-		assertFalse(result.getChanged());
+		assertFalse(result.isCreatedOrDeleted());
 		assertSame(album, result.getUpdate());
 	}
 
@@ -114,7 +114,7 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 		verify(db).update(isA(AlbumUpdateQuery.class));
 
 		// track has not changed, just the album's name (albumId is still the same for track)
-		assertFalse(result.getChanged());
+		assertFalse(result.isCreatedOrDeleted());
 		assertNotNull(result.getUpdate());
 
 		assertEquals("tHe CoLLeGe DroPoUt", result.getUpdate().getName());
@@ -131,7 +131,7 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 
 		verify(db).create(isA(AlbumCreateQuery.class));
 
-		assertTrue(result.getChanged());
+		assertTrue(result.isCreatedOrDeleted());
 		assertSame(album, result.getUpdate());
 	}
 
@@ -148,7 +148,7 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 
 		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate("late registration");
 
-		assertTrue(result.getChanged());
+		assertTrue(result.isCreatedOrDeleted());
 		assertSame(newAlbum, result.getUpdate());
 	}
 
@@ -167,7 +167,7 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 		verify(db, never()).create(isA(ArtistCreateQuery.class));
 		verify(db, never()).update(isA(ArtistUpdateQuery.class));
 
-		assertTrue(result.getChanged());
+		assertTrue(result.isCreatedOrDeleted());
 		assertSame(newAlbum, result.getUpdate());
 	}
 
@@ -181,7 +181,7 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 		verify(db, never()).create(isA(AlbumCreateQuery.class));
 		verify(db, never()).update(isA(AlbumUpdateQuery.class));
 
-		assertTrue(result.getChanged());
+		assertTrue(result.isCreatedOrDeleted());
 		assertNull(result.getUpdate());
 	}
 
@@ -196,14 +196,14 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 		newAlbum.setId(2L);
 
 		when(track.getAlbum()).thenReturn(album); // original track had album
-		when(artistUpdate.getChanged()).thenReturn(true);
+		when(artistUpdate.isCreatedOrDeleted()).thenReturn(true);
 		when(db.create(isA(AlbumCreateQuery.class))).thenReturn(newAlbum);
 
 		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate("the college dropout");
 
 		verify(db, never()).update(isA(AlbumUpdateQuery.class));
 
-		assertTrue(result.getChanged());
+		assertTrue(result.isCreatedOrDeleted());
 		assertNotNull(result.getUpdate());
 
 		assertEquals(newAlbum.getName(), result.getUpdate().getName());
@@ -220,14 +220,14 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 		newAlbum.setId(2L);
 
 		when(track.getAlbum()).thenReturn(album); // original track had album
-		when(artistUpdate.getChanged()).thenReturn(true);
+		when(artistUpdate.isCreatedOrDeleted()).thenReturn(true);
 		when(db.create(isA(AlbumCreateQuery.class))).thenReturn(newAlbum);
 
 		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate("tHe CoLLeGe DroPoUt");
 
 		verify(db, never()).update(isA(AlbumUpdateQuery.class));
 
-		assertTrue(result.getChanged());
+		assertTrue(result.isCreatedOrDeleted());
 		assertNotNull(result.getUpdate());
 
 		assertEquals(newAlbum.getName(), result.getUpdate().getName());
@@ -244,7 +244,7 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 		existingAlbum.setId(2L);
 
 		when(track.getAlbum()).thenReturn(album); // original track had album
-		when(artistUpdate.getChanged()).thenReturn(true);
+		when(artistUpdate.isCreatedOrDeleted()).thenReturn(true);
 		when(db.find(isA(AlbumFindByNameAndArtistIdQuery.class))).thenReturn(existingAlbum);
 
 		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate("kanye west");
@@ -252,7 +252,7 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 		verify(db, never()).update(isA(AlbumUpdateQuery.class));
 		verify(db, never()).create(isA(AlbumCreateQuery.class));
 
-		assertTrue(result.getChanged());
+		assertTrue(result.isCreatedOrDeleted());
 		assertNotNull(result.getUpdate());
 
 		assertEquals(existingAlbum.getName(), result.getUpdate().getName());
@@ -274,7 +274,7 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 		newAlbum.setArtist(trackArtist);
 
 		when(track.getAlbum()).thenReturn(album); // original track had album
-		when(artistUpdate.getChanged()).thenReturn(true);
+		when(artistUpdate.isCreatedOrDeleted()).thenReturn(true);
 		when(artistUpdate.getUpdate()).thenReturn(trackArtist);
 
 		when(db.create(isA(AlbumCreateQuery.class))).thenReturn(newAlbum);
@@ -283,7 +283,7 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 
 		verify(db, never()).update(isA(AlbumUpdateQuery.class));
 
-		assertTrue(result.getChanged());
+		assertTrue(result.isCreatedOrDeleted());
 		assertNotNull(result.getUpdate());
 
 		assertEquals(newAlbum.getName(), result.getUpdate().getName());
@@ -300,14 +300,14 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 		newAlbum.setId(2L);
 
 		when(track.getAlbum()).thenReturn(null); // original track had no album
-		when(artistUpdate.getChanged()).thenReturn(true);
+		when(artistUpdate.isCreatedOrDeleted()).thenReturn(true);
 		when(db.create(isA(AlbumCreateQuery.class))).thenReturn(newAlbum);
 
 		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate("the college dropout");
 
 		verify(db, never()).update(isA(AlbumUpdateQuery.class));
 
-		assertTrue(result.getChanged());
+		assertTrue(result.isCreatedOrDeleted());
 		assertNotNull(result.getUpdate());
 
 		assertEquals(newAlbum.getName(), result.getUpdate().getName());
@@ -329,7 +329,7 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 		existingAlbum.setArtist(trackArtist);
 
 		when(track.getAlbum()).thenReturn(album); // original track had album
-		when(artistUpdate.getChanged()).thenReturn(true);
+		when(artistUpdate.isCreatedOrDeleted()).thenReturn(true);
 		when(artistUpdate.getUpdate()).thenReturn(trackArtist);
 		when(db.find(isA(AlbumFindByNameAndArtistIdQuery.class))).thenReturn(existingAlbum);
 
@@ -338,7 +338,7 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 		verify(db, never()).create(isA(AlbumCreateQuery.class));
 		verify(db, never()).update(isA(AlbumUpdateQuery.class));
 
-		assertTrue(result.getChanged());
+		assertTrue(result.isCreatedOrDeleted());
 		assertNotNull(result.getUpdate());
 
 		assertEquals(existingAlbum.getName(), result.getUpdate().getName());
