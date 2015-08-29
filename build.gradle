@@ -4,7 +4,7 @@ buildscript {
 		mavenCentral()
 	}
 	dependencies {
-		classpath "com.h2database:h2:1.3+"
+		classpath "com.h2database:h2:1.3.176"
 		classpath "com.googlecode.flyway:flyway-gradle-plugin:2.2.+"
 	}
 }
@@ -44,7 +44,7 @@ dependencies {
 			[group: 'org.flywaydb', name: 'flyway-core', version: '3.1+'],
 
 			// h2
-			[group: 'com.h2database', name: 'h2', version: '1.3+'],
+			[group: 'com.h2database', name: 'h2', version: '1.3.176'],
 
 			// hibernate
 			[group: 'org.hibernate', name: 'hibernate-core', version: '4.2.15.Final'],
@@ -171,6 +171,8 @@ task distWeb(type: Exec) {
 	commandLine 'grunt', 'build'
 }
 
+distWeb.onlyIf { !project.hasProperty('distWeb.skip') }
+
 //distZip {
 //	into('/web') {
 //		from ''
@@ -184,16 +186,35 @@ distTar.dependsOn distWeb
 // Need this for mac so that java app doesn't show up in foreground
 applicationDefaultJvmArgs = ['-Dapple.awt.UIElement=true']
 
+tasks.startScripts {
+	doLast {
+		// Add redirection for stderr to log files in startup script:
+		def scriptShellFile = file "${outputDir}/${applicationName}"
+		scriptShellFile.text = scriptShellFile.text.replace("${mainClassName} \"\$@\"", "${mainClassName} \"\$@\" 2> \$APP_HOME/log/error.log")
+
+		// TODO: windows script
+		// def scriptBatchFile = file "${outputDir}/${applicationName}.bat"
+		//scriptBatchFile.text = scriptBatchFile.text.replace('CLASSPATH=%APP_HOME%\\lib', 'CLASSPATH=%APP_HOME%\\config\\;%APP_HOME%\\lib')
+	}
+}
+
+applicationDistribution.into('') {
+	//create an empty 'logs' directory in distribution root
+	def logDirBase = new File('/tmp/app-dummy-dir')
+	logDirBase.mkdirs()
+	def logDir = new File(logDirBase.absolutePath + '/log')
+	logDir.mkdirs()
+
+	from { logDirBase }
+}
+
 applicationDistribution.from("web/dist/") {
 	into "web"
 }
 
-applicationDistribution.from("conf/prod/config.groovy") {
+applicationDistribution.from("conf/prod") {
 	into "conf"
-}
-
-applicationDistribution.from("conf/prod/logback.groovy") {
-	into "conf"
+	include("config.groovy", "logback.groovy")
 }
 
 applicationDistribution.from("src/main/resources/images/no-cover.svg") {
