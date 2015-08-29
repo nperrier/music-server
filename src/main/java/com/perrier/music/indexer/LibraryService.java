@@ -142,8 +142,12 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 			Artist artist = this.addArtist(tag.getArtist());
 			Artist albumArtist = artist;
 
-			if (!StringUtils.isBlank(tag.getAlbumArtist()) && !tag.getArtist().equalsIgnoreCase(tag.getAlbumArtist())) {
-				albumArtist = this.addArtist(tag.getAlbumArtist());
+			if (!StringUtils.isBlank(tag.getAlbumArtist())) {
+				// we have an album artist. If it is not the same as the artist, then add it
+				if (StringUtils.isBlank(tag.getArtist())
+						|| !StringUtils.equalsIgnoreCase(tag.getArtist(), tag.getAlbumArtist())) {
+					albumArtist = this.addArtist(tag.getAlbumArtist());
+				}
 			}
 
 			final Genre genre = this.addGenre(tag.getGenre());
