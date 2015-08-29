@@ -27,9 +27,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * TODO Perhaps this could be a "MP3MetaDataParser" class.
- * 
+ * <p>
  * If a tracks source comes from an MP3, SoundCloud API, etc. then calling it a "Tag" doesn't make much sense
- * 
  */
 public class Mp3Tag extends AbstractTag {
 
@@ -38,9 +37,8 @@ public class Mp3Tag extends AbstractTag {
 
 	/**
 	 * The timestamp fields are based on a subset of ISO 8601
-	 *
+	 * <p>
 	 * Valid timestamps are:
-	 *
 	 * <ul>
 	 * <li>yyyy</li>
 	 * <li>yyyy-MM</li>
@@ -49,7 +47,6 @@ public class Mp3Tag extends AbstractTag {
 	 * <li>yyyy-MM-ddTHH:mm</li>
 	 * <li>yyyy-MM-ddTHH:mm:ss</li>
 	 * </ul>
-	 *
 	 * All time stamps are UTC
 	 */
 	private static final DateTimeFormatter YEAR_FORMATTER;
@@ -64,7 +61,7 @@ public class Mp3Tag extends AbstractTag {
 		};
 
 		YEAR_FORMATTER = new DateTimeFormatterBuilder().append(null, parsers).toFormatter();
-	};
+	}
 
 	private Mp3Tag(Builder builder) {
 		super(builder);
@@ -109,10 +106,10 @@ public class Mp3Tag extends AbstractTag {
 	/**
 	 * ID3v1 tags used a numeric id for the genre. Some software (looking at you iTunes) uses the numeric value in ID3v2
 	 * tags as well, even though they are supposed to be actual genre names.
-	 * 
+	 * <p>
 	 * To be nice, we'll check if genre field is a number (i.e.: 52 = House) and return the real genre name, otherwise
 	 * return the existing value. The number can also be wrapped in parentheses
-	 * 
+	 *
 	 * @param rawGenre
 	 * @return
 	 */
@@ -232,5 +229,11 @@ public class Mp3Tag extends AbstractTag {
 	@Override
 	public String toString() {
 		return Mp3Tag.class.getSimpleName() + super.toString();
+	}
+
+	public static void main(String[] args) throws IOException {
+		File mp3File = new File(args[0]);
+		ITag tag = Mp3Tag.parse(mp3File);
+		System.out.println(tag);
 	}
 }
