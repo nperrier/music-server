@@ -109,7 +109,7 @@ public abstract class AbstractTag implements ITag {
 			try {
 				number = Integer.parseInt(trackNumber);
 			} catch (final NumberFormatException e) {
-				log.warn("Could not parse track number: {}", trackNumber, e);
+				log.warn("Could not parse track number: {}", trackNumber);
 			}
 		}
 
