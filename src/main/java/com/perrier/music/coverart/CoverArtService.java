@@ -3,16 +3,29 @@ package com.perrier.music.coverart;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBuffer;
 import java.awt.image.DataBufferByte;
+import java.awt.image.DataBufferDouble;
+import java.awt.image.DataBufferFloat;
+import java.awt.image.DataBufferInt;
+import java.awt.image.DataBufferShort;
+import java.awt.image.DataBufferUShort;
 import java.awt.image.Raster;
 import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.DoubleBuffer;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.nio.ShortBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import javax.imageio.ImageIO;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.util.concurrent.AbstractIdleService;
 import com.google.inject.Inject;
@@ -25,8 +38,12 @@ import com.perrier.music.entity.album.Album;
 import com.perrier.music.entity.album.AlbumProvider;
 import com.perrier.music.entity.track.Track;
 import com.perrier.music.entity.track.TrackProvider;
+import com.perrier.music.tag.ITag;
+import com.perrier.music.tag.Mp3Tag;
 
 public class CoverArtService extends AbstractIdleService implements ICoverArtService {
+
+	private static final Logger log = LoggerFactory.getLogger(CoverArtService.class);
 
 	public static final OptionalProperty<Integer> ARTWORK_WIDTH = new OptionalProperty<Integer>("coverart.width", 115);
 	public static final OptionalProperty<Integer> ARTWORK_HEIGHT = new OptionalProperty<Integer>("coverart.height", 115);
@@ -147,7 +164,7 @@ public class CoverArtService extends AbstractIdleService implements ICoverArtSer
 		BufferedImage scaledImg = image;
 
 		String extension = this.config.getOptionalString(ARTWORK_FORMAT);
-		String imgPath = this.generateImagePath(scaledImg);
+		String imgPath = this.generateImageName(scaledImg);
 
 		String coverDir = this.config.getRequiredString(ApplicationProperties.COVERS_DIR);
 		String appRoot = this.config.getRequiredString(ApplicationProperties.APP_ROOT);
@@ -158,14 +175,66 @@ public class CoverArtService extends AbstractIdleService implements ICoverArtSer
 		return imageFile.getAbsolutePath();
 	}
 
-	private String generateImagePath(BufferedImage image) {
+	private String generateImageName(BufferedImage image) {
 
 		try {
 			MessageDigest md = MessageDigest.getInstance("SHA1");
 
-			Raster raster = image.getRaster();
-			DataBufferByte data = (DataBufferByte) raster.getDataBuffer();
-			byte[] digest = md.digest(data.getData());
+			byte[] bytes = null;
+			final Raster raster = image.getRaster();
+			final int dataType = raster.getDataBuffer().getDataType();
+
+			switch (dataType) {
+			case DataBuffer.TYPE_BYTE: {
+				bytes = ((DataBufferByte) raster.getDataBuffer()).getData();
+			}
+				break;
+			case DataBuffer.TYPE_INT: {
+				int[] data = ((DataBufferInt) raster.getDataBuffer()).getData();
+				ByteBuffer byteBuffer = ByteBuffer.allocate(data.length * Integer.BYTES);
+				IntBuffer intBuffer = byteBuffer.asIntBuffer();
+				intBuffer.put(data);
+				bytes = byteBuffer.array();
+			}
+				break;
+			case DataBuffer.TYPE_SHORT: {
+				final short[] data = ((DataBufferShort) raster.getDataBuffer()).getData();
+				ByteBuffer byteBuffer = ByteBuffer.allocate(data.length * Short.BYTES);
+				ShortBuffer shortBuffer = byteBuffer.asShortBuffer();
+				shortBuffer.put(data);
+				bytes = byteBuffer.array();
+			}
+			case DataBuffer.TYPE_USHORT: {
+				final short[] data = ((DataBufferUShort) raster.getDataBuffer()).getData();
+				ByteBuffer byteBuffer = ByteBuffer.allocate(data.length * Short.BYTES);
+				ShortBuffer shortBuffer = byteBuffer.asShortBuffer();
+				shortBuffer.put(data);
+				bytes = byteBuffer.array();
+			}
+				break;
+			case DataBuffer.TYPE_FLOAT: {
+				final float[] data = ((DataBufferFloat) raster.getDataBuffer()).getData();
+				ByteBuffer byteBuffer = ByteBuffer.allocate(data.length * Float.BYTES);
+				FloatBuffer floatBuffer = byteBuffer.asFloatBuffer();
+				floatBuffer.put(data);
+				bytes = byteBuffer.array();
+			}
+				break;
+			case DataBuffer.TYPE_DOUBLE: {
+				final double[] data = ((DataBufferDouble) raster.getDataBuffer()).getData();
+				ByteBuffer byteBuffer = ByteBuffer.allocate(data.length * Double.BYTES);
+				DoubleBuffer doubleBuffer = byteBuffer.asDoubleBuffer();
+				doubleBuffer.put(data);
+				bytes = byteBuffer.array();
+			}
+				break;
+			case DataBuffer.TYPE_UNDEFINED:
+			default:
+				log.error("Unable to generate image path");
+				break;
+			}
+
+			byte[] digest = md.digest(bytes);
 
 			return DigestUtils.sha1Hex(digest);
 
@@ -244,5 +313,13 @@ public class CoverArtService extends AbstractIdleService implements ICoverArtSer
 		double factor = (double) (tall ? targetHeight : targetWidth) / (double) (tall ? srcHeight : srcWidth);
 
 		return factor;
+	}
+
+	public static void main(String[] args) throws Exception {
+		File mp3File = new File(args[0]);
+		ITag tag = Mp3Tag.parse(mp3File);
+
+		CoverArtService cas = new CoverArtService(null, null, null);
+		cas.generateImageName(tag.getCoverArt());
 	}
 }
