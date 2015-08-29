@@ -90,8 +90,10 @@ public abstract class AbstractTag implements ITag {
 		if (artwork != null) {
 			try {
 				coverArt = artwork.getImage();
-			} catch (final IOException e) {
+			} catch (IOException | NullPointerException e) {
+				// NPE seen on some tags getting image. Bug in jaudiotagger lib?
 				log.warn("Could not read cover art from tag", e);
+				log.debug("Could not read cover art from tag", e);
 			}
 		}
 
