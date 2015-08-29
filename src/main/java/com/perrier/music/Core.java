@@ -4,6 +4,8 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.MigrationInfo;
@@ -45,6 +47,8 @@ public class Core {
 	private IConfiguration config;
 
 	public static void main(String[] args) throws Exception {
+		Thread t = Thread.currentThread();
+		t.setName(Core.class.getSimpleName());
 
 		// Read command line props
 		CommandLineArgs cmds = new CommandLineArgs();
@@ -55,7 +59,16 @@ public class Core {
 			configFile = "conf/config.groovy";
 		}
 
-		Core core = new Core();
+		final Core core = new Core();
+
+		Runtime.getRuntime().addShutdownHook(new Thread(Core.class.getSimpleName() + " SHUTDOWN") {
+
+			@Override
+			public void run() {
+				core.stop();
+			}
+		});
+
 		core.init(configFile);
 	}
 
@@ -66,6 +79,11 @@ public class Core {
 	}
 
 	private void configureLogging() {
+		// Hibernate loggers that don't play nice. Turn them off via system props:
+		System.setProperty("org.jboss.logging.provider", "slf4j");
+		System.setProperty("com.mchange.v2.log.MLog", "com.mchange.v2.log.FallbackMLog");
+		System.setProperty("com.mchange.v2.log.FallbackMLog.DEFAULT_CUTOFF_LEVEL", "WARNING");
+
 		// Some third-party libraries (Jersey, JAudioTagger) use java.util.logging
 		// Bridge to slf4
 		SLF4JBridgeHandler.removeHandlersForRootLogger();
@@ -101,6 +119,12 @@ public class Core {
 		this.createDatabase();
 		this.createInjector();
 		this.startServices();
+	}
+
+	public void stop() {
+		log.info("Shutting down...");
+		this.stopServices();
+		log.info("Application stopped");
 	}
 
 	@SuppressWarnings("unchecked")
@@ -188,6 +212,24 @@ public class Core {
 
 		// ServiceManager manager = new ServiceManager(services);
 		// manager.startAsync().awaitHealthy();
+	}
+
+	private void stopServices() {
+		try {
+			this.server.stopAsync().awaitTerminated(5, TimeUnit.SECONDS);
+		} catch (TimeoutException e) {
+			log.error("Timeout while stopping server");
+		}
+		try {
+			this.libraryService.stopAsync().awaitTerminated(5, TimeUnit.SECONDS);
+		} catch (TimeoutException e) {
+			log.error("Timeout while stopping library service");
+		}
+		try {
+			this.db.stopAsync().awaitTerminated(5, TimeUnit.SECONDS);
+		} catch (TimeoutException e) {
+			log.error("Timeout while stopping db");
+		}
 	}
 
 	@SuppressWarnings("rawtypes")
