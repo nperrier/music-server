@@ -84,7 +84,6 @@ public abstract class AbstractTag implements ITag {
 	}
 
 	protected static BufferedImage setCoverArt(final Artwork artwork) {
-
 		BufferedImage coverArt = null;
 
 		if (artwork != null) {
@@ -92,7 +91,7 @@ public abstract class AbstractTag implements ITag {
 				coverArt = artwork.getImage();
 			} catch (IOException | NullPointerException e) {
 				// NPE seen on some tags getting image. Bug in jaudiotagger lib?
-				log.warn("Could not read cover art from tag", e);
+				log.warn("Could not read cover art from tag");
 				log.debug("Could not read cover art from tag", e);
 			}
 		}
@@ -101,11 +100,9 @@ public abstract class AbstractTag implements ITag {
 	}
 
 	protected static Integer setTrackNumber(final String rawTrackNumber) {
-
 		Integer number = null;
 
 		if (!StringUtils.isBlank(rawTrackNumber)) {
-
 			String trackNumber = removeTrackTotalIfPresent(rawTrackNumber);
 
 			try {
@@ -127,9 +124,7 @@ public abstract class AbstractTag implements ITag {
 	 * @return
 	 */
 	protected static String removeTrackTotalIfPresent(String trackNumber) {
-
 		Matcher m = TRACK_NUMBER_TOTAL_PATTERN.matcher(trackNumber);
-
 		return m.matches() ? m.group(1) : trackNumber;
 	}
 
