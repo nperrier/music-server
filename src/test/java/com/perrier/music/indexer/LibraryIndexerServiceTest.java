@@ -26,7 +26,6 @@ public class LibraryIndexerServiceTest extends MusicUnitTest {
 
 	@Test
 	public void test() {
-
 		try {
 			this.libraryIndexerService.startAsync().awaitRunning(5, TimeUnit.SECONDS);
 		} catch (TimeoutException e) {
@@ -53,7 +52,6 @@ public class LibraryIndexerServiceTest extends MusicUnitTest {
 				return null;
 			}
 		}
-		;
 
 		this.libraryIndexerService.submit(new TestTask(null));
 
@@ -62,9 +60,7 @@ public class LibraryIndexerServiceTest extends MusicUnitTest {
 			System.out.println("Shutting down service now");
 			this.libraryIndexerService.stopAsync().awaitTerminated(5, TimeUnit.SECONDS);
 
-		} catch (TimeoutException e) {
-			fail();
-		} catch (InterruptedException e) {
+		} catch (TimeoutException | InterruptedException e) {
 			fail();
 		}
 	}
@@ -98,18 +94,15 @@ public class LibraryIndexerServiceTest extends MusicUnitTest {
 				return null;
 			}
 		}
-		;
 
 		Future<Boolean> result = this.libraryIndexerService.submit(new TestTask(null));
 
 		try {
 			Thread.sleep(5000);
-
 			boolean wasCancelled = false;
 			while (!wasCancelled) {
 				wasCancelled = result.cancel(true);
 			}
-
 		} catch (InterruptedException e) {
 			fail();
 		}
