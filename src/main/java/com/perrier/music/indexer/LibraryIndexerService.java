@@ -22,8 +22,8 @@ public class LibraryIndexerService extends AbstractIdleService implements ILibra
 	public LibraryIndexerService() {
 		ThreadFactoryBuilder builder = new ThreadFactoryBuilder().setNameFormat(LibraryIndexerService.class.getSimpleName()
 				+ " %1$d");
-		this.executor = new SingletonThreadPoolExecutor(2, 4, 1, TimeUnit.MINUTES, new LinkedBlockingQueue<Runnable>(),
-				builder.build());
+		this.executor = new SingletonThreadPoolExecutor(2, 4, 1, TimeUnit.MINUTES, new LinkedBlockingQueue<>(), builder
+				.build());
 	}
 
 	@Override
