@@ -16,13 +16,21 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Sets;
 
+/**
+ * Custom thread pool executor to ensure that only a single class type is executing at a given time
+ */
 public class SingletonThreadPoolExecutor extends ThreadPoolExecutor {
 
 	private static final Logger log = LoggerFactory.getLogger(SingletonThreadPoolExecutor.class);
 
-	 // tasks currently executing
+	// tasks currently executing
 	private Set<Callable<?>> executingTasks = Sets.newConcurrentHashSet();
 
+	/**
+	 * Wrapper FutureTask to hold the class of the running task
+	 * 
+	 * @param <V>
+	 */
 	private static class ClassContainerRunnableFuture<V> extends FutureTask<V> {
 
 		private final Callable<V> callable;
@@ -63,13 +71,11 @@ public class SingletonThreadPoolExecutor extends ThreadPoolExecutor {
 
 	@Override
 	protected <T> RunnableFuture<T> newTaskFor(Callable<T> callable) {
-
 		return new ClassContainerRunnableFuture<T>(callable);
 	}
 
 	@Override
 	public void execute(Runnable runnable) {
-
 		if (runnable instanceof ClassContainerRunnableFuture) {
 			ClassContainerRunnableFuture<?> target = (ClassContainerRunnableFuture<?>) runnable;
 			Callable<?> task = target.getContainedClass();
@@ -95,7 +101,6 @@ public class SingletonThreadPoolExecutor extends ThreadPoolExecutor {
 
 	@Override
 	protected void afterExecute(Runnable runnable, Throwable throwable) {
-
 		if (runnable instanceof ClassContainerRunnableFuture) {
 			ClassContainerRunnableFuture<?> target = (ClassContainerRunnableFuture<?>) runnable;
 			Callable<?> task = target.getContainedClass();
