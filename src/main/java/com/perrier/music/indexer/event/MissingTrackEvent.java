@@ -7,7 +7,7 @@ public class MissingTrackEvent implements ITrackEvent {
 
 	private final Track track;
 	private final Library library;
-	
+
 	public MissingTrackEvent(Track track, Library library) {
 		this.track = track;
 		this.library = library;
@@ -19,5 +19,10 @@ public class MissingTrackEvent implements ITrackEvent {
 
 	public Track getTrack() {
 		return track;
+	}
+
+	@Override
+	public String toString() {
+		return "MissingTrackEvent{" + "library=" + library + ", track=" + track + '}';
 	}
 }
