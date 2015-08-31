@@ -20,8 +20,6 @@ import com.perrier.music.entity.artist.Artist;
 import com.perrier.music.entity.genre.Genre;
 import com.perrier.music.entity.library.Library;
 
-//import javax.persistence.ManyToOne;
-
 @Entity
 @Table(name = "track", uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "artist_id", "album_id" }) })
 public class Track extends AbstractAuditableEntity {
