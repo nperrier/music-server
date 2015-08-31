@@ -34,12 +34,16 @@ import com.perrier.music.entity.track.Track;
 import com.perrier.music.entity.track.TrackCreateQuery;
 import com.perrier.music.entity.track.TrackDeleteQuery;
 import com.perrier.music.entity.track.TrackFindByNameAndArtistIdAndAlbumIdQuery;
+import com.perrier.music.entity.track.TrackUpdateQuery;
 import com.perrier.music.indexer.event.ChangedTrackEvent;
 import com.perrier.music.indexer.event.MissingTrackEvent;
 import com.perrier.music.indexer.event.UnknownTrackEvent;
 import com.perrier.music.tag.ITag;
 import com.perrier.music.tag.TagFactory;
 
+/**
+ * Responsible for adding, removing, and changing tracks and related entities in the database
+ */
 public class LibraryService extends AbstractIdleService implements ILibraryService {
 
 	private static final Logger log = LoggerFactory.getLogger(LibraryService.class);
@@ -73,11 +77,43 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 	}
 
 	@Subscribe
+	@AllowConcurrentEvents
 	public void handle(ChangedTrackEvent event) {
-		log.info(event.toString());
+		log.debug(event.toString());
+
+		final Track originalTrack = event.getTrack();
+		if (originalTrack.getEdited()) {
+			// if the track was edited by the user, don't change it
+			log.debug("Track changed on disk but is marked as 'edited'. Changes will not be applied, track: {}",
+					originalTrack);
+			return;
+		}
+
+		// The tag meta-data may have changed
+		try {
+			File file = event.getFile();
+			ITag tag = TagFactory.parseTag(file);
+			log.debug("Tag: {}", tag);
+
+			final Artist artist = this.addArtist(tag.getArtist());
+			final Artist albumArtist = this.addAlbumArtist(tag.getAlbumArtist(), artist);
+			final Genre genre = this.addGenre(tag.getGenre());
+			final Album album = this.addAlbum(albumArtist, tag.getAlbum(), tag.getYear(), tag.getCoverArt());
+			final Track updatedTrack = this.updateTrack(originalTrack, artist, album, genre, tag.getTrack(), tag.getNumber(),
+					tag.getLength(), tag.getCoverArt(), file, event.getLibrary());
+
+			if (updatedTrack != null) {
+				log.info("Track updated: {}", updatedTrack);
+			}
+
+		} catch (Exception e) {
+			log.error("Unable to handle changed track event: {}", event, e);
+		}
+
 	}
 
 	@Subscribe
+	@AllowConcurrentEvents
 	public void handle(MissingTrackEvent event) {
 		log.debug(event.toString());
 
@@ -139,17 +175,8 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 
 			log.debug("Tag: {}", tag);
 
-			Artist artist = this.addArtist(tag.getArtist());
-			Artist albumArtist = artist;
-
-			if (!StringUtils.isBlank(tag.getAlbumArtist())) {
-				// we have an album artist. If it is not the same as the artist, then add it
-				if (StringUtils.isBlank(tag.getArtist())
-						|| !StringUtils.equalsIgnoreCase(tag.getArtist(), tag.getAlbumArtist())) {
-					albumArtist = this.addArtist(tag.getAlbumArtist());
-				}
-			}
-
+			final Artist artist = this.addArtist(tag.getArtist());
+			final Artist albumArtist = this.addAlbumArtist(tag.getAlbumArtist(), artist);
 			final Genre genre = this.addGenre(tag.getGenre());
 			final Album album = this.addAlbum(albumArtist, tag.getAlbum(), tag.getYear(), tag.getCoverArt());
 			final Track track = this.addTrack(artist, album, genre, tag.getTrack(), tag.getNumber(), tag.getLength(), tag
@@ -164,14 +191,35 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 		}
 	}
 
-	private String addCoverArt(BufferedImage image) {
+	/**
+	 * The album artist is set to the track artist if it doesn't exist
+	 * 
+	 * Only add a new artist if it differs from the track artist
+	 * 
+	 * @param albumArtistName
+	 * @param trackArtist
+	 * @return
+	 */
+	private Artist addAlbumArtist(String albumArtistName, Artist trackArtist) {
+		Artist albumArtist = trackArtist;
 
+		if (!StringUtils.isBlank(albumArtistName)) {
+			// we have an album artist. If it is not the same as the track artist, then add it
+			if (trackArtist == null || !StringUtils.equalsIgnoreCase(albumArtistName, trackArtist.getName())) {
+				albumArtist = this.addArtist(albumArtistName);
+			}
+		}
+
+		return albumArtist;
+	}
+
+	private String addCoverArt(BufferedImage image) {
 		String coverArt = null;
 
 		try {
 			coverArt = this.coverArtService.cacheCoverArt(image);
 		} catch (CoverArtException e) {
-			log.error("Could not create cover image file, path: {}", coverArt, e);
+			log.error("Could not create cover for image file", e);
 		} catch (Exception e) {
 			log.error("Error adding coverArt", e);
 		}
@@ -180,18 +228,15 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 	}
 
 	private Genre addGenre(String name) {
-
 		if (StringUtils.isBlank(name)) {
 			return null;
 		}
 
 		try {
 			Genre genre = this.db.find(new GenreFindByNameQuery(name));
-
 			if (genre == null) {
 				genre = new Genre();
 				genre.setName(name);
-
 				this.db.create(new GenreCreateQuery(genre));
 			}
 
@@ -203,9 +248,45 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 		return null;
 	}
 
+	private Track updateTrack(Track track, Artist artist, Album album, Genre genre, String name, Integer number,
+			Long length, BufferedImage image, File file, Library library) {
+		// track name MUST have a value
+		if (StringUtils.isBlank(name)) {
+			log.error("Cannot update track: name was blank, path={}", track.getPath());
+			return null;
+		}
+
+		try {
+			track.setArtist(artist);
+			track.setAlbum(album);
+			track.setGenre(genre);
+			track.setLibrary(library);
+			track.setName(name);
+			track.setNumber(number);
+			track.setLength(length);
+			track.setFileModificationDate(new Date(file.lastModified()));
+
+			// Use album's covert art, otherwise use track's
+			if (album != null && album.getCoverArt() != null) {
+				track.setCoverArt(album.getCoverArt());
+			} else if (image != null) {
+				final String coverArt = this.addCoverArt(image);
+				track.setCoverArt(coverArt);
+			}
+
+			this.db.update(new TrackUpdateQuery(track));
+
+			return track;
+
+		} catch (Exception e) {
+			log.error("Error updating track, track: {}, file: {}", track, file, e);
+		}
+
+		return null;
+	}
+
 	private Track addTrack(Artist artist, Album album, Genre genre, String name, Integer number, Long length,
 			BufferedImage image, File file, Library library) {
-
 		// track name MUST have a value
 		if (StringUtils.isBlank(name)) {
 			log.error("Cannot add track: name was blank, file={}", file);
@@ -227,16 +308,15 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 				track.setName(name);
 				track.setNumber(number);
 				track.setLength(length);
-				track.setFileModificationDate(new Date(file.lastModified())); // TODO
+				track.setFileModificationDate(new Date(file.lastModified()));
 				track.setPath(file.getCanonicalPath());
 
 				// Use albums covert art, otherwise use tracks
 				if (album != null && album.getCoverArt() != null) {
 					track.setCoverArt(album.getCoverArt());
-				} else {
-					if (image != null) {
-						track.setCoverArt(this.addCoverArt(image));
-					}
+				} else if (image != null) {
+					final String coverArt = this.addCoverArt(image);
+					track.setCoverArt(coverArt);
 				}
 
 				this.db.create(new TrackCreateQuery(track));
@@ -252,7 +332,6 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 	}
 
 	private Album addAlbum(Artist artist, String name, String year, BufferedImage image) {
-
 		if (StringUtils.isBlank(name)) {
 			return null;
 		}
@@ -285,19 +364,16 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 	}
 
 	private Artist addArtist(String name) {
-
 		if (StringUtils.isBlank(name)) {
 			return null;
 		}
 
 		try {
 			Artist artist = this.db.find(new ArtistFindByNameQuery(name));
-
 			// new artist
 			if (artist == null) {
 				artist = new Artist();
 				artist.setName(name);
-
 				this.db.create(new ArtistCreateQuery(artist));
 			}
 

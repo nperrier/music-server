@@ -27,10 +27,9 @@ import com.perrier.music.indexer.event.MissingTrackEvent;
 import com.perrier.music.indexer.event.UnknownTrackEvent;
 
 /**
- * Scan the library for tracks to index
+ * Scan the library for tracks to index, then send an event out to the interested parties
  * 
  * Returns true if task was cancelled, else false
- * 
  */
 public class LibraryIndexerTask implements Callable<Boolean> {
 
@@ -41,7 +40,7 @@ public class LibraryIndexerTask implements Callable<Boolean> {
 	private TrackProvider trackProvider;
 	private IDatabase db;
 
-	private volatile boolean cancelScan = false;
+	private boolean cancelScan = false;
 
 	/**
 	 * Wrapper on Track to keep track of scanned and non-scanned tracks
@@ -96,10 +95,9 @@ public class LibraryIndexerTask implements Callable<Boolean> {
 
 	@Override
 	public Boolean call() throws LibraryIndexerException {
-
 		File rootPath = new File(this.library.getPath());
 
-		if (!rootPath.exists() || !rootPath.canRead()) {
+		if (!rootPath.exists() || !rootPath.canRead() || !rootPath.isDirectory()) {
 			throw new LibraryIndexerException("Unable to index " + rootPath + ": directory doesn't exist or cannot read");
 		}
 
@@ -113,7 +111,7 @@ public class LibraryIndexerTask implements Callable<Boolean> {
 		}
 
 		// wrap all the tracks in a IndexedTrack for use later to determine which tracks were not indexed
-		// map the path to the Scannedtrack
+		// map the path to the scanned track
 		Map<String, IndexedTrack> pathToTrack = Maps.newHashMapWithExpectedSize(tracks.size());
 		for (Track t : tracks) {
 			pathToTrack.put(t.getPath(), new IndexedTrack(t));
@@ -156,7 +154,6 @@ public class LibraryIndexerTask implements Callable<Boolean> {
 	}
 
 	private void scan(File dir, Map<String, IndexedTrack> pathToTrack) {
-
 		if (this.cancelScan) {
 			return;
 		}
@@ -200,7 +197,7 @@ public class LibraryIndexerTask implements Callable<Boolean> {
 	}
 
 	private void index(File file, Map<String, IndexedTrack> pathToTrack) throws IOException {
-		log.debug("Indexing file: " + file);
+		log.debug("Indexing file: {}", file);
 
 		String path = file.getCanonicalPath();
 		IndexedTrack idxTrack = pathToTrack.get(path);
@@ -210,9 +207,9 @@ public class LibraryIndexerTask implements Callable<Boolean> {
 			this.bus.post(new UnknownTrackEvent(file, this.library));
 		} else {
 			Date fileDate = new Date(file.lastModified());
-			if (fileDate.after(idxTrack.track.getModificationDate())) {
+			if (!fileDate.equals(idxTrack.track.getFileModificationDate())) {
 				// CHANGED
-				this.bus.post(new ChangedTrackEvent(idxTrack.track, this.library));
+				this.bus.post(new ChangedTrackEvent(file, idxTrack.track, this.library));
 			} else {
 				// NO CHANGE: do nothing
 			}
