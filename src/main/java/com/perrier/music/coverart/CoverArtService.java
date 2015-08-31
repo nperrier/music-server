@@ -45,10 +45,10 @@ public class CoverArtService extends AbstractIdleService implements ICoverArtSer
 
 	private static final Logger log = LoggerFactory.getLogger(CoverArtService.class);
 
-	public static final OptionalProperty<Integer> ARTWORK_WIDTH = new OptionalProperty<Integer>("coverart.width", 115);
-	public static final OptionalProperty<Integer> ARTWORK_HEIGHT = new OptionalProperty<Integer>("coverart.height", 115);
-	public static final OptionalProperty<String> ARTWORK_FORMAT = new OptionalProperty<String>("coverart.format", "png");
-	public static final Property<String> ARTWORK_DEFAULT = new Property<String>("coverart.nocover");
+	public static final OptionalProperty<Integer> ARTWORK_WIDTH = new OptionalProperty<>("coverart.width", 115);
+	public static final OptionalProperty<Integer> ARTWORK_HEIGHT = new OptionalProperty<>("coverart.height", 115);
+	public static final OptionalProperty<String> ARTWORK_FORMAT = new OptionalProperty<>("coverart.format", "png");
+	public static final Property<String> ARTWORK_DEFAULT = new Property<>("coverart.nocover");
 
 	private final IConfiguration config;
 	private final TrackProvider trackProvider;
@@ -75,32 +75,25 @@ public class CoverArtService extends AbstractIdleService implements ICoverArtSer
 
 	@Override
 	public File getCoverFile(Type type, Long id) throws CoverArtException {
-
 		try {
 			File coverArt = null;
 
 			switch (type) {
 			case ALBUM:
-
 				coverArt = this.getAlbumCoverFile(id);
 				if (coverArt == null) {
 					// TODO check if any tracks have cover art before sending default?
 					return this.getDefaultCoverArt(type);
 				}
-
 				return coverArt;
-
 			case ARTIST:
 				throw new UnsupportedOperationException("Not yet implemented");
 			case TRACK:
-
 				coverArt = this.getTrackCoverFile(id);
 				if (coverArt == null) {
 					return this.getDefaultCoverArt(type);
 				}
-
 				return coverArt;
-
 			default:
 				throw new RuntimeException("Unknown Cover Type: " + type);
 			}
@@ -120,7 +113,6 @@ public class CoverArtService extends AbstractIdleService implements ICoverArtSer
 	}
 
 	private File getTrackCoverFile(long id) throws DBException {
-
 		Track track = this.trackProvider.findById(id);
 		if (track == null || track.getCoverArt() == null) {
 			return null;
@@ -144,11 +136,9 @@ public class CoverArtService extends AbstractIdleService implements ICoverArtSer
 
 	@Override
 	public BufferedImage getCover(String path) throws IOException {
-
 		if (this.isCached(path)) {
 			File imageFile = new File(path);
 			BufferedImage image = ImageIO.read(imageFile);
-
 			return image;
 		}
 
@@ -157,7 +147,6 @@ public class CoverArtService extends AbstractIdleService implements ICoverArtSer
 
 	@Override
 	public String cacheCoverArt(BufferedImage image) throws IOException {
-
 		// TODO: Don't scale for now. May want to cache different sizes of image for thumbnails or for a grid layout, etc..
 		// BufferedImage scaledImg = scale(image, this.config.getOptionalInteger(ARTWORK_HEIGHT), this.config
 		// .getOptionalInteger(ARTWORK_WIDTH));
@@ -176,7 +165,6 @@ public class CoverArtService extends AbstractIdleService implements ICoverArtSer
 	}
 
 	private String generateImageName(BufferedImage image) {
-
 		try {
 			MessageDigest md = MessageDigest.getInstance("SHA1");
 
@@ -245,14 +233,11 @@ public class CoverArtService extends AbstractIdleService implements ICoverArtSer
 
 	@Override
 	public boolean isCached(String path) throws IOException {
-
 		File image = new File(path);
-
 		return image.isFile() && image.exists();
 	}
 
 	private static BufferedImage scale(BufferedImage image, int width, int height) {
-
 		int origWidth = image.getWidth();
 		int origHeight = image.getHeight();
 
@@ -274,7 +259,6 @@ public class CoverArtService extends AbstractIdleService implements ICoverArtSer
 	 * 
 	 */
 	private static BufferedImage scale(BufferedImage image, double dScaleFactor) {
-
 		// calculate new width and height
 		int width = (int) (image.getWidth() * dScaleFactor);
 		int height = (int) (image.getHeight() * dScaleFactor);
@@ -308,7 +292,6 @@ public class CoverArtService extends AbstractIdleService implements ICoverArtSer
 	 * 
 	 */
 	private static double calcScalingFactor(int srcWidth, int srcHeight, int targetWidth, int targetHeight) {
-
 		boolean tall = (srcHeight > srcWidth);
 		double factor = (double) (tall ? targetHeight : targetWidth) / (double) (tall ? srcHeight : srcWidth);
 
