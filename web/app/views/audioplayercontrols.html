@@ -3,6 +3,7 @@
 
   <div id="wrapper-left">
     <div id="player-wrapper-left">
+      <!-- <track-info></track-info> -->
       <div class="now-playing" ng-show="currentTrack">
         <b>Now Playing:</b>
         <img class="coverart-thumb" ng-src="{{currentTrack.coverArtUrl}}" />
@@ -13,6 +14,7 @@
     </div>
   </div>
 
+  <!-- <track-buttons></track-buttons>  -->
   <div class="player-deck">
     <button ng-disabled="!hasPrevious()" class="btn btn-default prev" ng-click="previous()">
       <span class="glyphicon glyphicon-step-backward"></span>
@@ -29,21 +31,24 @@
   </div>
 
   <div id="wrapper-right">
+    <!-- <time-slider></time-slider> -->
     <div class="time" ng-show="currentTrack">
       <span class="current-time" ng-model="currentTime">
         {{( currentTime ? currentTime : 0 ) | duration:'seconds'}}
       </span>
-      <span class="duration" ng-model="duration">
-        {{( duration ? duration : 0 ) | duration}}
+      <!-- <span class="duration" ng-model="duration" > -->
+      <span class="duration" ng-model="currentTrack.length"> <!-- ng-model-options=" { getterSetter: true }"-->
+        {{ ( currentTrack ? currentTrack.length : 0 ) | duration }}
       </span>
-      <input class="time-range" min="0" max="100" step="0.01" type="range" ng-model="currentPercentage" />
+
+      <timeslider id="range-slider" class="time-range" floor="0" ceiling="100" step="0.1" precision="1" highlight="left" ng-model="currentPercentage"></timeslider>
     </div>
 
+    <!-- <volume-slider></volume-slider> -->
     <div class="volume" ng-show="currentTrack">
       <span id="volume-icon-low" class="glyphicon glyphicon-volume-down"></span>
       <span id="volume-icon-high" class="glyphicon glyphicon-volume-up"></span>
-      <input class="volume-slider" min="0" max="1" step="0.01" type="range" ng-model="audioVolume.volume"
-      ng-model-options="{ getterSetter: true }" />
+      <input class="volume-slider" min="0" max="1" step="0.01" type="range" ng-model="audioVolume.volume" ng-model-options="{ getterSetter: true }" />
     </div>
   </div>
 </div>

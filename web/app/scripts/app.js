@@ -6,8 +6,8 @@ var musicApp = angular.module('musicApp', [
 	'ui.bootstrap',
 	'ngRoute',
 	'ngResource',
-  'ngAnimate',
-  'angularSpinner'
+	'ngAnimate',
+	'angularSpinner'
 ]);
 
 musicApp.config(['$routeProvider', function($routeProvider) {
