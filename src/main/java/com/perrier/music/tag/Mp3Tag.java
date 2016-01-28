@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 public class Mp3Tag extends AbstractTag {
 
 	private static final Logger log = LoggerFactory.getLogger(Mp3Tag.class);
-	private static final Pattern GENRE_ID_TO_NAME_PATTERN = Pattern.compile("^\\(?(\\d+)\\)?$");
+	private static final Pattern GENRE_ID_TO_NAME_PATTERN = Pattern.compile("^\\(?(\\d+)\\)?");
 
 	/**
 	 * The timestamp fields are based on a subset of ISO 8601
