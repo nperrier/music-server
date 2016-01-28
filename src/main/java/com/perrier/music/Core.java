@@ -7,17 +7,13 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.flywaydb.core.Flyway;
-import org.flywaydb.core.api.MigrationInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.bridge.SLF4JBridgeHandler;
+import groovy.util.ConfigObject;
+import groovy.util.ConfigSlurper;
 
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.util.ContextInitializer;
 import ch.qos.logback.core.joran.spi.JoranException;
 import ch.qos.logback.core.util.StatusPrinter;
-
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.google.common.collect.Maps;
@@ -25,6 +21,12 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.Module;
+import org.flywaydb.core.Flyway;
+import org.flywaydb.core.api.MigrationInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.bridge.SLF4JBridgeHandler;
+
 import com.perrier.music.config.ApplicationConfig;
 import com.perrier.music.config.IConfiguration;
 import com.perrier.music.db.IDatabase;
@@ -32,9 +34,6 @@ import com.perrier.music.indexer.ILibraryService;
 import com.perrier.music.module.MusicModule;
 import com.perrier.music.module.MusicServletModule;
 import com.perrier.music.server.IServer;
-
-import groovy.util.ConfigObject;
-import groovy.util.ConfigSlurper;
 
 public class Core {
 
