@@ -19,7 +19,7 @@ import com.perrier.music.entity.track.Track
 import com.perrier.music.entity.track.TrackProvider
 import com.perrier.music.server.EntityExistsException
 import com.perrier.music.server.EntityNotFoundException
-import com.perrier.music.stream.TrackStreamer
+import com.perrier.music.rest.stream.FileStreamer
 
 @Path("api/track")
 @Produces(MediaType.APPLICATION_JSON)
@@ -88,7 +88,7 @@ public class TrackResource extends RestResource {
 			@Override
 			public void write(OutputStream os) throws IOException, WebApplicationException {
 				try {
-					TrackStreamer streamer = new TrackStreamer(track)
+					FileStreamer streamer = new FileStreamer(track)
 					streamer.writeStream(os)
 				}
 				catch (Exception e) {

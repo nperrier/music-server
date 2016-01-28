@@ -1,21 +1,26 @@
 package com.perrier.music.rest.resource
 
-import javax.ws.rs.GET
-import javax.ws.rs.Path
-import javax.ws.rs.PathParam
-import javax.ws.rs.Produces
-import javax.ws.rs.WebApplicationException
-import javax.ws.rs.core.Response
-import javax.ws.rs.core.StreamingOutput
-
+import com.google.common.base.Preconditions
 import com.google.inject.Inject
 import com.perrier.music.entity.track.Track
 import com.perrier.music.entity.track.TrackProvider
+import com.perrier.music.rest.stream.FileStreamer
+import com.perrier.music.rest.stream.RangeStreamer
 import com.perrier.music.server.EntityNotFoundException
-import com.perrier.music.stream.TrackStreamer
+import com.sun.jersey.api.ParamException.HeaderParamException
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+
+import javax.ws.rs.*
+import javax.ws.rs.core.HttpHeaders
+import javax.ws.rs.core.Response
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 @Path("api/stream")
 public class StreamResource extends RestResource {
+
+	public static final Logger log = LoggerFactory.getLogger(StreamResource)
 
 	@Inject
 	private TrackProvider trackProvider
@@ -26,7 +31,7 @@ public class StreamResource extends RestResource {
 			"audio/mpeg",
 			"application/json"
 	])
-	public Response get(@PathParam("id") Long id) {
+	public Response get(@HeaderParam("Range") String rangeHeader, @PathParam("id") Long id) {
 
 		Track track = this.trackProvider.findById(id)
 
@@ -34,19 +39,110 @@ public class StreamResource extends RestResource {
 			throw new EntityNotFoundException("track not found")
 		}
 
-		StreamingOutput stream = new StreamingOutput() {
-			@Override
-			public void write(OutputStream os) throws IOException, WebApplicationException {
-				try {
-					TrackStreamer streamer = new TrackStreamer(track)
-					streamer.writeStream(os)
-				}
-				catch (Exception e) {
-					throw new WebApplicationException(e)
-				}
-			}
+		final File trackFile = new File(track.getPath())
+
+		if (rangeHeader != null) {
+			Range range = processRangeRequest(rangeHeader, trackFile)
+			final RangeStreamer stream = new RangeStreamer(range.start, range.length, trackFile);
+			final String responseRange = String.format("bytes %d-%d/%d", range.start, range.end, trackFile.length());
+
+			return Response.ok(stream) //
+					.status(206) //
+					.header("Accept-Ranges", "bytes") //
+					.header("Content-Range", responseRange) //
+					.header(HttpHeaders.CONTENT_LENGTH, range.length) //
+					.header(HttpHeaders.LAST_MODIFIED, new Date(trackFile.lastModified())) //
+					.build()
+		} else {
+			FileStreamer stream = new FileStreamer(trackFile)
+
+			return Response.ok(stream) //
+					.type("audio/mpeg") //
+					.header(HttpHeaders.CONTENT_LENGTH, trackFile.length()) //
+					.build()
+		}
+	}
+
+	/**
+	 *
+	 * Process range request headers to seek to positions in the audio stream
+	 *
+	 * GET /2390/2253727548_a413c88ab3_s.jpg HTTP/1.1
+	 * Host: farm3.static.flickr.com
+	 * Range: bytes=1000-
+	 *
+	 * HTTP/1.0 206 Partial Content
+	 *
+	 * Content-Length: 2980
+	 * Content-Range: bytes 1000-3979/3980
+	 *
+	 */
+	def static processRangeRequest(String rangeHeader, File trackFile) throws IOException, HeaderParamException {
+
+		final Pattern pattern = Pattern.compile("bytes=(\\d+)-(\\d+)?")
+		final Matcher matcher = pattern.matcher(rangeHeader)
+
+		if (!matcher.matches()) {
+			log.error("Bad \"Range\" header: {}", rangeHeader)
+			throw new WebApplicationException(416)
 		}
 
-		return Response.ok(stream).type("audio/mpeg").build()
+		try {
+			long beginPos = Long.parseLong(matcher.group(1))
+			long endPos = -1
+
+			String endMatch = matcher.group(2)
+
+			if (endMatch != null) {
+				endPos = Long.parseLong(endMatch)
+			}
+
+			final long trackLength = trackFile.length()
+
+			if (endPos < 0) {
+				endPos = trackLength - 1
+			}
+
+			if (beginPos < 0 || beginPos >= trackLength || endPos >= trackLength || endPos <= beginPos) {
+				log.error("Bad \"Range\" values: {} - {}", beginPos, endPos)
+				throw new WebApplicationException(416)
+			}
+
+			return new Range(beginPos, endPos)
+
+		} catch (NumberFormatException e) {
+			log.error("Bad \"Range\" header", e)
+			throw new WebApplicationException(416)
+		}
+	}
+
+	/**
+	 * Simple pair of values with the constraint that start &lt; end
+	 */
+	private static class Range {
+
+		private long start
+		private long end
+
+		public Range(long start, long end) {
+			Preconditions.checkArgument(start >= 0)
+			Preconditions.checkArgument(end > 0)
+			Preconditions.checkArgument(start < end)
+			this.start = start
+			this.end = end
+		}
+
+		public long getStart() {
+			return this.start
+		}
+
+		public long getEnd() {
+			return this.end
+		}
+
+		// start and end represent byte positions, so we need to +1
+		public long getLength() {
+			return end - start + 1
+		}
 	}
 }
