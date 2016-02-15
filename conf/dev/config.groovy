@@ -16,7 +16,7 @@ h2 {
 	url = 'jdbc:h2:file:' + appdir.root + '/' + appdir.db + '/music;DB_CLOSE_ON_EXIT=FALSE'
 	username = 'SA'
 	password = ''
-	showSql = true
+	showSql = false
 }
 
 server {
