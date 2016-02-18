@@ -5,49 +5,47 @@
   </button>
 </div>
 
-<div class="page-content jumbotron">
+<div class="page-content jumbotron" ng-class="{'fade-start': !doneLoading, 'fade-in': doneLoading}">
   <div class="container">
 
+     <!-- todo: fade-in on load -->
     <div ng-if="tracks.length" ng-cloak>
       <table class="table table-condensed table-hover">
         <thead>
           <tr>
-            <th/>
-            <th>Cover</th>
-            <th>Title</th>
-            <th>
+            <th class="col-queue-status"/>
+            <th class="col-queue-title">Title</th>
+            <th class="col-queue-artist">Artist</th>
+            <th class="col-queue-album">Album</th>
+            <th class="col-queue-length">
               <span class="glyphicon glyphicon-time"></span>
             </th>
-            <th>Artist</th>
-            <th>Album</th>
-            <th/>
+            <th class="col-queue-button"/>
           </tr>
         </thead>
         <tbody>
           <tr class="track-list-item" ng-repeat="t in tracks track by $index">
             <td>
-              <span ng-show="isPlaying($index)" class="glyphicon glyphicon-headphones"></span>
+              <span ng-show="isPlaying($index)" class="glyphicon glyphicon-headphones queue-playing"></span>
             </td>
             <td>
               <img class="coverart-thumb" ng-src="{{t.coverArtUrl}}"/>
-            </td>
-            <td>
-              <a ng-href="#/track/{{t.id}}" class="thumb">
+              <span class="track-text track-title">
                 {{t.name}}
-              </a>
+              </span>
             </td>
             <td>
-              {{t.length | duration}}
-            </td>
-            <td>
-              <a ng-href="#/artist/{{t.artist.id}}" class="thumb">
+              <a ng-href="#/artist/{{t.artist.id}}" class="track-text">
                 {{t.artist.name}}
               </a>
             </td>
             <td>
-              <a ng-href="#/album/{{t.album.id}}" class="thumb">
+              <a ng-href="#/album/{{t.album.id}}" class="track-text">
                 {{t.album.name}}
               </a>
+            </td>
+            <td class="track-length">
+              {{t.length | duration}}
             </td>
             <td>
               <button class="btn btn-default queue-remove" ng-click="remove(t, $index)">

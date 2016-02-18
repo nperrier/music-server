@@ -8,39 +8,38 @@
       <table class="table table-condensed table-hover">
         <thead>
           <tr>
-            <th ng-click="sortField = 'position'; reverse = !reverse">Position</th>
-            <th>Cover</th>
-            <th ng-click="sortField = 'track.name'; reverse = !reverse">Title</th>
-            <th ng-click="sortField = 'track.length'; reverse = !reverse">
+            <th class="col-track-position" ng-click="sortField = 'position'; reverse = !reverse">#</th>
+            <th class="col-track-title" ng-click="sortField = 'track.name'; reverse = !reverse">
+              <span class="track-title-header">Title</span>
+            </th>
+            <th class="col-track-artist" ng-click="sortField = 'track.artist.name'; reverse = !reverse">Artist</th>
+            <th class="col-track-album" ng-click="sortField = 'track.album.name'; reverse = !reverse">Album</th>
+            <th class="col-track-length" ng-click="sortField = 'track.length'; reverse = !reverse">
               <span class="glyphicon glyphicon-time"></span>
             </th>
-            <th ng-click="sortField = 'track.artist.name'; reverse = !reverse">Artist</th>
-            <th ng-click="sortField = 'track.album.name'; reverse = !reverse">Album</th>
           </tr>
         </thead>
         <tbody>
           <tr class="track-list-item" ng-repeat="pt in tracks| orderBy:sortField:reverse">
-            <td>
+            <td class="track-position">
               {{pt.position + 1}}
             </td>
             <td>
-              <img class="coverart-thumb" ng-src="{{pt.track.coverArtUrl}}"/>
+              <img class="coverart-thumb" ng-src="{{pt.track.coverArtUrl}}" fade-in />
+              <span class="track-title track-text">{{pt.track.name}}</span>
             </td>
             <td>
-              {{pt.track.name}}
-            </td>
-            <td>
-              {{pt.track.length | duration}}
-            </td>
-            <td>
-              <a ng-href="#/artist/{{pt.track.artist.id}}" class="thumb">
+              <a ng-href="#/artist/{{pt.track.artist.id}}" class="track-text">
                 {{pt.track.artist.name}}
               </a>
             </td>
             <td>
-              <a ng-href="#/album/{{pt.track.album.id}}" class="thumb">
+              <a ng-href="#/album/{{pt.track.album.id}}" class="track-text">
                 {{pt.track.album.name}}
               </a>
+            </td>
+            <td class="track-length">
+              {{pt.track.length | duration}}
             </td>
           </tr>
         </tbody>

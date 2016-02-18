@@ -9,7 +9,7 @@
  * Filter in the musicApp.
  */
 angular.module('musicApp')
-  .filter('duration', function () {
+  .filter('duration', ['_', 'moment', function (_, moment) {
 
     return function (duration, unit) {
       // default to milliseconds
@@ -35,4 +35,4 @@ angular.module('musicApp')
 
       return formattedDuration;
     };
-  });
+  }]);

@@ -1,82 +1,70 @@
 'use strict';
 
+/**
+ * @ngdoc function
+ * @name musicApp.directive:audioPlayerControls
+ * @description
+ * # AudioPlayerControls
+ *
+ */
 angular.module('musicApp')
-.directive('audioPlayerControls', ['$log', '$rootScope', '$interval', 'PlayerQueue',
-  function($log, $rootScope, $interval, PlayerQueue) {
+  .directive('audioPlayerControls', ['$log', '$rootScope', '$interval', 'AudioPlayer', 'PlayerQueue',
+    function ($log, $rootScope, $interval, AudioPlayer, PlayerQueue) {
 
     return {
       restrict: 'E',
       scope: {}, // isolate scope
       templateUrl: '/views/audioplayercontrols.html',
-      controller: function($scope, $element) {
+      controller: function($scope) {
 
-        $scope.audio = new Audio();
-        $scope.currentTrack = null;
         $scope.currentTime = 0;
         $scope.currentPercentage = 0;
+        // TODO: Better way to do this?
+        $scope.model = AudioPlayer;
+        $scope.queue = PlayerQueue;
+
+        var timeUpdater = null;
 
         /* For some reason angular won't allow ng-model='audio.volume' anymore */
         $scope.audioVolume = {
           volume: function(val) {
             if (val) {
-              $scope.audio.volume = val;
+              AudioPlayer.setVolume(val);
             }
-            return $scope.audio.volume;
+            return AudioPlayer.getVolume();
           }
         };
 
-        var timeUpdater = null;
+        // Tell audio player to play/pause
+        $scope.playOrPause = function() {
+          if (!AudioPlayer.isPlaying()) {
+            AudioPlayer.play();
+            startTimeUpdater();
+          }
+          else {
+            stopTimeUpdater();
+            AudioPlayer.pause();
+          }
+        };
 
         $scope.previous = function() {
           var track = PlayerQueue.getPrevious();
-
           if (track) {
-            $scope.playNow(track);
+            AudioPlayer.playNow(track);
           }
           else {
             resetPlayer();
           }
-          //$rootScope.$emit('audio.prev');
-        };
-
-        var getDuration = function() {
-          if ($scope.currentTrack) {
-            return $scope.currentTrack.length;
-          }
-          return 0;
         };
 
         // try to play the next track in the queue
         $scope.next = function() {
           var track = PlayerQueue.getNext();
-
           if (track) {
-            $scope.playNow(track);
+            AudioPlayer.playNow(track);
           }
           else {
             resetPlayer();
-          }
-        };
-
-        // TODO: Somehow "bind" my PlayerQueue "model"
-        // to the views using angular
-        $scope.hasNext = function() {
-          return PlayerQueue.hasNext();
-        };
-
-        $scope.hasPrevious = function() {
-          return PlayerQueue.hasPrevious();
-        };
-
-        // tell audio element to play/pause
-        $scope.playOrPause = function() {
-          if ($scope.audio.paused) {
-            $scope.audio.play();
-            startTimeUpdater();
-          }
-          else {
-            stopTimeUpdater();
-            $scope.audio.pause();
           }
         };
 
@@ -85,130 +73,107 @@ angular.module('musicApp')
             // update display of things every .5 seconds
             // makes the time-scrubber work
             timeUpdater = $interval(function() {
-              if ($scope.currentTrack) {
-                $scope.currentTime = $scope.audio.currentTime;
-                var percentPlayed = $scope.currentTime / ($scope.currentTrack.length / 1000) * 100;
+              if (AudioPlayer.isTrackLoaded()) {
+                $scope.currentTime = AudioPlayer.getTrackTime();
+                var percentPlayed = $scope.currentTime / (AudioPlayer.getTrackLength() / 1000) * 100;
                 $scope.currentPercentage = Math.round(percentPlayed);
               }
             }, 500);
           }
-        }
+        };
 
         var stopTimeUpdater = function() {
           if (timeUpdater) {
             $interval.cancel(timeUpdater);
             timeUpdater = null;
           }
-        }
-
-        // listen for audio-element events, and broadcast stuff
-        $scope.audio.addEventListener('play', function() {
-          $rootScope.$emit('audio.play', this);
-        });
-
-        $scope.audio.addEventListener('pause', function() {
-          $rootScope.$emit('audio.pause', this);
-        });
-
-        $scope.audio.addEventListener('timeupdate', function() {
-          $rootScope.$emit('audio.time', this);
-        });
-
-        $scope.audio.addEventListener('ended', function() {
-          $rootScope.$emit('audio.ended', this);
-          $scope.next();
-        });
-
-        // The time slider is being moved. Don't update the knob position
-        $scope.$on('slider.dragging', function(evt) {
-          console.log('Event: slider.dragging');
-          stopTimeUpdater();
-        });
-
-        // The slider knob has changed to a new position.  Seek the audio to the new position
-        $scope.$on('slider.dropped', function(evt, seekPercentage) {
-          console.log('Event: slider.dropped, new percentage value: ' + seekPercentage);
-          seek(seekPercentage);
-          startTimeUpdater();
-        });
-
-        // seek to a new audio position
-        var seek = function(seekPercentage) {
-          if (!isTrackLoaded()) {
-            return;
-          }
-
-          if (seekPercentage < 0 || seekPercentage > 100) {
-            throw new Error('Invalid seek percentage');
-          }
-
-          var duration = getDuration() / 1000; // to seconds
-          var seekTime = Math.floor(((seekPercentage / 100) * duration));
-          // TODO: may need handle edge cases (0 or 100)
-          console.log('Seeking to position: ' + seekTime);
-          $scope.audio.currentTime = seekTime;
-        };
-
-        // play the given track immediately
-        $scope.playNow = function(track) {
-          resetPlayer();
-
-          $scope.currentTrack = track;
-
-          $scope.audio.src = track.streamUrl;
-          $scope.audio.load();
-          $scope.audio.play();
-
-          startTimeUpdater();
         };
 
         var resetPlayer = function() {
           stopTimeUpdater();
-
-          $scope.audio.pause();
-          $scope.audio.removeAttribute('src');
-
-          $scope.currentTrack = null;
-          $scope.currentTime = 0;
-          $scope.currentPercentage = 0;
+          AudioPlayer.resetPlayer();
         };
 
-        // a track has been added to the queue
-        // auto-play if the player has no track loaded
-        $rootScope.$on('track.added', function(event) {
-          if (!isTrackLoaded()) {
-            var track = PlayerQueue.getNext();
-            $scope.playNow(track);
+        $rootScope.$on('audio.play', function() {
+          $log.debug('Event: audio.play');
+          startTimeUpdater();
+        });
+
+        $rootScope.$on('audio.pause', function() {
+          $log.debug('Event: audio.pause');
+          stopTimeUpdater();
+        });
+
+        $rootScope.$on('audio.ended', function() {
+          $log.debug('Event: audio.ended');
+          // play next track
+          var nextTrack = PlayerQueue.getNext();
+          if (nextTrack) {
+            AudioPlayer.playNow(nextTrack);
+          }
+          else {
+            resetPlayer();
           }
         });
 
-        // a track has been removed from the queue
-        // if current track is playing, stop it and reset
-        // Right now we assume that this event is only fired if the current track was playing
-        // because the PlayerQueue keeps track of this, not the audio player
-        // TODO: could add an 'isPlaying' boolean to object send with event...
-        $rootScope.$on('track.removed', function(event) {
-          // play the next track in the queue, if there is one
-          $scope.next();
+        $rootScope.$on('queue.track.added', function(evt, track) {
+          $log.debug('Event: queue.track.added, track: ' + track);
+          // If there is no track loaded, play it:
+          if (!AudioPlayer.isTrackLoaded()) {
+            var nextTrack = PlayerQueue.getNext();
+            AudioPlayer.playNow(nextTrack);
+            startTimeUpdater();
+          }
         });
 
-        // TODO: NOT USED
-        $scope.isPlaying = function() {
-          if (isTrackLoaded()) {
-            return !$scope.audio.paused || !$scope.audio.ended;
+        $rootScope.$on('queue.tracks.removed', function(evt, tracks) {
+          $log.info('Event: queue.track.removed, tracks: ' + tracks);
+          for (var i = 0; i < tracks.length; i++) {
+            var t = tracks[i];
+            if (AudioPlayer.isTrackLoaded(t)) {
+              var nextTrack = PlayerQueue.getNext();
+              if (nextTrack) {
+                AudioPlayer.playNow(nextTrack);
+              }
+              else {
+                resetPlayer();
+                break;
+              }
+            }
           }
-          return false;
-        }
+        });
 
-        // this should only return true if the player isn't playing
-        // and the PlayerQueue is empty
-        var isTrackLoaded = function() {
-          // Not sure how to tell if Audio element has a track or not...
-          // May need to use some sort of 'state' variable instead
-          return $scope.audio.src;
-        };
+        // The time slider is being moved. Don't update the knob position
+        $scope.$on('slider.dragging', function() {
+          $log.debug('Event: slider.dragging');
+          stopTimeUpdater();
+        });
 
-        // $element.on() ?
+        // The time slider is being moved. Update the current time
+        $scope.$on('slider.moved', function(evt, seekPercentage) {
+          $log.debug('Event: slider.moved: ' + seekPercentage + '%');
+          if (seekPercentage < 0 || seekPercentage > 100) {
+            throw new Error('Invalid seek percentage');
+          }
+          var duration = AudioPlayer.getDuration() / 1000; // to seconds
+          var seekTime = Math.floor(((seekPercentage / 100) * duration));
+          // TODO: may need handle edge cases (0 or 100)
+          $scope.currentTime = seekTime;
+        });
+
+        // The slider knob has changed to a new position.  Seek the audio to the new position
+        $scope.$on('slider.dropped', function(evt, seekPercentage) {
+          $log.debug('Event: slider.dropped, new percentage value: ' + seekPercentage);
+          AudioPlayer.seek(seekPercentage);
+          startTimeUpdater();
+        });
+
+        // The slider knob has changed to a new position.  Seek the audio to the new position
+        $scope.$on('slider.clicked', function(evt, seekPercentage) {
+          $log.debug('Event: slider.clicked, new percentage value: ' + seekPercentage);
+          AudioPlayer.seek(seekPercentage);
+        });
+
         $scope.$on('$destroy', function() {
           stopTimeUpdater();
         });

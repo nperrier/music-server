@@ -13,9 +13,9 @@ angular.module('musicApp')
       restrict: 'E',
       templateUrl: '/views/albumactionmenu.html',
       scope: false, // inherit from parent scope - assumes 'album' is in scope
-      controller: function ($scope, $element) {
+      controller: function ($scope) {
 
-        $scope.editAlbum = function(album) {
+        $scope.editAlbum = function() {
 
           var modalInstance = $modal.open({
             templateUrl: 'views/editalbum.html',

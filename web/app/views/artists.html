@@ -3,22 +3,24 @@
   <div class="container">
 
     <div ng-if="artists.length" ng-cloak>
+
       <table class="table table-condensed table-hover">
         <thead>
           <tr>
             <th ng-click="sortField = 'name'; reverse = !reverse">Artist</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody vs-repeat vs-scroll-parent=".main-content" vs-excess="40">
           <tr ng-repeat="a in artists | orderBy:sortField:reverse">
             <td>
-              <a ng-href="#/artist/{{a.id}}" class="thumb">
+              <a ng-href="#/artist/{{a.id}}" class="track-title">
                 {{a.name}}
               </a>
             </td>
           </tr>
         </tbody>
       </table>
+
     </div>
 
     <div class="text-center" ng-if="artists.length == 0" ng-cloak>

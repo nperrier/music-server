@@ -13,9 +13,9 @@ angular.module('musicApp')
       restrict: 'E',
       templateUrl: '/views/trackactionmenu.html',
       scope: false, // inherit from parent scope
-      controller: function ($scope, $element) {
+      controller: function ($scope) {
 
-        $scope.editTrack = function(track) {
+        $scope.editTrack = function() {
 
           var modalInstance = $modal.open({
             templateUrl: 'views/edittrack.html',

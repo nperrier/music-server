@@ -15,7 +15,7 @@ angular.module('musicApp')
       templateUrl: '/views/playlistactionmenu.html',
       // inherits scope from parent:
       scope: false,
-      controller: function ($scope, $element) {
+      controller: function ($scope) {
 
         $scope.delete = function () {
 

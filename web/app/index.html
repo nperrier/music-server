@@ -87,7 +87,7 @@
   <!-- /sidebar -->
   <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
     <!-- this is where content will be injected -->
-    <div ng-view></div>
+    <div ng-view class="main-content"></div>
   </div>
 
   <footer id="footer" class="navbar-fixed-bottom">
@@ -118,6 +118,7 @@
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/angular-touch/angular-touch.js"></script>
+    <script src="bower_components/angular-vs-repeat/src/angular-vs-repeat.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -149,6 +150,7 @@
     <script src="scripts/services/albumtrack.js"></script>
     <script src="scripts/services/playlist.js"></script>
     <script src="scripts/services/playerqueue.js"></script>
+    <script src="scripts/services/audioplayer.js"></script>
 
     <script src="scripts/filters/duration.js"></script>
 
@@ -159,6 +161,7 @@
     <script src="scripts/directives/playlistactionmenu.js"></script>
     <script src="scripts/directives/emptytonull.js"></script>
     <script src="scripts/directives/texttonumber.js"></script>
+    <script src="scripts/directives/fadein.js"></script>
     <!-- endbuild -->
 
   </body>

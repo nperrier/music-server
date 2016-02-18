@@ -8,12 +8,13 @@
  * Service in the musicApp.
  */
 angular.module('musicApp')
-  .service('PlayerQueue', ['$log', '$rootScope', function($log, $rootScope) {
+  .service('PlayerQueue', ['$log', '$rootScope',
+    function ($log, $rootScope) {
 
     var self = this;
 
     self.queue = []; // a list of tracks, incrementing from 0..total
-    self.current = -1; // the index of the currently playing track
+    self.current = -1; // the index of the track currently loaded into the AudioPlayer
 
     self.addTrack = function(track) {
       // add track to end of queue:
@@ -31,7 +32,6 @@ angular.module('musicApp')
     };
 
     self.insertTrack = function(track, position) {
-
       if (position > self.queue.length || position < 0) {
         $log.error('Attempting to add track to invalid position: ' + position + ', total: ' + self.queue.length);
         return false;
@@ -43,14 +43,13 @@ angular.module('musicApp')
         self.current++;
       }
 
-      $log.info('Added track to queue: ' + track);
-      $rootScope.$emit('track.added');
+      $log.debug('Added track to queue: ' + track);
+      $rootScope.$emit('queue.track.added', track);
 
       return true;
     };
 
     self.removeTrack = function(position) {
-
       var currentRemoved = false;
 
       if (position > self.queue.length || position < 0) {
@@ -68,24 +67,20 @@ angular.module('musicApp')
 
       var track = self.queue.splice(position, 1)[0];
 
-      $log.info('Removed track from queue, track.id: ' + track.id);
-
-      if (currentRemoved) {
-        // The player must be informed that the current track was removed
-        $rootScope.$emit('track.removed');
-      }
+      $log.debug('Removed track from queue, track: ' + track);
+      $rootScope.$emit('queue.tracks.removed', [ track ]);
 
       return track;
     };
 
     self.clear = function () {
       if (self.queue.length !== 0) {
-        // this is how you clear an array with external references in javascript
-        // a definitive "WTF?" ladies and gentlemen...
-        self.queue.length = 0;
+        var removedTracks = self.queue.slice(0); // copy the array
+        self.queue.splice(0); // clear the array
+        // self.queue.length = 0;
         self.current = -1;
-        // The player must be informed that the current track was removed
-        $rootScope.$emit('track.removed');
+        // Let interested parties know that the current track was removed
+        $rootScope.$emit('queue.tracks.removed', removedTracks);
       }
     };
 
@@ -99,7 +94,9 @@ angular.module('musicApp')
 
     self.getNext = function() {
       if (self.current === (self.queue.length - 1)) {
-        return null; // no more tracks!
+         // no more tracks, reset to the beginning of the queue
+         self.current = -1;
+        return null;
       }
 
       self.current++;
@@ -126,4 +123,5 @@ angular.module('musicApp')
     self.hasPrevious = function() {
       return self.current > 0;
     };
+
   }]);

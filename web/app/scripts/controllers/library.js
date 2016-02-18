@@ -30,11 +30,11 @@ angular.module('musicApp')
         Library.scan({ libraryId: library.id });
       };
 
-      $scope.removeLibrary = function(library) {
+      $scope.removeLibrary = function() {
         // TODO
       };
 
-      $scope.createLibraryDialog = function(library) {
+      $scope.createLibraryDialog = function() {
 
         var modalInstance = $modal.open({
           templateUrl: 'views/librarycreatemodal.html',

@@ -8,8 +8,10 @@
  * Controller of the musicApp
  */
 angular.module('musicApp')
-  .controller('TracksCtrl', ['$scope', '$log', '$timeout', 'Track', 'Playlist', 'PlayerQueue', 'usSpinnerService',
-    function($scope, $log, $timeout, Track, Playlist, PlayerQueue, usSpinnerService) {
+  .controller('TracksCtrl', ['$scope', '$log', '$timeout', 'Track',
+    'Playlist', 'PlayerQueue', 'usSpinnerService',
+    function($scope, $log, $timeout, Track,
+      Playlist, PlayerQueue, usSpinnerService) {
 
     $scope.sortField = 'name';
     $scope.reverse = false;
@@ -33,7 +35,7 @@ angular.module('musicApp')
     $scope.updateTrack = function(trackId, trackInfo) {
       $log.info('updateTrack, trackId: ' + trackId);
 
-      Track.update({ trackId: trackId }, trackInfo, function (t) {
+      Track.update({ trackId: trackId }, trackInfo, function () {
         // do something after updating
       });
     };

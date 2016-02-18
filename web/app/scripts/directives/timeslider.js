@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('musicApp')
-  .directive('timeslider', ['$log', '$rootScope', '$timeout', '$document',
-    function($log, $rootScope, $timeout, $document) {
+  .directive('timeslider', ['$rootScope', '$timeout', '$document',
+    function($rootScope, $timeout, $document) {
       return {
         restrict: 'E',
         scope: {
@@ -19,9 +19,7 @@ angular.module('musicApp')
                   '<div class="handle model"></div>\n' +
                   '<div class="bubble limit model">{{ floor }}</div>\n' +
                   '<div class="bubble value model">{{ model || 0 }}</div>\n',
-        // controller: function($scope, $element) {}
-        // link: function($scope, element, attrs) {}
-        compile: function(telement, tattributes) {
+        compile: function() {
 
           // Helper Functions
 
@@ -31,10 +29,10 @@ angular.module('musicApp')
             var roundedValue;
             var steppedValue;
 
-            if (floor == null) {
+            if (floor === null) {
               floor = 0;
             }
-            if (step == null) {
+            if (step === null) {
               step = 1 / Math.pow(10, precision);
             }
 
@@ -84,16 +82,16 @@ angular.module('musicApp')
           return {
             post: function(scope, element, attributes) {
 
-              var watchables      = ['floor', 'model'];
-              var boundToInputs   = false;
-              var handleHalfWidth = undefined;
-              var barWidth        = undefined;
-              var minOffset       = undefined;
-              var maxOffset       = undefined;
-              var minValue        = undefined;
-              var maxValue        = undefined;
-              var valueRange      = undefined;
-              var offsetRange     = undefined;
+              var watchables = ['floor', 'model'];
+              var boundToInputs = false;
+              var handleHalfWidth;
+              var barWidth;
+              var minOffset;
+              var maxOffset;
+              var minValue;
+              var maxValue;
+              var valueRange;
+              var offsetRange;
 
               // children elements
               var barElement    = angular.element(element.children()[0]);
@@ -108,13 +106,13 @@ angular.module('musicApp')
 
 
               var dimensions = function() {
-                if (scope.step == null) {
+                if (scope.step === null) {
                   scope.step = 1;
                 }
-                if (scope.floor == null) {
+                if (scope.floor === null) {
                   scope.floor = 0;
                 }
-                if (scope.precision == null) {
+                if (scope.precision === null) {
                   scope.precision = 0;
                 }
 
@@ -172,26 +170,7 @@ angular.module('musicApp')
                     handleElement.removeClass('active');
                     $document.unbind(events.move);
                     $document.unbind(events.end);
-                    // TODO: event: track position changed: emit value
                     scope.$emit('slider.dropped', scope.model);
-                    // TODO: event: restore automatic updates to pointer
-                    return scope.$apply();
-                  };
-
-                  var onMove = function(event) {
-                    var eventX     = event.clientX || event.touches[0].clientX;
-                    var newOffset  = eventX - element[0].getBoundingClientRect().left - handleHalfWidth;
-                    newOffset      = Math.max(Math.min(newOffset, maxOffset), minOffset);
-                    var newPercent = percentOffset(newOffset);
-                    var newValue   = minValue + (valueRange * newPercent / 100.0);
-                    var step       = parseFloat(scope.step);
-                    var precision  = parseInt(scope.precision);
-                    var floor      = parseFloat(scope.floor);
-                    newValue       = roundStep(newValue, precision, step, floor);
-
-                    scope.model = newValue;
-
-                    setPointers();
 
                     return scope.$apply();
                   };
@@ -201,7 +180,6 @@ angular.module('musicApp')
                     bubbleElement.addClass('active');
                     handleElement.addClass('active');
                     setPointers();
-                    // TODO: event: prevent automatic updates to pointer
                     scope.$emit('slider.dragging');
                     event.stopPropagation();
                     event.preventDefault();
@@ -213,18 +191,39 @@ angular.module('musicApp')
                   return handleElement.bind(events.start, onStart);
                 };
 
+                var updateHandle = function() {
+                  var eventX     = event.clientX || event.touches[0].clientX;
+                  var newOffset  = eventX - element[0].getBoundingClientRect().left - handleHalfWidth;
+                  newOffset      = Math.max(Math.min(newOffset, maxOffset), minOffset);
+                  var newPercent = percentOffset(newOffset);
+                  var newValue   = minValue + (valueRange * newPercent / 100.0);
+                  var step       = parseFloat(scope.step);
+                  var precision  = parseInt(scope.precision);
+                  var floor      = parseFloat(scope.floor);
+                  scope.model    = roundStep(newValue, precision, step, floor);
+                  setPointers();
+                };
+
+                var onMove = function(event) {
+                  updateHandle(event);
+                  scope.$emit('slider.moved', scope.model);
+                  return scope.$apply();
+                };
+
+                var onClick = function(event) {
+                  updateHandle(event);
+                  scope.$emit('slider.clicked', scope.model);
+                  return scope.$apply();
+                };
 
                 var setBindings = function() {
                   boundToInputs = true;
                   var inputTypes = ['touch', 'mouse'];
-                  var boundVariables = [];
                   for (var j = 0; j < inputTypes.length; j++) {
                     var type = inputTypes[j];
-                    var bound = bindToInputEvents(handleElement, bubbleElement, inputEvents[type]);
-                    boundVariables.push(bound);
+                    bindToInputEvents(handleElement, bubbleElement, inputEvents[type]);
                   }
-
-                  return boundVariables;
+                  barElement.bind('click', onClick);
                 };
 
                 if (!boundToInputs) {
@@ -241,13 +240,11 @@ angular.module('musicApp')
                 scope.$watch(w, updateDOM, true);
               }
 
-              return window.addEventListener("resize", updateDOM);
+              return window.addEventListener('resize', updateDOM);
             }
           };
         },
-        controller: function($scope, $element) {
-
-        }
+        controller: function() {}
       };
     }
   ]);

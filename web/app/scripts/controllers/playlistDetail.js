@@ -8,7 +8,8 @@
  * Controller of the musicApp
  */
 angular.module('musicApp')
-  .controller('PlaylistDetailCtrl', ['$scope', '$routeParams', '$timeout', 'Playlist', 'usSpinnerService',
+  .controller('PlaylistDetailCtrl', ['$scope', '$routeParams', '$timeout',
+    'Playlist', 'usSpinnerService',
     function($scope, $routeParams, $timeout, Playlist, usSpinnerService) {
 
     $scope.sortField = 'position';
@@ -24,7 +25,7 @@ angular.module('musicApp')
 
     $scope.playlist = Playlist.get({ playlistId: $routeParams.playlistId });
 
-    $scope.tracks = Playlist.getTracks({ playlistId: $routeParams.playlistId }, function(tracks) {
+    $scope.tracks = Playlist.getTracks({ playlistId: $routeParams.playlistId }, function() {
       usSpinnerService.stop('spinner-loading');
       $scope.doneLoading = true;
     });

@@ -3,27 +3,29 @@
   <div class="container">
 
     <div ng-if="albums.length" ng-cloak>
+
+      Search: <input ng-model="albumQuery" ng-minlength="3">
+
       <table class="table table-condensed table-hover">
         <thead>
           <tr>
-            <th />
-            <th ng-click="sortField = 'name'; reverse = !reverse">Title</th>
-            <th ng-click="sortField = 'artist.name'; reverse = !reverse">Artist</th>
+            <th class="col-album-title" ng-click="sortField = 'name'; reverse = !reverse">
+              <span class="track-title-header">Title</span>
+            </th>
+            <th class="col-album-artist" ng-click="sortField = 'artist.name'; reverse = !reverse">Artist</th>
           </tr>
         </thead>
-        <tbody>
-          <tr ng-repeat="album in albums | orderBy:sortField:reverse">
+        <tbody vs-repeat vs-scroll-parent=".main-content" vs-excess="40">
+          <tr ng-repeat="album in albums | filter:albumQuery | orderBy:sortField:reverse">
             <td>
-              <img class="coverart-thumb" ng-src="{{album.coverArtUrl}}"/>
-            </td>
-            <td>
-              <a ng-href="#/album/{{album.id}}" class="thumb">
+              <img class="coverart-thumb" ng-src="{{album.coverArtUrl}}" fade-in />
+              <a ng-href="#/album/{{album.id}}" class="track-text track-title">
                 {{album.name}}
               </a>
-              <album-action-menu></album-action-menu>
+              <album-action-menu class="action-menu"></album-action-menu>
             </td>
             <td>
-              <a ng-href="#/artist/{{album.artist.id}}" class="thumb">
+              <a ng-href="#/artist/{{album.artist.id}}" class="track-text">
                 {{album.artist.name}}
               </a>
             </td>

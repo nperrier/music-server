@@ -8,7 +8,27 @@
 
  $header-height: 50px;
  $footer-height: 60px;
+ $cover-thumb-width: 40px;
  $cover-thumb-height: 40px;
+
+ $bootstrap-blue: #337ab7;
+
+.coverart-thumb.ng-hide-add,
+.coverart-thumb.ng-hide-remove,
+.queuepage {
+  transition: all linear 0.5s;
+  display: block !important;
+}
+
+.coverart-thumb.ng-hide-add.ng-hide-add-active,
+.coverart-thumb.ng-hide-remove {
+  opacity: 0;
+}
+
+.coverart-thumb.ng-hide-add,
+.coverart-thumb.ng-hide-remove.ng-hide-remove-active {
+  opacity: 1;
+}
 
 /*
  * Base structure
@@ -22,7 +42,7 @@ body {
 }
 
 td {
-  text-align: left;
+/*  text-align: left; */
 }
 
 /*
@@ -32,6 +52,10 @@ td {
 .jumbotron {
   margin-bottom: 0px;
   background-color: white;
+}
+
+.table {
+  table-layout: fixed;
 }
 
 .table tbody tr {
@@ -88,7 +112,18 @@ td {
   position: absolute;
   top: $header-height;
   bottom: $footer-height;
-  /* need these rule to allow scrolling */
+}
+
+.main-content {
+    position: absolute;
+    bottom: 0px;
+    top: 0px;
+    overflow-y: scroll;
+    width: 100%;
+}
+
+.scrollable {
+  /* need this rule to allow scrolling */
   overflow-y: scroll;
 }
 
@@ -135,12 +170,18 @@ td {
 
 .coverart-medium {
   width: 300px;
-  /* height: 300px; svg crops the width if aspect ratio is different */
+  height: 300px; /* svg crops the width if aspect ratio is different */
+  background-repeat: no-repeat;
+  background-color: $bootstrap-blue;
 }
 
 .coverart-thumb {
-  width: $cover-thumb-height;
-  /* height: 40px; svg crops the width if aspect ratio is different */
+  width: $cover-thumb-width;
+  height: $cover-thumb-height; /* NOTE: svg crops the width if aspect ratio is different */
+  float: left;
+  margin-right: 10px;
+  background-repeat: no-repeat;
+  background-color: $bootstrap-blue;
 }
 
 .track-menu,
@@ -219,9 +260,6 @@ td {
 }
 
 .fade-in {
-  -webkit-transition: 0.5s linear all;
-  -moz-transition: 0.5s linear all;
-  -o-transition: 0.5s linear all;
   transition: 0.5s linear all;
 }
 
@@ -241,3 +279,81 @@ td {
   float: left;
 }
 */
+
+.track-title {
+  width: 75% !important;
+}
+
+.track-text {
+  display: inline-block;
+  float: left;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 100%;
+}
+
+.action-menu {
+  width: 30px;
+  margin-left: 8px;
+  display: block;
+  float: right;
+}
+
+.col-track-number {
+  width: 20px;
+}
+
+.col-track-year {
+  width: 50px;
+}
+
+.col-track-title {
+  width: 40%;
+}
+
+.track-title-header {
+  padding-left: 50px;
+}
+
+.col-track-length,
+.col-queue-length {
+  text-align: right;
+  width: 50px;
+}
+
+.col-track-position {
+  width: 30px;
+}
+
+.track-length {
+  text-align: right;
+}
+
+.col-track-artist,
+.col-track-album,
+.col-queue-artist,
+.col-queue-album {
+  width: 30%;
+}
+
+.col-album-title {
+  width: 60%;
+}
+.col-album-artist {
+  width: 40%;
+}
+
+.col-queue-status {
+  width: 40px;
+}
+.col-queue-title {
+  width: 40%;
+}
+.col-queue-button {
+  width: 40px;
+}
+
+.queue-playing {
+  font-size: 2em;
+}

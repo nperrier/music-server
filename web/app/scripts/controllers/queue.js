@@ -8,11 +8,15 @@
  * Controller of the musicApp
  */
 angular.module('musicApp')
-  .controller('QueueCtrl', ['$scope', '$log', '$rootScope', 'PlayerQueue',
-    function ($scope, $log, $rootScope, PlayerQueue) {
+  .controller('QueueCtrl', ['$scope', '$log', '$rootScope', '$timeout', 'PlayerQueue',
+    function ($scope, $log, $rootScope, $timeout, PlayerQueue) {
 
     $scope.tracks = PlayerQueue.getTracks();
-    $scope.paused = true;
+    $scope.doneLoading = false;
+
+    $timeout(function() {
+      $scope.doneLoading = true;
+    }, 10);
 
     // Indicate the "currently playing" Track in the view
     $scope.isPlaying = function(trackIndex) {
@@ -20,7 +24,7 @@ angular.module('musicApp')
       // currentTrack can be null
       if (currentTrackIndex >= 0) {
         var isCurrent = (currentTrackIndex === trackIndex);
-        return isCurrent && !$scope.paused;
+        return isCurrent;
       }
       return false;
     };
@@ -33,7 +37,6 @@ angular.module('musicApp')
     $scope.clearQueue = function() {
       $log.info('Removing all tracks');
       PlayerQueue.clear();
-      $scope.paused = true;
     };
 
     // TODO: This should update the view
@@ -49,19 +52,16 @@ angular.module('musicApp')
     // sent by audio player when track begins playing
     $rootScope.$on('audio.play', function() {
       $log.info('audio.play called');
-      $scope.paused = false;
     });
 
     // sent by audio player when track has ended
     $rootScope.$on('audio.ended', function() {
       $log.info('audio.ended called');
-      $scope.paused = true;
     });
 
     // sent by audio player when track has paused
     $rootScope.$on('audio.pause', function() {
       $log.info('audio.pause called');
-      $scope.paused = true;
     });
 
   }]);

@@ -1,13 +1,28 @@
 // app.js
 'use strict';
 
+// hack to inject underscore lib
+angular.module('underscore', [])
+  .factory('_', ['$window', function($window) {
+    return $window._; // assumes underscore has already been loaded on the page
+  }]);
+
+// hack to inject moment lib
+angular.module('moment', [])
+  .factory('moment', ['$window', function($window) {
+    return $window.moment; // assumes moment has already been loaded on the page
+  }]);
+
 // depends on ngRoute module
 var musicApp = angular.module('musicApp', [
 	'ui.bootstrap',
 	'ngRoute',
 	'ngResource',
 	'ngAnimate',
-	'angularSpinner'
+	'angularSpinner',
+	'vs-repeat',
+	'underscore',
+	'moment'
 ]);
 
 musicApp.config(['$routeProvider', function($routeProvider) {
