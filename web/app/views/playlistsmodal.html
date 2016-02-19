@@ -7,7 +7,7 @@
 <div class="modal-body">
   <ul>
     <li ng-repeat="p in playlists">
-      <a ng-click="selected.playlist = p; ok()">{{ p.name }}</a>
+      <a href class="playlist-item" ng-click="selected.playlist = p; ok()">{{ p.name }}</a>
     </li>
   </ul>
 </div>

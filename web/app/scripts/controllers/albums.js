@@ -34,13 +34,7 @@ angular.module('musicApp')
 
     $scope.addAlbumToPlaylist = function(album, playlist) {
       $log.info('Add album.id: ' + album.id + ' to playlist.id: ' + playlist.id);
-
-      AlbumTrack.get({ albumId: album.id }, function(tracks) {
-        var orderedTracks = _.sortBy(tracks, function(t) { return t.number; });
-        var trackIds = _.pluck(orderedTracks, 'id');
-        $log.info('Add track ids: ' + trackIds + ' to playlist.id: ' + playlist.id);
-        Playlist.addTracks({ playlistId: playlist.id }, trackIds);
-      });
+       Playlist.addAlbum({ playlistId: playlist.id }, album.id);
     };
 
     // Add an Album to the player queue:

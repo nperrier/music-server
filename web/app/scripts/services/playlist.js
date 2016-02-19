@@ -36,6 +36,11 @@ angular.module('musicApp')
         url: 'api/playlist/:playlistId/tracks',
         method: 'POST',
         params: { tracks: '@tracks' }
+      },
+      addAlbum: {
+        url: 'api/playlist/:playlistId/album',
+        method: 'POST',
+        params: { albumId: '@albumId' }
       }
     });
   }]);

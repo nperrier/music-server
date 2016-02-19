@@ -1,16 +1,5 @@
 package com.perrier.music.rest.resource
 
-import javax.ws.rs.Consumes
-import javax.ws.rs.DELETE
-import javax.ws.rs.GET
-import javax.ws.rs.POST
-import javax.ws.rs.Path
-import javax.ws.rs.PathParam
-import javax.ws.rs.Produces
-import javax.ws.rs.QueryParam
-import javax.ws.rs.core.MediaType
-import javax.ws.rs.core.Response
-
 import com.google.inject.Inject
 import com.perrier.music.dto.playlist.PlaylistDto
 import com.perrier.music.dto.playlist.PlaylistDtoMapper
@@ -19,6 +8,10 @@ import com.perrier.music.dto.playlist.PlaylistTrackDtoMapper
 import com.perrier.music.entity.playlist.Playlist
 import com.perrier.music.entity.playlist.PlaylistProvider
 import com.perrier.music.server.EntityNotFoundException
+
+import javax.ws.rs.*
+import javax.ws.rs.core.MediaType
+import javax.ws.rs.core.Response
 
 @Path("api/playlist")
 @Produces(MediaType.APPLICATION_JSON)
@@ -107,4 +100,20 @@ class PlaylistResource extends RestResource {
 		return Response.status(Response.Status.CREATED).build()
 	}
 
+
+	@POST
+	@Path("{id}/album")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response addAlbum(
+			@PathParam("id") Long id, @QueryParam("position") Integer position, Long albumId) {
+		Playlist playlist = this.playlistProvider.findById(id, true)
+
+		if (!playlist) {
+			throw new EntityNotFoundException("Playlist not found, id: " + id)
+		}
+
+		this.playlistProvider.addAlbumToPlaylist(playlist, albumId, position)
+
+		return Response.status(Response.Status.CREATED).build()
+	}
 }

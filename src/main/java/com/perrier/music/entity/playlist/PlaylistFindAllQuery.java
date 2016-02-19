@@ -14,7 +14,7 @@ public class PlaylistFindAllQuery extends FindQuery<List<Playlist>> {
 	// Eagerly load tracks (default is lazy)
 	private final boolean includeTracks;
 
-	PlaylistFindAllQuery(boolean includeTracks) {
+	public PlaylistFindAllQuery(boolean includeTracks) {
 		this.includeTracks = includeTracks;
 	}
 

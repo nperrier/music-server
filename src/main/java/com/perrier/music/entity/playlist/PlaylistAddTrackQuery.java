@@ -35,6 +35,7 @@ public class PlaylistAddTrackQuery extends CreateQuery<List<PlaylistTrack>> {
 
 			playlistTracks = this.playlist.getPlaylistTracks();
 
+			// if position is not specified, append tracks to the end of the list
 			int pos = (this.position != null ? this.position : playlistTracks.size());
 
 			// TODO: this class is doing much more than querying, so it should probably be up a layer higher
@@ -47,6 +48,7 @@ public class PlaylistAddTrackQuery extends CreateQuery<List<PlaylistTrack>> {
 				playlistTrack.setPlaylist(this.playlist);
 				playlistTrack.setTrack(track);
 				playlistTracks.add(pos, playlistTrack);
+				pos++;
 			}
 
 			session.update(this.playlist);
