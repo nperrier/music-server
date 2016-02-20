@@ -10,7 +10,7 @@
         <tr>
           <td>
             <label for="name">Name</label>
-            <input ng-model="track.name" name="name" type="text" size="50" class="form-control track-edit-input" emptytonull/>
+            <input ng-model="track.name" name="name" type="text" size="50" class="form-control track-edit-input" empty-to-null/>
           </td>
           <td rowspan="2">
             <img ng-src="{{track.coverArtUrl}}" class="track-edit-image" />
@@ -19,28 +19,28 @@
         <tr>
           <td>
             <label for="artist">Artist</label>
-            <input ng-model="track.artist" name="artist" type="text" size="50" class="form-control track-edit-input" emptytonull/>
+            <input ng-model="track.artist" name="artist" type="text" size="50" class="form-control track-edit-input" empty-to-null/>
           </td>
           <td />
         </tr>
         <tr>
           <td>
             <label for="album">Album</label>
-            <input ng-model="track.album" name="album" type="text" size="50" class="form-control track-edit-input" emptytonull/>
+            <input ng-model="track.album" name="album" type="text" size="50" class="form-control track-edit-input" empty-to-null/>
           </td>
           <td>
             <label for="album">Year</label>
-            <input ng-model="track.year" ng-pattern="/^\d{0,4}$/" name="year" type="text" maxlength="4" min="0" max="9999" class="form-control track-edit-input" emptytonull />
+            <input ng-model="track.year" ng-pattern="/^\d{0,4}$/" name="year" type="text" maxlength="4" min="0" max="9999" class="form-control track-edit-input" empty-to-null />
           </td>
         </tr>
         <tr>
           <td>
             <label for="genre">Genre</label>
-            <input ng-model="track.genre" name="genre" type="text" size="50" class="form-control track-edit-input" emptytonull/>
+            <input ng-model="track.genre" name="genre" type="text" size="50" class="form-control track-edit-input" empty-to-null/>
           </td>
           <td>
             <label for="album">Number</label>
-            <input ng-model="track.number" ng-pattern="/^\d{0,3}$/" name="number" type="text" maxlength="3" min="0" max="999" class="form-control track-edit-input" texttonumber emptytonull />
+            <input ng-model="track.number" ng-pattern="/^\d{0,3}$/" name="number" type="text" maxlength="3" min="0" max="999" class="form-control track-edit-input" text-to-number empty-to-null />
           </td>
         </tr>
       </tbody>

@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc directive
- * @name musicApp.directive:emptytonull
+ * @name musicApp.directive:emptyToNull
  * @description
- * # emptytonull
+ * # emptyToNull
  */
-angular.module('musicApp')
-  .directive('emptytonull', function () {
+angular.module('musicApp').directive('emptyToNull',
+  function () {
     return {
       restrict: 'A',
       require: 'ngModel',
@@ -17,4 +17,5 @@ angular.module('musicApp')
         });
       }
     };
-  });
+  }
+);

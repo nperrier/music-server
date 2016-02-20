@@ -6,19 +6,19 @@
  * @description
  * # albumActionMenu
  */
-angular.module('musicApp')
-  .directive('albumActionMenu', ['$log', '$modal', function($log, $modal) {
+angular.module('musicApp').directive('albumActionMenu', [
+  '$log', '$modal', function($log, $modal) {
 
     return {
       restrict: 'E',
-      templateUrl: '/views/albumactionmenu.html',
+      templateUrl: '/views/albumActionMenu.html',
       scope: false, // inherit from parent scope - assumes 'album' is in scope
       controller: function ($scope) {
 
         $scope.editAlbum = function() {
 
           var modalInstance = $modal.open({
-            templateUrl: 'views/editalbum.html',
+            templateUrl: 'views/editAlbum.html',
             backdrop: false,
             resolve: {
               album: function () {
@@ -70,7 +70,7 @@ angular.module('musicApp')
               $scope.updateTrack($scope.album.id, album);
             },
             function (reason) {
-              $log.info('Modal dismissed: ' + reason);
+              $log.debug('Modal dismissed: ' + reason);
             }
           );
         };
@@ -80,7 +80,7 @@ angular.module('musicApp')
         $scope.selectPlaylist = function (album) {
 
           var modalInstance = $modal.open({
-            templateUrl: 'views/playlistsmodal.html',
+            templateUrl: 'views/playlistsModal.html',
             size: 'sm',
             backdrop: false,
             resolve: {
@@ -111,7 +111,7 @@ angular.module('musicApp')
               $scope.addAlbumToPlaylist(album, playlist);
             },
             function (reason) {
-              $log.info('Modal dismissed: ' + reason);
+              $log.debug('Modal dismissed: ' + reason);
             }
           );
         };

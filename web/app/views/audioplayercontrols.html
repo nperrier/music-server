@@ -38,7 +38,7 @@
         {{ model.track ? model.track.length : 0 | duration }}
       </span>
 
-      <timeslider id="range-slider" class="time-range" floor="0" ceiling="100" step="0.1" precision="1" highlight="left" ng-model="currentPercentage"></timeslider>
+      <time-slider id="range-slider" class="time-range" floor="0" ceiling="100" step="0.1" precision="1" highlight="left" ng-model="currentPercentage"></time-slider>
     </div>
 
     <div class="volume" ng-show="model.isTrackLoaded()">
