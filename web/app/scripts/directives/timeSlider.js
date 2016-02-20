@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('musicApp').directive('timeslider', [
+angular.module('musicApp').directive('timeSlider', [
   '$rootScope', '$timeout', '$document', function($rootScope, $timeout, $document) {
 
     return {
@@ -191,7 +191,7 @@ angular.module('musicApp').directive('timeslider', [
                 return handleElement.bind(events.start, onStart);
               };
 
-              var updateHandle = function() {
+              var updateHandle = function(event) {
                 var eventX     = event.clientX || event.touches[0].clientX;
                 var newOffset  = eventX - element[0].getBoundingClientRect().left - handleHalfWidth;
                 newOffset      = Math.max(Math.min(newOffset, maxOffset), minOffset);
@@ -211,8 +211,11 @@ angular.module('musicApp').directive('timeslider', [
               };
 
               var onClick = function(event) {
+                dimensions();
                 updateHandle(event);
                 scope.$emit('slider.clicked', scope.model);
+                event.stopPropagation();
+                event.preventDefault();
                 return scope.$apply();
               };
 
