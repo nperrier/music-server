@@ -5,9 +5,9 @@
     <key>Label</key>
     <string>com.perrier.music</string>
     <key>WorkingDirectory</key>
-    <string>/Users/nathan.perrier/music-server-0.1/</string>
+    <string>/Users/nathan.perrier/music-server/</string>
     <key>Program</key>
-    <string>/Users/nathan.perrier/music-server-0.1/bin/music-server</string>
+    <string>/Users/nathan.perrier/music-server/bin/music-server</string>
     <key>RunAtLoad</key>
     <true/>
     <key>KeepAlive</key>
