@@ -33,7 +33,7 @@ angular.module('musicApp').controller('GenreTracksCtrl', [
     });
 
     $scope.updateTrack = function(trackId, trackInfo) {
-      $log.info('updateTrack, trackId: ' + trackId);
+      $log.debug('updateTrack, trackId: ' + trackId);
       Track.update({ trackId: trackId }, trackInfo, function () {
         // do something after updating
       });
@@ -41,12 +41,12 @@ angular.module('musicApp').controller('GenreTracksCtrl', [
 
     $scope.addTrackToPlaylist = function(track, playlist) {
       Playlist.addTracks({ playlistId: playlist.id }, [ track.id ]);
-      $log.info('Added track.id: ' + track.id + ' to playlist.id: ' + playlist.id);
+      $log.debug('Added track.id: ' + track.id + ' to playlist.id: ' + playlist.id);
     };
 
     $scope.addTrackToQueue = function(track) {
       PlayerQueue.addTrack(track);
-      $log.info('Added track to player queue, track.id: ' + track.id);
+      $log.debugdebug('Added track to player queue, track.id: ' + track.id);
     };
   }
 ]);

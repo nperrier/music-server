@@ -127,7 +127,7 @@ angular.module('musicApp').directive('audioPlayerControls', [
         });
 
         $rootScope.$on('queue.tracks.removed', function(evt, tracks) {
-          $log.info('Event: queue.track.removed, tracks: ' + tracks);
+          $log.debug('Event: queue.track.removed, tracks: ' + tracks);
           for (var i = 0; i < tracks.length; i++) {
             var t = tracks[i];
             if (AudioPlayer.isTrackLoaded(t)) {
