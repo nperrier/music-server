@@ -7,8 +7,9 @@
  * # Album
  * Factory in the musicApp.
  */
-angular.module('musicApp')
-  .factory('Album', ['$resource', function($resource) {
+angular.module('musicApp').factory('Album', [
+  '$resource', function($resource) {
+
     return $resource('api/album/:albumId', {}, {
       query: {
         method: 'GET',
@@ -17,6 +18,13 @@ angular.module('musicApp')
       get: {
         method: 'GET',
         params: { albumId: '@albumId' }
+      },
+      getTracks: {
+        url: 'api/album/:albumId/tracks',
+        method: 'GET',
+        params: { albumId: '@albumId' },
+        isArray: true
       }
     });
-  }]);
+  }
+]);

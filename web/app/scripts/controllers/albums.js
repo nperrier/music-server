@@ -7,11 +7,11 @@
  * # AlbumsCtrl
  * Controller of the musicApp
  */
-angular.module('musicApp')
-  .controller('AlbumsCtrl', ['$scope', '$log', '$timeout', '_',
-    'Album', 'AlbumTrack', 'Playlist', 'PlayerQueue', 'usSpinnerService',
-    function($scope, $log, $timeout, _,
-      Album, AlbumTrack, Playlist, PlayerQueue, usSpinnerService) {
+angular.module('musicApp').controller('AlbumsCtrl', [
+  '$scope', '$log', '$timeout', '_', 'usSpinnerService',
+  'Album', 'Playlist', 'PlayerQueue',
+  function($scope, $log, $timeout, _, usSpinnerService,
+    Album, Playlist, PlayerQueue) {
 
     $scope.sortField = 'name';
     $scope.reverse = false;
@@ -41,9 +41,10 @@ angular.module('musicApp')
     $scope.addAlbumToQueue = function(album) {
       $log.info('Add album to player queue, id: ' + album.id);
 
-      AlbumTrack.get({ albumId: album.id }, function(tracks) {
+      Album.getTracks({ albumId: album.id }, function(tracks) {
         var orderedTracks = _.sortBy(tracks, function(t) { return t.number; });
         PlayerQueue.addTracks(orderedTracks);
       });
     };
-  }]);
+  }
+]);
