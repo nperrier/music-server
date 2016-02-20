@@ -7,11 +7,11 @@
  * # GenreTracksCtrl
  * Controller of the musicApp
  */
-angular.module('musicApp')
-  .controller('GenreTracksCtrl', ['$scope', '$routeParams', '$log', '$timeout',
-    'GenreTrack', 'Track', 'Playlist', 'PlayerQueue', 'usSpinnerService',
-    function($scope, $routeParams, $log, $timeout,
-      GenreTrack, Track, Playlist, PlayerQueue, usSpinnerService) {
+angular.module('musicApp').controller('GenreTracksCtrl', [
+  '$scope', '$routeParams', '$log', '$timeout', 'usSpinnerService',
+  'Genre', 'Track', 'Playlist', 'PlayerQueue',
+  function($scope, $routeParams, $log, $timeout, usSpinnerService,
+    Genre, Track, Playlist, PlayerQueue) {
 
     $scope.sortField = 'name';
     $scope.reverse = false;
@@ -27,7 +27,7 @@ angular.module('musicApp')
     // this is needed for the track-action-menu modal
     $scope.playlists = Playlist.query();
 
-    $scope.tracks = GenreTrack.get({ genreId: $routeParams.genreId }, function() {
+    $scope.tracks = Genre.getTracks({ genreId: $routeParams.genreId }, function() {
       usSpinnerService.stop('spinner-loading');
       $scope.doneLoading = true;
     });
@@ -48,5 +48,5 @@ angular.module('musicApp')
       PlayerQueue.addTrack(track);
       $log.info('Added track to player queue, track.id: ' + track.id);
     };
-
-  }]);
+  }
+]);

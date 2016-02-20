@@ -15,6 +15,12 @@ angular.module('musicApp').factory('Genre', [
         method: 'GET',
         isArray: true
       },
+      getTracks: {
+        url: 'api/genre/:genreId/tracks',
+        method: 'GET',
+        params: { genreId: '@genreId' },
+        isArray: true
+      }
     });
   }
 ]);
