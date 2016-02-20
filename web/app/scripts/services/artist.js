@@ -24,7 +24,13 @@ angular.module('musicApp').factory('Artist', [
 	      method: 'GET',
 	      isArray: true,
 	      params: { artistId: '@artistId' }
-	    }
+	    },
+      getAlbums: {
+      	url: 'api/artist/:artistId/albums',
+        method: 'GET',
+        params: { artistId: '@artistId' },
+        isArray: true
+      }
 		});
   }
 ]);
