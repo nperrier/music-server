@@ -48,12 +48,12 @@ musicApp.config(['$routeProvider', function($routeProvider) {
 	})
 
 	.when('/artist/:artistId', {
-		templateUrl: 'views/artistdetail.html',
+		templateUrl: 'views/artistDetail.html',
 		controller: 'ArtistDetailCtrl'
 	})
 
 	.when('/artist/:artistId/tracks', {
-		templateUrl: 'views/artisttracks.html',
+		templateUrl: 'views/artistTracks.html',
 		controller: 'ArtistTracksCtrl'
 	})
 
@@ -63,7 +63,7 @@ musicApp.config(['$routeProvider', function($routeProvider) {
 	})
 
 	.when('/album/:albumId', {
-		templateUrl: 'views/albumdetail.html',
+		templateUrl: 'views/albumDetail.html',
 		controller: 'AlbumDetailCtrl'
 	})
 
@@ -78,7 +78,7 @@ musicApp.config(['$routeProvider', function($routeProvider) {
 	})
 
 	.when('/genre/:genreId', {
-		templateUrl: 'views/genretracks.html',
+		templateUrl: 'views/genreTracks.html',
 		controller: 'GenreTracksCtrl'
 	})
 
@@ -88,7 +88,7 @@ musicApp.config(['$routeProvider', function($routeProvider) {
 	})
 
 	.when('/playlist/:playlistId', {
-		templateUrl: 'views/playlistdetail.html',
+		templateUrl: 'views/playlistDetail.html',
 		controller: 'PlaylistDetailCtrl'
 	})
 

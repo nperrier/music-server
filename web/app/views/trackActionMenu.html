@@ -1,0 +1,29 @@
+<!-- BEGIN: track-action-menu -->
+<div class="btn-group track-menu" dropdown>
+  <button class="dropdown-toggle" dropdown-toggle>
+    <span class="glyphicon glyphicon-th-list"></span>
+  </button>
+  <ul class="dropdown-menu">
+    <li>
+      <a href ng-click="editTrack(track)" class="thumb">
+        Edit
+      </a>
+    </li>
+    <li>
+      <a href ng-click="addTrackToQueue(track)" class="thumb">
+        Add to Queue
+      </a>
+    </li>
+    <li ng-if="playlists.length">
+      <a href ng-click="selectPlaylist(track)" class="thumb">
+        Add to Playlist
+      </a>
+    </li>
+    <li>
+      <a ng-href="/api/track/download/{{track.id}}" class="thumb">
+        Download
+      </a>
+    </li>
+  </ul>
+</div>
+<!-- END track-action-menu -->

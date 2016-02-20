@@ -7,9 +7,8 @@
  * # PlayerQueue
  * Service in the musicApp.
  */
-angular.module('musicApp')
-  .service('PlayerQueue', ['$log', '$rootScope',
-    function ($log, $rootScope) {
+angular.module('musicApp').service('PlayerQueue', [
+  '$log', '$rootScope', function ($log, $rootScope) {
 
     var self = this;
 
@@ -123,5 +122,5 @@ angular.module('musicApp')
     self.hasPrevious = function() {
       return self.current > 0;
     };
-
-  }]);
+  }
+]);

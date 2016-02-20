@@ -3,6 +3,7 @@ package com.perrier.music.entity.track;
 import static org.apache.commons.lang3.StringUtils.trimToEmpty;
 
 import com.google.inject.Inject;
+
 import com.perrier.music.db.DBException;
 import com.perrier.music.db.IDatabase;
 
@@ -25,7 +26,7 @@ abstract class AbstractTrackUpdater<T> {
 
 		public enum Change {
 			NONE, DELETED, UPDATED, CREATED
-		};
+		}
 
 		private final E original; // this is the value of the original object
 		private final E update; // this is the new object value
@@ -50,7 +51,15 @@ abstract class AbstractTrackUpdater<T> {
 		}
 
 		public boolean isChanged() {
-			return Change.NONE.equals(change);
+			return !Change.NONE.equals(change);
+		}
+
+		public boolean isCreated() {
+			return Change.CREATED.equals(change);
+		}
+
+		public boolean isDeleted() {
+			return Change.DELETED.equals(change);
 		}
 
 		public boolean isCreatedOrDeleted() {

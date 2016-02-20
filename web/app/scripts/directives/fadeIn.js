@@ -6,8 +6,8 @@
  * @description
  * # fadeIn
  */
-angular.module('musicApp')
-  .directive('fadeIn', function () {
+angular.module('musicApp').directive('fadeIn',
+  function () {
     return {
       restrict: 'A',
       link: function($scope, $element) {
@@ -17,4 +17,5 @@ angular.module('musicApp')
         });
       }
     };
-  });
+  }
+);

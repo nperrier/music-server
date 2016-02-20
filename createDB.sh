@@ -1,3 +1,4 @@
 #!/bin/bash
 
-gradle --offline flywayClean flywayMigrate
+gradle flywayClean flywayMigrate
+#gradle --offline flywayClean flywayMigrate

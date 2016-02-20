@@ -1,15 +1,8 @@
 package com.perrier.music.entity.track;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.isA;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -34,6 +27,9 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 
 	@Mock
 	UpdateResult<Artist> artistUpdate;
+
+	@Mock
+	UpdateResult<Artist> albumArtistUpdate;
 
 	@Mock
 	IDatabase db;
@@ -74,6 +70,7 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 
 		when(track.getAlbum()).thenReturn(album); // original track had album
 		when(artistUpdate.isCreatedOrDeleted()).thenReturn(false);
+		when(albumArtistUpdate.isDeleted()).thenReturn(false);
 
 		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate("the college dropout");
 
@@ -186,54 +183,6 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 	}
 
 	/* ********** Tests below assume the track artist has changed ************* */
-
-	@Test
-	public void shouldCreateAlbumIfArtistRemovedButAlbumWasSame() throws Exception {
-		// track-artist: removed
-		// track-album: no change
-		Album newAlbum = new Album();
-		newAlbum.setName(album.getName());
-		newAlbum.setId(2L);
-
-		when(track.getAlbum()).thenReturn(album); // original track had album
-		when(artistUpdate.isCreatedOrDeleted()).thenReturn(true);
-		when(db.create(isA(AlbumCreateQuery.class))).thenReturn(newAlbum);
-
-		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate("the college dropout");
-
-		verify(db, never()).update(isA(AlbumUpdateQuery.class));
-
-		assertTrue(result.isCreatedOrDeleted());
-		assertNotNull(result.getUpdate());
-
-		assertEquals(newAlbum.getName(), result.getUpdate().getName());
-		assertEquals(newAlbum.getId(), result.getUpdate().getId());
-		assertNull(result.getUpdate().getArtist());
-	}
-
-	@Test
-	public void shouldCreateAlbumIfArtistRemovedButAlbumWasSameIgnoringCase() throws Exception {
-		// track-artist: removed
-		// track-album: no change
-		Album newAlbum = new Album();
-		newAlbum.setName("tHe CoLLeGe DroPoUt");
-		newAlbum.setId(2L);
-
-		when(track.getAlbum()).thenReturn(album); // original track had album
-		when(artistUpdate.isCreatedOrDeleted()).thenReturn(true);
-		when(db.create(isA(AlbumCreateQuery.class))).thenReturn(newAlbum);
-
-		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate("tHe CoLLeGe DroPoUt");
-
-		verify(db, never()).update(isA(AlbumUpdateQuery.class));
-
-		assertTrue(result.isCreatedOrDeleted());
-		assertNotNull(result.getUpdate());
-
-		assertEquals(newAlbum.getName(), result.getUpdate().getName());
-		assertEquals(newAlbum.getId(), result.getUpdate().getId());
-		assertNull(result.getUpdate().getArtist());
-	}
 
 	@Test
 	public void shouldAssignExistingAlbumIfArtistRemovedButAlbumWasSame() throws Exception {

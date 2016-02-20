@@ -193,9 +193,9 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 
 	/**
 	 * The album artist is set to the track artist if it doesn't exist
-	 * 
+	 *
 	 * Only add a new artist if it differs from the track artist
-	 * 
+	 *
 	 * @param albumArtistName
 	 * @param trackArtist
 	 * @return
@@ -227,10 +227,12 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 		return coverArt;
 	}
 
-	private Genre addGenre(String name) {
-		if (StringUtils.isBlank(name)) {
+	private Genre addGenre(String rawName) {
+		if (StringUtils.isBlank(rawName)) {
 			return null;
 		}
+
+		final String name = StringUtils.trim(rawName);
 
 		try {
 			Genre genre = this.db.find(new GenreFindByNameQuery(name));
@@ -248,13 +250,15 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 		return null;
 	}
 
-	private Track updateTrack(Track track, Artist artist, Album album, Genre genre, String name, Integer number,
+	private Track updateTrack(Track track, Artist artist, Album album, Genre genre, String rawName, Integer number,
 			Long length, BufferedImage image, File file, Library library) {
 		// track name MUST have a value
-		if (StringUtils.isBlank(name)) {
+		if (StringUtils.isBlank(rawName)) {
 			log.error("Cannot update track: name was blank, path={}", track.getPath());
 			return null;
 		}
+
+		final String name = StringUtils.trim(rawName);
 
 		try {
 			track.setArtist(artist);
@@ -285,13 +289,15 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 		return null;
 	}
 
-	private Track addTrack(Artist artist, Album album, Genre genre, String name, Integer number, Long length,
+	private Track addTrack(Artist artist, Album album, Genre genre, String rawName, Integer number, Long length,
 			BufferedImage image, File file, Library library) {
 		// track name MUST have a value
-		if (StringUtils.isBlank(name)) {
+		if (StringUtils.isBlank(rawName)) {
 			log.error("Cannot add track: name was blank, file={}", file);
 			return null;
 		}
+
+		final String name = StringUtils.trim(rawName);
 
 		try {
 			Track track = null;
@@ -331,10 +337,12 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 		return null;
 	}
 
-	private Album addAlbum(Artist artist, String name, String year, BufferedImage image) {
-		if (StringUtils.isBlank(name)) {
+	private Album addAlbum(Artist artist, String rawName, String year, BufferedImage image) {
+		if (StringUtils.isBlank(rawName)) {
 			return null;
 		}
+
+		final String name = StringUtils.trim(rawName);
 
 		try {
 			Album album = null;
@@ -363,10 +371,12 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 		return null;
 	}
 
-	private Artist addArtist(String name) {
-		if (StringUtils.isBlank(name)) {
+	private Artist addArtist(String rawName) {
+		if (StringUtils.isBlank(rawName)) {
 			return null;
 		}
+
+		final String name = StringUtils.trim(rawName);
 
 		try {
 			Artist artist = this.db.find(new ArtistFindByNameQuery(name));

@@ -7,10 +7,9 @@
  * # PlaylistDetailCtrl
  * Controller of the musicApp
  */
-angular.module('musicApp')
-  .controller('PlaylistDetailCtrl', ['$scope', '$routeParams', '$timeout',
-    'Playlist', 'usSpinnerService',
-    function($scope, $routeParams, $timeout, Playlist, usSpinnerService) {
+angular.module('musicApp').controller('PlaylistDetailCtrl', [
+  '$scope', '$routeParams', '$timeout', 'usSpinnerService', 'Playlist',
+  function($scope, $routeParams, $timeout, usSpinnerService, Playlist) {
 
     $scope.sortField = 'position';
     $scope.reverse = false;
@@ -29,5 +28,5 @@ angular.module('musicApp')
       usSpinnerService.stop('spinner-loading');
       $scope.doneLoading = true;
     });
-
-  }]);
+  }
+]);

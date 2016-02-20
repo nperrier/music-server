@@ -7,10 +7,11 @@
  * # TrackDetailCtrl
  * Controller of the musicApp
  */
-angular.module('musicApp')
-  .controller('TrackDetailCtrl', ['$scope', '$routeParams', 'Track', function($scope, $routeParams, Track) {
+angular.module('musicApp').controller('TrackDetailCtrl', [
+  '$scope', '$routeParams', 'Track', function($scope, $routeParams, Track) {
 
-	Track.get({ trackId: $routeParams.trackId }, function(track) {
-		$scope.track = track;
-	});
-}]);
+  	Track.get({ trackId: $routeParams.trackId }, function(track) {
+  		$scope.track = track;
+  	});
+  }
+]);

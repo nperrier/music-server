@@ -2,21 +2,36 @@
 
 /**
  * @ngdoc function
- * @name musicApp.controller:TracksCtrl
+ * @name musicApp.controller:ArtisttracksCtrl
  * @description
- * # TracksCtrl
+ * # ArtisttracksCtrl
  * Controller of the musicApp
  */
-angular.module('musicApp').controller('TracksCtrl', [
-  '$scope', '$log', '$timeout', 'usSpinnerService', 'Track', 'Playlist', 'PlayerQueue',
-    function($scope, $log, $timeout, usSpinnerService, Track, Playlist, PlayerQueue) {
+angular.module('musicApp').controller('ArtistTracksCtrl', [
+  '$scope', '$routeParams', '$log', '$timeout', 'usSpinnerService',
+  'Artist', 'Track', 'Playlist', 'PlayerQueue',
+    function($scope, $routeParams, $log, $timeout, usSpinnerService,
+      Artist, Track, Playlist, PlayerQueue) {
 
     $scope.sortField = 'name';
     $scope.reverse = false;
     $scope.doneLoading = false;
+    var numberPendingRequests = 3;
+
+    var checkDoneLoading = function() {
+      numberPendingRequests--;
+      if (numberPendingRequests <= 0) {
+        usSpinnerService.stop('spinner-loading');
+        $scope.doneLoading = true;
+      }
+    };
 
     // this is needed for the track-action-menu modal
-    $scope.playlists = Playlist.query();
+    $scope.playlists = Playlist.query(checkDoneLoading);
+
+    $scope.artist = Artist.get({ artistId: $routeParams.artistId }, checkDoneLoading);
+
+    $scope.tracks = Artist.getTracks({ artistId: $routeParams.artistId }, checkDoneLoading);
 
     // wait 1.5 seconds before showing spinner
     $timeout(function () {
@@ -24,11 +39,6 @@ angular.module('musicApp').controller('TracksCtrl', [
         usSpinnerService.spin('spinner-loading');
       }
     }, 1500);
-
-    $scope.tracks = Track.query(function () {
-      usSpinnerService.stop('spinner-loading');
-      $scope.doneLoading = true;
-    });
 
     $scope.updateTrack = function(trackId, trackInfo) {
       $log.debug('updateTrack, trackId: ' + trackId);
@@ -47,5 +57,6 @@ angular.module('musicApp').controller('TracksCtrl', [
       PlayerQueue.addTrack(track);
       $log.debug('Added track to player queue, track.id: ' + track.id);
     };
-  }
-]);
+
+  }]);
+

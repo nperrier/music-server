@@ -33,13 +33,13 @@ angular.module('musicApp').controller('AlbumsCtrl', [
     $scope.playlists = Playlist.query();
 
     $scope.addAlbumToPlaylist = function(album, playlist) {
-      $log.info('Add album.id: ' + album.id + ' to playlist.id: ' + playlist.id);
+      $log.debug('Add album.id: ' + album.id + ' to playlist.id: ' + playlist.id);
        Playlist.addAlbum({ playlistId: playlist.id }, album.id);
     };
 
     // Add an Album to the player queue:
     $scope.addAlbumToQueue = function(album) {
-      $log.info('Add album to player queue, id: ' + album.id);
+      $log.debug('Add album to player queue, id: ' + album.id);
 
       Album.getTracks({ albumId: album.id }, function(tracks) {
         var orderedTracks = _.sortBy(tracks, function(t) { return t.number; });

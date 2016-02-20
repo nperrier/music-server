@@ -1,0 +1,51 @@
+<!-- BEGIN: audio-player-controls -->
+<div id="player-controls">
+
+  <div id="wrapper-left">
+    <div id="player-wrapper-left">
+      <div class="now-playing" ng-show="model.isTrackLoaded()">
+        <b>Now Playing:</b>
+        <img class="coverart-thumb" ng-src="{{model.track.coverArtUrl}}" />
+        <a ng-href="#/artist/{{model.track.artist.id}}" class="thumb">
+          {{model.track.artist.name}}
+        </a> - {{model.track.name}}
+      </div>
+    </div>
+  </div>
+
+  <div class="player-deck">
+    <button ng-disabled="!queue.hasPrevious()" class="btn btn-default prev" ng-click="previous()">
+      <span class="glyphicon glyphicon-step-backward"></span>
+    </button>
+
+    <button class="btn btn-default playpause" ng-click="playOrPause()" ng-class="{paused: model.isPaused()}" ng-disabled="!model.isTrackLoaded()">
+      <span class="play-text glyphicon glyphicon-play"></span>
+      <span class="pause-text glyphicon glyphicon-pause"></span>
+    </button>
+
+    <button ng-disabled="!queue.hasNext()" class="btn btn-default next" ng-click="next()">
+      <span class="glyphicon glyphicon-step-forward"></span>
+    </button>
+  </div>
+
+  <div id="wrapper-right">
+    <div class="time" ng-show="model.isTrackLoaded()">
+      <span class="current-time" ng-model="currentTime">
+        {{( currentTime ? currentTime : 0 ) | duration:'seconds'}}
+      </span>
+
+      <span class="duration" ng-model="model.track.length">
+        {{ model.track ? model.track.length : 0 | duration }}
+      </span>
+
+      <timeslider id="range-slider" class="time-range" floor="0" ceiling="100" step="0.1" precision="1" highlight="left" ng-model="currentPercentage"></timeslider>
+    </div>
+
+    <div class="volume" ng-show="model.isTrackLoaded()">
+      <span id="volume-icon-low" class="glyphicon glyphicon-volume-down"></span>
+      <span id="volume-icon-high" class="glyphicon glyphicon-volume-up"></span>
+      <input class="volume-slider" min="0" max="1" step="0.01" type="range" ng-model="audioVolume.volume" ng-model-options="{ getterSetter: true }" />
+    </div>
+  </div>
+</div>
+<!-- END: audio-player-controls -->

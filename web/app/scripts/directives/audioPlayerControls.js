@@ -7,14 +7,14 @@
  * # AudioPlayerControls
  *
  */
-angular.module('musicApp')
-  .directive('audioPlayerControls', ['$log', '$rootScope', '$interval', 'AudioPlayer', 'PlayerQueue',
+angular.module('musicApp').directive('audioPlayerControls', [
+  '$log', '$rootScope', '$interval', 'AudioPlayer', 'PlayerQueue',
     function ($log, $rootScope, $interval, AudioPlayer, PlayerQueue) {
 
     return {
       restrict: 'E',
       scope: {}, // isolate scope
-      templateUrl: '/views/audioplayercontrols.html',
+      templateUrl: '/views/audioPlayerControls.html',
       controller: function($scope) {
 
         $scope.currentTime = 0;
@@ -177,7 +177,7 @@ angular.module('musicApp')
         $scope.$on('$destroy', function() {
           stopTimeUpdater();
         });
-
       }
     };
-  }]);
+  }
+]);

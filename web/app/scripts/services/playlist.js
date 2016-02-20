@@ -7,8 +7,9 @@
  * # Playlist
  * Factory in the musicApp.
  */
-angular.module('musicApp')
-  .factory('Playlist', ['$resource', function($resource) {
+angular.module('musicApp').factory('Playlist', [
+  '$resource', function($resource) {
+
     return $resource('api/playlist/:playlistId', {}, {
       query: {
         method: 'GET',
@@ -43,4 +44,5 @@ angular.module('musicApp')
         params: { albumId: '@albumId' }
       }
     });
-  }]);
+  }
+]);

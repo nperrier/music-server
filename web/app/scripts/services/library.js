@@ -7,8 +7,8 @@
  * # Library
  * Factory in the musicApp.
  */
-angular.module('musicApp')
-  .factory('Library', ['$resource', function($resource) {
+angular.module('musicApp').factory('Library', [
+  '$resource', function($resource) {
 
     return $resource('api/library/:libraryId', { libraryId: '@libraryId' }, {
       query: {
@@ -31,4 +31,5 @@ angular.module('musicApp')
         //  return []; // this sets the 'libraryId' param in the body...REMOVE IT!
       }
     });
-  }]);
+  }
+]);

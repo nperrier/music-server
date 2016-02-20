@@ -6,19 +6,19 @@
  * @description
  * # trackActionMenu
  */
-angular.module('musicApp')
-  .directive('trackActionMenu', ['$log', '$modal', function($log, $modal) {
+angular.module('musicApp').directive('trackActionMenu', [
+  '$log', '$modal', function($log, $modal) {
 
     return {
       restrict: 'E',
-      templateUrl: '/views/trackactionmenu.html',
+      templateUrl: '/views/trackActionMenu.html',
       scope: false, // inherit from parent scope
       controller: function ($scope) {
 
         $scope.editTrack = function() {
 
           var modalInstance = $modal.open({
-            templateUrl: 'views/edittrack.html',
+            templateUrl: 'views/editTrack.html',
             backdrop: false,
             resolve: {
               track: function () {
@@ -62,7 +62,7 @@ angular.module('musicApp')
 
               $scope.isUnchanged = function(track) {
                 var isEqual = angular.equals(track, $scope.originalTrack);
-                //$log.info("equal?: " + isEqual);
+                //$log.debug("equal?: " + isEqual);
                 if (isEqual) {
                   this.editTrackForm.$setPristine();
                 }
@@ -76,7 +76,7 @@ angular.module('musicApp')
               $scope.updateTrack($scope.track.id, track);
             },
             function (reason) {
-              $log.info('Modal dismissed: ' + reason);
+              $log.debug('Modal dismissed: ' + reason);
             }
           );
         };
@@ -116,7 +116,7 @@ angular.module('musicApp')
               $scope.addTrackToPlaylist(track, playlist);
             },
             function (reason) {
-              $log.info('Modal dismissed: ' + reason);
+              $log.debug('Modal dismissed: ' + reason);
             }
           );
         };

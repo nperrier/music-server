@@ -4,6 +4,7 @@ public class TrackUpdateDto {
 
 	String name;
 	String artist;
+	String albumArtist;
 	String album;
 	String genre;
 	String coverArtUrl;
@@ -67,5 +68,13 @@ public class TrackUpdateDto {
 
 	public void setYear(String year) {
 		this.year = year;
+	}
+
+	public String getAlbumArtist() {
+		return albumArtist;
+	}
+
+	public void setAlbumArtist(String albumArtist) {
+		this.albumArtist = albumArtist;
 	}
 }

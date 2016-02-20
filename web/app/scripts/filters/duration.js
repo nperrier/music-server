@@ -8,8 +8,8 @@
  * # duration: input: 270000, output: '04:30'
  * Filter in the musicApp.
  */
-angular.module('musicApp')
-  .filter('duration', ['_', 'moment', function (_, moment) {
+angular.module('musicApp').filter('duration', [
+  '_', 'moment', function (_, moment) {
 
     return function (duration, unit) {
       // default to milliseconds
@@ -35,4 +35,5 @@ angular.module('musicApp')
 
       return formattedDuration;
     };
-  }]);
+  }
+]);

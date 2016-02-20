@@ -2,21 +2,20 @@
 
 /**
  * @ngdoc function
- * @name musicApp.controller:TracksCtrl
+ * @name musicApp.controller:GenreTracksCtrl
  * @description
- * # TracksCtrl
+ * # GenreTracksCtrl
  * Controller of the musicApp
  */
-angular.module('musicApp').controller('TracksCtrl', [
-  '$scope', '$log', '$timeout', 'usSpinnerService', 'Track', 'Playlist', 'PlayerQueue',
-    function($scope, $log, $timeout, usSpinnerService, Track, Playlist, PlayerQueue) {
+angular.module('musicApp').controller('GenreTracksCtrl', [
+  '$scope', '$routeParams', '$log', '$timeout', 'usSpinnerService',
+  'Genre', 'Track', 'Playlist', 'PlayerQueue',
+  function($scope, $routeParams, $log, $timeout, usSpinnerService,
+    Genre, Track, Playlist, PlayerQueue) {
 
     $scope.sortField = 'name';
     $scope.reverse = false;
     $scope.doneLoading = false;
-
-    // this is needed for the track-action-menu modal
-    $scope.playlists = Playlist.query();
 
     // wait 1.5 seconds before showing spinner
     $timeout(function () {
@@ -25,14 +24,16 @@ angular.module('musicApp').controller('TracksCtrl', [
       }
     }, 1500);
 
-    $scope.tracks = Track.query(function () {
+    // this is needed for the track-action-menu modal
+    $scope.playlists = Playlist.query();
+
+    $scope.tracks = Genre.getTracks({ genreId: $routeParams.genreId }, function() {
       usSpinnerService.stop('spinner-loading');
       $scope.doneLoading = true;
     });
 
     $scope.updateTrack = function(trackId, trackInfo) {
-      $log.debug('updateTrack, trackId: ' + trackId);
-
+      $log.info('updateTrack, trackId: ' + trackId);
       Track.update({ trackId: trackId }, trackInfo, function () {
         // do something after updating
       });
@@ -40,12 +41,12 @@ angular.module('musicApp').controller('TracksCtrl', [
 
     $scope.addTrackToPlaylist = function(track, playlist) {
       Playlist.addTracks({ playlistId: playlist.id }, [ track.id ]);
-      $log.debug('Added track.id: ' + track.id + ' to playlist.id: ' + playlist.id);
+      $log.info('Added track.id: ' + track.id + ' to playlist.id: ' + playlist.id);
     };
 
     $scope.addTrackToQueue = function(track) {
       PlayerQueue.addTrack(track);
-      $log.debug('Added track to player queue, track.id: ' + track.id);
+      $log.info('Added track to player queue, track.id: ' + track.id);
     };
   }
 ]);

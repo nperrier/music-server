@@ -1,11 +1,11 @@
 package com.perrier.music.entity.track;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import com.google.inject.assistedinject.AssistedInject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.perrier.music.db.DBException;
 import com.perrier.music.db.IDatabase;
 import com.perrier.music.dto.track.TrackUpdateDto;
@@ -78,7 +78,10 @@ public class TrackUpdater {
 		TrackArtistUpdater trackArtistUpdater = trackArtistUpdaterFactory.create(track);
 		UpdateResult<Artist> artist = trackArtistUpdater.handleUpdate(trackUpdateDto.getArtist());
 
-		TrackAlbumUpdater trackAlbumUpdater = trackAlbumUpdaterFactory.create(track, artist);
+		TrackArtistUpdater trackAlbumArtistUpdater = trackArtistUpdaterFactory.create(track);
+		UpdateResult<Artist> albumArtist = trackAlbumArtistUpdater.handleUpdate(trackUpdateDto.getAlbumArtist());
+
+		TrackAlbumUpdater trackAlbumUpdater = trackAlbumUpdaterFactory.create(track, albumArtist, artist);
 		UpdateResult<Album> album = trackAlbumUpdater.handleUpdate(trackUpdateDto.getAlbum());
 
 		TrackGenreUpdater trackGenreUpdater = trackGenreUpdaterFactory.create(track);
@@ -150,43 +153,30 @@ public class TrackUpdater {
 	/**
 	 * Editing Track info may have caused previous associations to be removed creating orphaned entities (Genre, Artist,
 	 * Album)
-	 * 
+	 * <p>
 	 * Delete them if there are no more associations to them
-	 * 
+	 *
 	 * @param artist
 	 * @param album
 	 * @param genre
 	 */
 	private void cleanupOrphans(UpdateResult<Artist> artist, UpdateResult<Album> album, UpdateResult<Genre> genre)
 			throws DBException {
+		removeOrphanedGenres(genre);
+		removeOrphanedArtists(artist);
+		removeOrphanedAlbums(album);
+	}
 
-		// if we created a new genre, then the old one might need to be removed
-		// if we removed an existing genre, then it might not have any more associations
-		final Genre originalGenre = genre.getOriginal();
-		if (originalGenre != null && (genre.getUpdate() == null || (genre.getUpdate().getId() != originalGenre.getId()))) {
-			log.info("Genre removed from track, possible orphan: genre={}", originalGenre);
-			boolean genreDeleted = genreProvider.deleteIfOrphaned(originalGenre);
-			if (genreDeleted) {
-				log.info("Deleted: album={}", originalGenre);
-			}
-		}
+	private void removeOrphanedAlbums(UpdateResult<Album> album) throws DBException {
+		final Album originalAlbum = album.getOriginal();
 
-		// if we created a new artist, then the old one might need to be removed
-		// if we removed an existing artist, then it might not have any more associations
-		final Artist originalArtist = artist.getOriginal();
-		if (originalArtist != null
-				&& (artist.getUpdate() == null || (artist.getUpdate().getId() != originalArtist.getId()))) {
-			log.info("Artist removed from track, possible orphan: artist={}", originalArtist);
-			boolean artistDeleted = artistProvider.deleteIfOrphaned(originalArtist);
-			if (artistDeleted) {
-				log.info("Deleted: artist={}", originalArtist);
-			}
+		if (originalAlbum == null) {
+			return;
 		}
 
 		// if we created a new album, then the old one might need to be removed
 		// if we removed an existing album, then it might not have any more associations
-		final Album originalAlbum = album.getOriginal();
-		if (originalAlbum != null && (album.getUpdate() == null || (album.getUpdate().getId() != originalAlbum.getId()))) {
+		if (album.getUpdate() == null || !album.getUpdate().getId().equals(originalAlbum.getId())) {
 			log.info("Album removed from track, possible orphan: album={}", originalAlbum);
 			boolean albumDeleted = albumProvider.deleteIfOrphaned(originalAlbum);
 			if (albumDeleted) {
@@ -201,6 +191,42 @@ public class TrackUpdater {
 						log.info("Deleted: albumArtist={}", originalAlbumArtist);
 					}
 				}
+			}
+		}
+	}
+
+	private void removeOrphanedArtists(UpdateResult<Artist> artist) throws DBException {
+		final Artist originalArtist = artist.getOriginal();
+
+		if (originalArtist == null) {
+			return;
+		}
+
+		// if we created a new artist, then the old one might need to be removed
+		// if we removed an existing artist, then it might not have any more associations
+		if (artist.getUpdate() == null || !artist.getUpdate().getId().equals(originalArtist.getId())) {
+			log.info("Artist removed from track, possible orphan: artist={}", originalArtist);
+			boolean artistDeleted = artistProvider.deleteIfOrphaned(originalArtist);
+			if (artistDeleted) {
+				log.info("Deleted: artist={}", originalArtist);
+			}
+		}
+	}
+
+	private void removeOrphanedGenres(UpdateResult<Genre> genre) throws DBException {
+		final Genre originalGenre = genre.getOriginal();
+
+		if (originalGenre == null) {
+			return;
+		}
+
+		// if we created a new genre, then the old one might need to be removed
+		// if we removed an existing genre, then it might not have any more associations
+		if (genre.getUpdate() == null || !genre.getUpdate().getId().equals(originalGenre.getId())) {
+			log.info("Genre removed from track, possible orphan: genre={}", originalGenre);
+			boolean genreDeleted = genreProvider.deleteIfOrphaned(originalGenre);
+			if (genreDeleted) {
+				log.info("Deleted: genre={}", originalGenre);
 			}
 		}
 	}

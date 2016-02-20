@@ -85,6 +85,6 @@ public class TrackArtistUpdater extends AbstractTrackUpdater<Artist> {
 			throw new RuntimeException("Unknown change type: " + change);
 		}
 
-		return new UpdateResult<Artist>(originalArtist, artistUpdate, change);
+		return new UpdateResult<>(originalArtist, artistUpdate, change);
 	}
 }

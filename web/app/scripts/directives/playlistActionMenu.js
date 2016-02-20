@@ -6,21 +6,19 @@
  * @description
  * # playlistActionMenu
  */
-angular.module('musicApp')
-  .directive('playlistActionMenu', ['$log', '$modal',
-    function($log, $modal) {
+angular.module('musicApp').directive('playlistActionMenu', [
+  '$log', '$modal', function($log, $modal) {
 
     return {
       restrict: 'E',
-      templateUrl: '/views/playlistactionmenu.html',
+      templateUrl: '/views/playlistActionMenu.html',
       // inherits scope from parent:
       scope: false,
       controller: function ($scope) {
 
         $scope.delete = function () {
-
           var modalInstance = $modal.open({
-            templateUrl: 'views/playlistdeletemodal.html',
+            templateUrl: 'views/playlistDeleteModal.html',
             size: 'sm',
             backdrop: false,
             resolve: {
@@ -33,7 +31,7 @@ angular.module('musicApp')
               $scope.playlist = playlist;
 
               $scope.ok = function (playlist) {
-                $log.info('Remove playlist, id: ' + playlist.id);
+                $log.debug('Remove playlist, id: ' + playlist.id);
                 $modalInstance.close(playlist);
               };
 
@@ -48,10 +46,11 @@ angular.module('musicApp')
               $scope.deletePlaylist(playlist);
             },
             function () {
-              $log.info('Modal dismissed');
+              $log.debug('Modal dismissed');
             }
           );
         };
       }
     };
-  }]);
+  }
+]);

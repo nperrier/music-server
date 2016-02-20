@@ -8,8 +8,9 @@
  * Controller of the musicApp
  */
 angular.module('musicApp')
-  .controller('PlaylistsCtrl', ['$scope', '$log', '$modal', '$timeout', 'Playlist', 'PlayerQueue', 'usSpinnerService',
-    function ($scope, $log, $modal, $timeout, Playlist, PlayerQueue, usSpinnerService) {
+  .controller('PlaylistsCtrl', [
+    '$scope', '$log', '$modal', '$timeout', 'usSpinnerService', 'Playlist', 'PlayerQueue',
+    function ($scope, $log, $modal, $timeout, usSpinnerService, Playlist, PlayerQueue) {
 
     $scope.sortField = 'name';
     $scope.doneLoading = false;
@@ -33,7 +34,7 @@ angular.module('musicApp')
     };
 
     $scope.deletePlaylist = function(playlist) {
-      $log.info('Deleting playlist, id: ' + playlist.id);
+      $log.debug('Deleting playlist, id: ' + playlist.id);
       Playlist.delete({ playlistId: playlist.id }, function () {
         // TODO: Might be better to simply remove the corresponding playlist object
         // from the Array instead of re-querying the entire list
@@ -42,24 +43,22 @@ angular.module('musicApp')
     };
 
     $scope.addPlaylistToQueue = function(playlist) {
-      $log.info('Add playlist to queue, id: ' + playlist.id);
+      $log.debug('Add playlist to queue, id: ' + playlist.id);
 
       $scope.tracks = Playlist.getTracks({ playlistId: playlist.id }, function(tracks) {
         tracks.forEach(function(playlistTrack) {
-          $log.info('Add track to player queue, id: ' + playlistTrack.track.id);
+          $log.debug('Add track to player queue, id: ' + playlistTrack.track.id);
           PlayerQueue.addTrack(playlistTrack.track);
         });
       });
     };
 
     $scope.createPlaylistDialog = function() {
-
       var modalInstance = $modal.open({
-        templateUrl: 'views/playlistcreatemodal.html',
+        templateUrl: 'views/playlistCreateModal.html',
         backdrop: false,
         resolve: {},
         controller: function ($scope, $modalInstance) {
-
           $scope.save = function (playlist) {
             // TODO: Need to add client-side validation
             $modalInstance.close(playlist);
@@ -76,9 +75,9 @@ angular.module('musicApp')
           $scope.createPlaylist(playlist);
         },
         function (reason) {
-          $log.info('Modal dismissed: ' + reason);
+          $log.debug('Modal dismissed: ' + reason);
         }
       );
     };
-
-  }]);
+  }
+]);

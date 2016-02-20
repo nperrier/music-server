@@ -6,11 +6,11 @@ A simple web app to stream music built using modern Java libraries and AngularJS
 
 ###Dependencies
 
-* Install Java 6 SDK
-* Install Groovy 
+* Install Java 7 SDK
+* Install Groovy
 * Install Node
 * Install Node Package Manager
-* Install Grunt
+* Install Grunt CLI
 
 ###Steps
 
@@ -34,10 +34,9 @@ A simple web app to stream music built using modern Java libraries and AngularJS
 * Implement search: (client-side or server-side?)
 * Implement handling of changed metadata for media files in indexer
 * Add ability to delete Library
-* playing icon does not get removed after the last song in the queue ends
-* 1969 is displayed for songs without year field
-* Changing/Removing the associated album, genre, artist, etc. of an existing track should remove orphaned associates (i.e., if no tracks for an album, then delete the album)
 * Add a 'Shuffle' feature
 * Add a 'Play Now' feature (currently can only add songs to end of queue)
 * Ensure that artist/album/genre/song names are being queried case-insensitive
 * TrackAlbumUpdater: Creating a new album should associate the cover art with the album
+* Add ability to Edit a Playlist (remove tracks, move position of tracks
+* Add the version number to the menu bar

@@ -7,8 +7,8 @@
  * # AudioPlayer
  * Service in the musicApp.
  */
-angular.module('musicApp')
-  .service('AudioPlayer', ['$log', '$rootScope', function ($log, $rootScope) {
+angular.module('musicApp').service('AudioPlayer', [
+  '$log', '$rootScope', function ($log, $rootScope) {
 
     var self = this;
 
@@ -151,4 +151,5 @@ angular.module('musicApp')
     //   $rootScope.$emit('audio.time', self);
     // });
 
-  }]);
+  }
+]);

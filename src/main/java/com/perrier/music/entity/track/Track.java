@@ -1,18 +1,7 @@
 package com.perrier.music.entity.track;
 
 import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 
 import com.perrier.music.entity.AbstractAuditableEntity;
 import com.perrier.music.entity.album.Album;
@@ -21,7 +10,7 @@ import com.perrier.music.entity.genre.Genre;
 import com.perrier.music.entity.library.Library;
 
 @Entity
-@Table(name = "track", uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "artist_id", "album_id" }) })
+@Table(name = "track", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "artist_id", "album_id"})})
 public class Track extends AbstractAuditableEntity {
 
 	private Long id;
@@ -31,6 +20,7 @@ public class Track extends AbstractAuditableEntity {
 	private String year;
 	private Long length;
 	private Artist artist;
+	private Artist albumArtist;
 	private Album album;
 	private Genre genre;
 	private Library library;
@@ -88,10 +78,6 @@ public class Track extends AbstractAuditableEntity {
 		this.year = year;
 	}
 
-	public void setArtist(Artist artist) {
-		this.artist = artist;
-	}
-
 	@Column(nullable = false)
 	public Long getLength() {
 		return this.length;
@@ -105,6 +91,20 @@ public class Track extends AbstractAuditableEntity {
 	@JoinColumn(name = "artist_id", insertable = true, updatable = true)
 	public Artist getArtist() {
 		return this.artist;
+	}
+
+	public void setArtist(Artist artist) {
+		this.artist = artist;
+	}
+
+	@ManyToOne
+	@JoinColumn(name = "album_artist_id", insertable = true, updatable = true)
+	public Artist getAlbumArtist() {
+		return albumArtist;
+	}
+	
+	public void setAlbumArtist(Artist albumArtist) {
+		this.albumArtist = albumArtist;
 	}
 
 	@ManyToOne

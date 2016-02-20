@@ -14,6 +14,7 @@ angular.module('musicApp')
     $scope.tracks = PlayerQueue.getTracks();
     $scope.doneLoading = false;
 
+    // Fade the page in:
     $timeout(function() {
       $scope.doneLoading = true;
     }, 10);
@@ -30,38 +31,38 @@ angular.module('musicApp')
     };
 
     $scope.remove = function(track, position) {
-      $log.info('Removing track.id: ' + track.id + ' at position: ' + position);
+      $log.debug('Removing track.id: ' + track.id + ' at position: ' + position);
       PlayerQueue.removeTrack(position);
     };
 
     $scope.clearQueue = function() {
-      $log.info('Removing all tracks');
+      $log.debug('Removing all tracks');
       PlayerQueue.clear();
     };
 
     // TODO: This should update the view
     $rootScope.$on('track.added', function() {
-      $log.info('track.added called');
+      $log.debug('track.added called');
     });
 
     // TODO: This should update the view
     $rootScope.$on('track.removed', function() {
-      $log.info('track.removed called');
+      $log.debug('track.removed called');
     });
 
     // sent by audio player when track begins playing
     $rootScope.$on('audio.play', function() {
-      $log.info('audio.play called');
+      $log.debug('audio.play called');
     });
 
     // sent by audio player when track has ended
     $rootScope.$on('audio.ended', function() {
-      $log.info('audio.ended called');
+      $log.debug('audio.ended called');
     });
 
     // sent by audio player when track has paused
     $rootScope.$on('audio.pause', function() {
-      $log.info('audio.pause called');
+      $log.debug('audio.pause called');
     });
-
-  }]);
+  }
+]);

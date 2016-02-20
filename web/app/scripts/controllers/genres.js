@@ -7,9 +7,9 @@
  * # GenresCtrl
  * Controller of the musicApp
  */
-angular.module('musicApp')
-  .controller('GenresCtrl', ['$scope', '$timeout', 'Genre', 'usSpinnerService',
-    function($scope, $timeout, Genre, usSpinnerService) {
+angular.module('musicApp').controller('GenresCtrl', [
+  '$scope', '$timeout', 'usSpinnerService', 'Genre',
+  function($scope, $timeout, usSpinnerService, Genre) {
 
     $scope.sortField = 'name';
     $scope.reverse = false;
@@ -26,4 +26,5 @@ angular.module('musicApp')
       usSpinnerService.stop('spinner-loading');
       $scope.doneLoading = true;
     });
-  }]);
+  }
+]);

@@ -10,9 +10,9 @@
 
 angular.module('musicApp').controller('ArtistDetailCtrl', [
     '$scope', '$routeParams', '$log', '$timeout', '_', 'usSpinnerService',
-    'Artist', 'Playlist', 'PlayerQueue',
+    'Artist', 'Album', 'Playlist', 'PlayerQueue',
     function($scope, $routeParams, $log, $timeout, _, usSpinnerService,
-      Artist, Playlist, PlayerQueue) {
+      Artist, Album, Playlist, PlayerQueue) {
 
       $scope.sortField = 'name';
       $scope.reverse = false;

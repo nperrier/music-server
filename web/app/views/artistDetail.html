@@ -1,0 +1,46 @@
+<!-- artistdetail.html -->
+<div class="jumbotron" ng-class="{'fade-start': !doneLoading, 'fade-in': doneLoading}">
+	<div class="container">
+
+		<h1>{{artist.name}}</h1>
+
+		<div ng-if="albums.length" ng-cloak>
+
+			<h2>Albums</h2>
+
+			<div ng-if="albums.length" ng-cloak>
+				<table class="table table-condensed table-hover">
+					<thead>
+						<tr>
+							<th class="col-track-album" ng-click="sortField = 'name'; reverse = !reverse">
+								<span class="track-title-header">Title</span>
+							</th>
+							<th class="col-track-year" ng-click="sortField = 'year'; reverse = !reverse">Year</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="album in albums | orderBy:sortField:reverse">
+							<td>
+								<img class="coverart-thumb" ng-src="{{album.coverArtUrl}}" fade-in />
+								<a ng-href="#/album/{{album.id}}" class="track-title track-text">
+									{{album.name}}
+								</a>
+								<album-action-menu class="action-menu"></album-action-menu>
+							</td>
+							<td>
+								{{album.year}}
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+		<div>
+			<a ng-href="#/artist/{{artist.id}}/tracks">
+				All tracks
+			</a>
+		</div>
+
+	</div>
+</div>
