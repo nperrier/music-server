@@ -7,8 +7,8 @@
  * # Track
  * Factory in the musicApp.
  */
-angular.module('musicApp')
-  .factory('Track', ['$resource', function($resource) {
+angular.module('musicApp').factory('Track', [
+  '$resource', function($resource) {
 
     return $resource('api/track/:trackId', {}, {
       query: {
@@ -24,4 +24,5 @@ angular.module('musicApp')
         params: { track: '@track' }
       }
     });
-  }]);
+  }
+]);

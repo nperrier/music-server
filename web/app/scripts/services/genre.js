@@ -7,12 +7,14 @@
  * # Genre
  * Factory in the musicApp.
  */
-angular.module('musicApp')
-  .factory('Genre', ['$resource', function($resource) {
-  return $resource('api/genre', {}, {
-    query: {
-      method: 'GET',
-      isArray: true
-    },
-  });
-}]);
+angular.module('musicApp').factory('Genre', [
+  '$resource', function($resource) {
+
+    return $resource('api/genre', {}, {
+      query: {
+        method: 'GET',
+        isArray: true
+      },
+    });
+  }
+]);

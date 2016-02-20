@@ -8,14 +8,11 @@
  * Controller of the musicApp
  */
 
-angular.module('musicApp')
-  .controller('ArtistDetailCtrl', [
-    '$scope', '$routeParams', '$log', '$timeout', '_',
-    'Artist', 'ArtistAlbum', 'Playlist', 'AlbumTrack',
-    'PlayerQueue', 'usSpinnerService',
-    function($scope, $routeParams, $log, $timeout, _,
-      Artist, ArtistAlbum, Playlist, AlbumTrack,
-      PlayerQueue, usSpinnerService) {
+angular.module('musicApp').controller('ArtistDetailCtrl', [
+    '$scope', '$routeParams', '$log', '$timeout', '_', 'usSpinnerService',
+    'Artist', 'ArtistAlbum', 'Playlist', 'AlbumTrack', 'PlayerQueue',
+    function($scope, $routeParams, $log, $timeout, _, usSpinnerService,
+      Artist, ArtistAlbum, Playlist, AlbumTrack, PlayerQueue) {
 
       $scope.sortField = 'name';
       $scope.reverse = false;
@@ -47,19 +44,19 @@ angular.module('musicApp')
       $scope.playlists = Playlist.query(checkDoneLoading);
 
       $scope.addAlbumToPlaylist = function(album, playlist) {
-        $log.info('Add album.id: ' + album.id + ' to playlist.id: ' + playlist.id);
+        $log.debug('Add album.id: ' + album.id + ' to playlist.id: ' + playlist.id);
 
         AlbumTrack.get({ albumId: album.id }, function(tracks) {
           var orderedTracks = _.sortBy(tracks, function(t) { return t.number; });
           var trackIds = _.pluck(orderedTracks, 'id');
-          $log.info('Add track ids: ' + trackIds + ' to playlist.id: ' + playlist.id);
+          $log.debug('Add track ids: ' + trackIds + ' to playlist.id: ' + playlist.id);
           Playlist.addTracks({ playlistId: playlist.id }, trackIds);
         });
       };
 
       // Add an Album to the player queue:
       $scope.addAlbumToQueue = function(album) {
-        $log.info('Add album to player queue, id: ' + album.id);
+        $log.debug('Add album to player queue, id: ' + album.id);
 
         AlbumTrack.get({ albumId: album.id }, function(tracks) {
           var orderedTracks = _.sortBy(tracks, function(t) { return t.number; });
