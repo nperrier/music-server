@@ -111,7 +111,7 @@ dependencies {
 
 // println "projectDir: $projectDir"
 description = 'A personal music server'
-version = '0.2'
+version = '0.3'
 sourceCompatibility = 1.8
 //targetCompatability = 1.8
 mainClassName = 'com.perrier.music.Core'
