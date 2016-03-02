@@ -40,7 +40,7 @@ angular.module('musicApp').controller('PlaylistDetailCtrl', [
           }
         },
         function(e) {
-          $log.error("Unable to delete track" + e);
+          $log.error('Unable to delete track' + e);
         });
     };
 
