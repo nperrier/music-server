@@ -22,7 +22,8 @@ var musicApp = angular.module('musicApp', [
 	'angularSpinner',
 	'vs-repeat',
 	'underscore',
-	'moment'
+	'moment',
+	'angular-sortable-view'
 ]);
 
 musicApp.config(['$routeProvider', function($routeProvider) {

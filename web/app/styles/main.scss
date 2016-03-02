@@ -41,10 +41,6 @@ body {
   background-color: white;
 }
 
-td {
-/*  text-align: left; */
-}
-
 /*
  * Bootstrap overrides
  */
@@ -62,14 +58,30 @@ td {
   height: $cover-thumb-height + 10px + 1px; /* cover-img + padding + border */
 }
 
+.track-table {
+  background-color: white;
+}
+
 /*
  * Sidebar
  */
 
- /* Hide for mobile, show later */
- .sidebar {
+/* Hide for mobile, show later */
+.sidebar {
   display: none;
 }
+
+/* angular-sortable-view style overrides */
+.sv-helper {
+  opacity: .9;
+  background-color: white;
+}
+/*
+.sv-candidate {}
+.sv-placeholder {}
+.sv-sorting-in-progress {}
+.sv-visibility-hidden {}
+*/
 
 @media (min-width: 768px) {
   .sidebar {
@@ -350,7 +362,8 @@ td {
 .col-queue-title {
   width: 40%;
 }
-.col-queue-button {
+.col-queue-button,
+.col-track-button {
   width: 40px;
 }
 

@@ -39,9 +39,21 @@ angular.module('musicApp').factory('Playlist', [
         params: { tracks: '@tracks' }
       },
       addAlbum: {
-        url: 'api/playlist/:playlistId/album',
+        url: 'api/playlist/:playlistId/album/:albumId',
         method: 'POST',
-        params: { albumId: '@albumId' }
+        params: { playlistId: '@playlistId', albumId: '@albumId' }
+      },
+      updateTracks: {
+        url: 'api/playlist/:playlistId/tracks',
+        method: 'PUT',
+        isArray: true,
+        params: { playlistId: '@playlistId' }
+      },
+      deleteTrack: {
+        url: 'api/playlist/:playlistId/tracks/:playlistTrackId',
+        method: 'DELETE',
+        isArray: true,
+        params: { playlistId: '@playlistId', playlistTrackId: '@playlistTrackId' }
       }
     });
   }

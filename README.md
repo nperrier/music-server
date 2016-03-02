@@ -40,3 +40,5 @@ A simple web app to stream music built using modern Java libraries and AngularJS
 * TrackAlbumUpdater: Creating a new album should associate the cover art with the album
 * Add ability to Edit a Playlist (remove tracks, move position of tracks
 * Add the version number to the menu bar
+* Show 'Scanning...' when library is currently scanning on Library page
+
