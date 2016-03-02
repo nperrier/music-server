@@ -3,6 +3,7 @@ package com.perrier.music.dto.playlist;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+
 import com.perrier.music.dto.track.TrackDtoMapper;
 import com.perrier.music.entity.playlist.PlaylistTrack;
 
@@ -24,11 +25,11 @@ public class PlaylistTrackDtoMapper {
 	public static PlaylistTrackDto build(PlaylistTrack playlistTrack) {
 
 		PlaylistTrackDto dto = new PlaylistTrackDto();
+		dto.setId(playlistTrack.getId());
 		dto.setPosition(playlistTrack.getPosition());
 		dto.setPlaylistId(playlistTrack.getPlaylist().getId());
 		dto.setTrack(TrackDtoMapper.build(playlistTrack.getTrack()));
 
 		return dto;
 	}
-
 }

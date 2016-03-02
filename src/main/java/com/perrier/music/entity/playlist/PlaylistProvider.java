@@ -1,12 +1,15 @@
 package com.perrier.music.entity.playlist;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.inject.Inject;
 
 import com.perrier.music.db.DBException;
 import com.perrier.music.db.IDatabase;
+import com.perrier.music.dto.playlist.PlaylistTrackDto;
 import com.perrier.music.entity.album.Album;
 import com.perrier.music.entity.album.AlbumFindByIdQuery;
 import com.perrier.music.entity.track.Track;
@@ -40,23 +43,13 @@ public class PlaylistProvider {
 	}
 
 	public void addAlbumToPlaylist(Playlist playlist, Long albumId, Integer position) throws DBException {
-
 		this.db.beginTransaction();
 		try {
-
 			Album album = this.db.find(new AlbumFindByIdQuery(albumId));
 			final List<Track> albumTracks = album.getTracks();
-			// sort by number
-			Collections.sort(albumTracks, (t1, t2) -> {
-				if (t1.getNumber() > t2.getNumber()) {
-					return 1;
-				} else if (t1.getNumber() < t2.getNumber()) {
-					return -1;
-				}
-				return 0;
-			});
-
-			this.db.create(new PlaylistAddTrackQuery(playlist, albumTracks, position));
+			final List<PlaylistTrack> playlistTracks = appendTracksToPlaylist(playlist, albumTracks, position);
+			playlist.setPlaylistTracks(playlistTracks);
+			this.db.update(new PlaylistUpdateQuery(playlist));
 
 			this.db.commit();
 
@@ -66,19 +59,79 @@ public class PlaylistProvider {
 	}
 
 	public void addTracksToPlaylist(Playlist playlist, List<Long> trackIds, Integer position) throws DBException {
-
 		this.db.beginTransaction();
 		try {
-
 			List<Track> tracks = this.db.find(new TrackFindByIds(trackIds));
-			// TODO: the above query returns tracks in random order
-			// we want to add the tracks to the playlist in the order of trackIds
-			this.db.create(new PlaylistAddTrackQuery(playlist, tracks, position));
+			// Sort tracks by the order specified by the trackIds list:
+			Collections.sort(tracks, (left, right) -> {
+				int lIndex = trackIds.indexOf(left.getId());
+				int rIndex = trackIds.indexOf(right.getId());
+				return (lIndex == rIndex ? 0 : (lIndex > rIndex ? 1 : -1));
+			});
+
+			final List<PlaylistTrack> playlistTracks = appendTracksToPlaylist(playlist, tracks, position);
+			playlist.setPlaylistTracks(playlistTracks);
+			this.db.update(new PlaylistUpdateQuery(playlist));
 
 			this.db.commit();
 
 		} finally {
 			this.db.endTransaction();
 		}
+	}
+
+	private List<PlaylistTrack> appendTracksToPlaylist(Playlist playlist, List<Track> tracks, Integer position) throws DBException {
+		if (tracks.isEmpty()) {
+			return Collections.emptyList();
+		}
+
+		List<PlaylistTrack> playlistTracks = playlist.getPlaylistTracks();
+
+		// if position is not specified, append tracks to the end of the list
+		int pos = (position != null ? position : playlistTracks.size());
+
+		if (pos > playlistTracks.size() || pos < 0) {
+			throw new DBException("Invalid position: " + pos);
+		}
+
+		for (final Track track : tracks) {
+			PlaylistTrack playlistTrack = new PlaylistTrack();
+			playlistTrack.setPlaylist(playlist);
+			playlistTrack.setTrack(track);
+			playlistTracks.add(pos, playlistTrack);
+			pos++;
+		}
+
+		return playlistTracks;
+	}
+
+	public void updatePlaylistTracks(Playlist playlist, List<PlaylistTrackDto> trackDtos) throws DBException {
+		List<PlaylistTrack> tracks = new ArrayList<>(trackDtos.size());
+		trackDtos.forEach((t) -> {
+			PlaylistTrack pt = new PlaylistTrack();
+			pt.setId(t.getId());
+			pt.setPlaylist(playlist);
+			pt.setPosition(t.getPosition());
+			pt.setTrack(pt.getTrack());
+			tracks.add(pt.getPosition(), pt);
+		});
+
+		playlist.setPlaylistTracks(tracks);
+		this.db.update(new PlaylistUpdateQuery(playlist));
+	}
+
+	public void removeTrack(Playlist playlist, long playlistTrackId) throws DBException {
+		List<PlaylistTrack> playlistTracks = playlist.getPlaylistTracks();
+		// find the playlistTrackId to remove
+		for (Iterator<PlaylistTrack> i = playlistTracks.iterator(); i.hasNext(); ) {
+			PlaylistTrack pt = i.next();
+			if (playlistTrackId == pt.getId()) {
+				i.remove();
+				break;
+			}
+		}
+
+		// hibernate will update position column:
+		this.db.update(new PlaylistUpdateQuery(playlist));
 	}
 }

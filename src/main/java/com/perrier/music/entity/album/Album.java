@@ -1,25 +1,14 @@
 package com.perrier.music.entity.album;
 
 import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 
 import com.perrier.music.entity.AbstractAuditableEntity;
 import com.perrier.music.entity.artist.Artist;
 import com.perrier.music.entity.track.Track;
 
 @Entity
-@Table(name = "album", uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "artist_id" }) })
+@Table(name = "album", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "artist_id"})})
 // @FetchProfile(name = "album-with-tracks", fetchOverrides = {
 // @FetchProfile.FetchOverride(entity = Album.class, association = "tracks", mode = FetchMode.JOIN)
 // })
@@ -38,7 +27,7 @@ public class Album extends AbstractAuditableEntity {
 
 	/**
 	 * Creates a shallow copy of this Album. This is really only needed for deleting an album.
-	 * 
+	 *
 	 * @return
 	 */
 	public static Album copy(Album a) {
@@ -94,6 +83,7 @@ public class Album extends AbstractAuditableEntity {
 	// @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "album_id")
+	@OrderBy("number")
 	public List<Track> getTracks() {
 		return this.tracks;
 	}
