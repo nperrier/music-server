@@ -72,6 +72,16 @@ angular.module('musicApp').service('PlayerQueue', [
       return track;
     };
 
+    self.moveTrack = function(fromIndex, toIndex) {
+      if (fromIndex === self.current) {
+        self.current = toIndex;
+      } else if (fromIndex > self.current) {
+          self.current++;
+      } else if (fromIndex < self.current) {
+          self.current--;
+      }
+    };
+
     self.clear = function () {
       if (self.queue.length !== 0) {
         var removedTracks = self.queue.slice(0); // copy the array

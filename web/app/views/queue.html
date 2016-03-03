@@ -8,7 +8,6 @@
 <div class="page-content jumbotron" ng-class="{'fade-start': !doneLoading, 'fade-in': doneLoading}">
   <div class="container">
 
-     <!-- todo: fade-in on load -->
     <div ng-if="tracks.length" ng-cloak>
       <table class="table table-condensed table-hover">
         <thead>
@@ -23,8 +22,8 @@
             <th class="col-queue-button"/>
           </tr>
         </thead>
-        <tbody>
-          <tr class="track-list-item" ng-repeat="t in tracks track by $index">
+        <tbody sv-root sv-part="tracks" sv-on-sort="onTrackMoveSort($item, $partFrom, $partTo, $indexFrom, $indexTo)">
+          <tr class="track-list-item" ng-repeat="t in tracks track by $index" sv-element="{containment:'tbody'}">
             <td>
               <span ng-show="isPlaying($index)" class="glyphicon glyphicon-headphones queue-playing"></span>
             </td>

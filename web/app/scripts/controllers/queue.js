@@ -40,6 +40,11 @@ angular.module('musicApp')
       PlayerQueue.clear();
     };
 
+    $scope.onTrackMoveSort = function($item, $partFrom, $partTo, $indexFrom, $indexTo) {
+      $log.debug('move sorted, fromIndex: ' + $indexFrom + ', toIndex: ' + $indexTo);
+      PlayerQueue.moveTrack($indexFrom, $indexTo);
+    };
+
     // TODO: This should update the view
     $rootScope.$on('track.added', function() {
       $log.debug('track.added called');
