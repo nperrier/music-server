@@ -84,7 +84,7 @@ angular.module('musicApp').directive('trackActionMenu', [
         $scope.selectPlaylist = function (track) {
 
           var modalInstance = $modal.open({
-            templateUrl: 'views/playlistsmodal.html',
+            templateUrl: 'views/playlistsModal.html',
             size: 'sm',
             backdrop: false,
             resolve: {
