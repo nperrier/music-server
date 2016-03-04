@@ -46,7 +46,7 @@ angular.module('musicApp').controller('GenreTracksCtrl', [
 
     $scope.addTrackToQueue = function(track) {
       PlayerQueue.addTrack(track);
-      $log.debugdebug('Added track to player queue, track.id: ' + track.id);
+      $log.debug('Added track to player queue, track.id: ' + track.id);
     };
   }
 ]);
