@@ -4,15 +4,15 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Date;
 
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.common.eventbus.AllowConcurrentEvents;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.common.util.concurrent.AbstractIdleService;
 import com.google.inject.Inject;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.perrier.music.coverart.CoverArtException;
 import com.perrier.music.coverart.ICoverArtService;
 import com.perrier.music.db.IDatabase;
@@ -30,11 +30,7 @@ import com.perrier.music.entity.genre.GenreFindByNameQuery;
 import com.perrier.music.entity.genre.GenreProvider;
 import com.perrier.music.entity.library.Library;
 import com.perrier.music.entity.playlist.PlaylistTrackDeleteQuery;
-import com.perrier.music.entity.track.Track;
-import com.perrier.music.entity.track.TrackCreateQuery;
-import com.perrier.music.entity.track.TrackDeleteQuery;
-import com.perrier.music.entity.track.TrackFindByNameAndArtistIdAndAlbumIdQuery;
-import com.perrier.music.entity.track.TrackUpdateQuery;
+import com.perrier.music.entity.track.*;
 import com.perrier.music.indexer.event.ChangedTrackEvent;
 import com.perrier.music.indexer.event.MissingTrackEvent;
 import com.perrier.music.indexer.event.UnknownTrackEvent;
@@ -57,7 +53,7 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 
 	@Inject
 	public LibraryService(IDatabase db, EventBus bus, ICoverArtService coverArtService, GenreProvider genreProvider,
-			AlbumProvider albumProvider, ArtistProvider artistProvider) {
+	                      AlbumProvider albumProvider, ArtistProvider artistProvider) {
 		this.db = db;
 		this.bus = bus;
 		this.coverArtService = coverArtService;
@@ -179,7 +175,7 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 			final Artist albumArtist = this.addAlbumArtist(tag.getAlbumArtist(), artist);
 			final Genre genre = this.addGenre(tag.getGenre());
 			final Album album = this.addAlbum(albumArtist, tag.getAlbum(), tag.getYear(), tag.getCoverArt());
-			final Track track = this.addTrack(artist, album, genre, tag.getTrack(), tag.getNumber(), tag.getLength(), tag
+			final Track track = this.addTrack(artist, album, genre, tag.getTrack(), tag.getYear(), tag.getNumber(), tag.getLength(), tag
 					.getCoverArt(), file, event.getLibrary());
 
 			if (track != null) {
@@ -193,7 +189,7 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 
 	/**
 	 * The album artist is set to the track artist if it doesn't exist
-	 *
+	 * <p>
 	 * Only add a new artist if it differs from the track artist
 	 *
 	 * @param albumArtistName
@@ -251,7 +247,7 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 	}
 
 	private Track updateTrack(Track track, Artist artist, Album album, Genre genre, String rawName, Integer number,
-			Long length, BufferedImage image, File file, Library library) {
+	                          Long length, BufferedImage image, File file, Library library) {
 		// track name MUST have a value
 		if (StringUtils.isBlank(rawName)) {
 			log.error("Cannot update track: name was blank, path={}", track.getPath());
@@ -289,8 +285,8 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 		return null;
 	}
 
-	private Track addTrack(Artist artist, Album album, Genre genre, String rawName, Integer number, Long length,
-			BufferedImage image, File file, Library library) {
+	private Track addTrack(Artist artist, Album album, Genre genre, String rawName, String year, Integer number, Long length,
+	                       BufferedImage image, File file, Library library) {
 		// track name MUST have a value
 		if (StringUtils.isBlank(rawName)) {
 			log.error("Cannot add track: name was blank, file={}", file);
@@ -312,6 +308,7 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 				track.setGenre(genre);
 				track.setLibrary(library);
 				track.setName(name);
+				track.setYear(year);
 				track.setNumber(number);
 				track.setLength(length);
 				track.setFileModificationDate(new Date(file.lastModified()));
