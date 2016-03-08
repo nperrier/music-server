@@ -17,7 +17,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="p in playlists | orderBy:sortField:reverse">
+            <tr ng-repeat="p in playlists track by $index | orderBy:sortField:reverse">
               <td>
                 <a ng-href="#/playlist/{{p.id}}" class="thumb">
                   {{p.name}}

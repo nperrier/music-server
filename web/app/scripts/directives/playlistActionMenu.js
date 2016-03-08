@@ -24,15 +24,18 @@ angular.module('musicApp').directive('playlistActionMenu', [
             resolve: {
               playlist: function () {
                 return $scope.p;
+              },
+              index: function() {
+                return $scope.$index;
               }
             },
-            controller: function ($scope, $modalInstance, playlist) {
+            controller: function ($scope, $modalInstance, playlist, index) {
 
               $scope.playlist = playlist;
 
               $scope.ok = function (playlist) {
                 $log.debug('Remove playlist, id: ' + playlist.id);
-                $modalInstance.close(playlist);
+                $modalInstance.close(playlist, index);
               };
 
               $scope.cancel = function () {
@@ -42,8 +45,8 @@ angular.module('musicApp').directive('playlistActionMenu', [
           });
 
           modalInstance.result.then(
-            function (playlist) {
-              $scope.deletePlaylist(playlist);
+            function (playlist, index) {
+              $scope.deletePlaylist(playlist, index);
             },
             function () {
               $log.debug('Modal dismissed');

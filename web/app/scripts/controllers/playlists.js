@@ -33,12 +33,10 @@ angular.module('musicApp')
       });
     };
 
-    $scope.deletePlaylist = function(playlist) {
+    $scope.deletePlaylist = function(playlist, index) {
       $log.debug('Deleting playlist, id: ' + playlist.id);
       Playlist.delete({ playlistId: playlist.id }, function () {
-        // TODO: Might be better to simply remove the corresponding playlist object
-        // from the Array instead of re-querying the entire list
-        $scope.playlists = Playlist.query();
+        $scope.playlists.splice(index, 1);
       });
     };
 
