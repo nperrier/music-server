@@ -41,4 +41,5 @@ A simple web app to stream music built using modern Java libraries and AngularJS
 * Add ability to Edit a Playlist (remove tracks, move position of tracks
 * Add the version number to the menu bar
 * Show 'Scanning...' when library is currently scanning on Library page
+* Add auto-completer suggestions for Edit input fields (i.e., suggest a genre)
 
