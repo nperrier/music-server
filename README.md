@@ -42,4 +42,6 @@ A simple web app to stream music built using modern Java libraries and AngularJS
 * Add the version number to the menu bar
 * Show 'Scanning...' when library is currently scanning on Library page
 * Add auto-completer suggestions for Edit input fields (i.e., suggest a genre)
+* Use 'ETag' header to cache cover art
+* Generate small and large cover art
 
