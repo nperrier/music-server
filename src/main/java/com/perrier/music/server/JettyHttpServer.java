@@ -1,17 +1,22 @@
 package com.perrier.music.server;
 
+import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.List;
+
 import javax.servlet.DispatcherType;
 
-import com.google.common.util.concurrent.AbstractIdleService;
-import com.google.inject.Inject;
-import com.google.inject.servlet.GuiceFilter;
+import org.eclipse.jetty.http.MimeTypes;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.util.concurrent.AbstractIdleService;
+import com.google.inject.Inject;
+import com.google.inject.servlet.GuiceFilter;
+import com.perrier.music.ApplicationProperties;
 import com.perrier.music.config.IConfiguration;
 import com.perrier.music.config.Property;
 
@@ -46,6 +51,20 @@ public class JettyHttpServer extends AbstractIdleService implements IServer {
 
 		// requires a single servlet
 		contextHandler.addServlet(DefaultServlet.class, "/");
+
+		// Add additional MIME types
+		List additionalMimeTypes = this.config.getOptionalList(ApplicationProperties.MIME_TYPES);
+		MimeTypes mimeTypes = contextHandler.getMimeTypes();
+		additionalMimeTypes.forEach(mimeType -> {
+			String[] tokens = ((String) mimeType).split(" ");
+			String type = tokens[0];
+			tokens = Arrays.copyOfRange(tokens, 1, tokens.length);
+			// application/xml xml xsd xsi
+			for (String ext : tokens) {
+				mimeTypes.addMimeMapping(ext, type);
+			}
+		});
+		contextHandler.setMimeTypes(mimeTypes);
 
 		server.setHandler(contextHandler);
 		server.setStopAtShutdown(true);

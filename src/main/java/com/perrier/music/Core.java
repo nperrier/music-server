@@ -3,37 +3,42 @@ package com.perrier.music;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import groovy.util.ConfigObject;
-import groovy.util.ConfigSlurper;
+import javax.activation.MimetypesFileTypeMap;
 
-import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.classic.util.ContextInitializer;
-import ch.qos.logback.core.joran.spi.JoranException;
-import ch.qos.logback.core.util.StatusPrinter;
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-import com.google.common.collect.Maps;
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Module;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.MigrationInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.google.common.collect.Maps;
+import com.google.common.util.concurrent.Service;
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Module;
 import com.perrier.music.config.ApplicationConfig;
 import com.perrier.music.config.IConfiguration;
 import com.perrier.music.db.IDatabase;
+import com.perrier.music.indexer.ILibraryIndexerService;
 import com.perrier.music.indexer.ILibraryService;
 import com.perrier.music.module.MusicModule;
 import com.perrier.music.module.MusicServletModule;
 import com.perrier.music.server.IServer;
+
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.util.ContextInitializer;
+import ch.qos.logback.core.joran.spi.JoranException;
+import ch.qos.logback.core.util.StatusPrinter;
+import groovy.util.ConfigObject;
+import groovy.util.ConfigSlurper;
 
 public class Core {
 
@@ -111,8 +116,9 @@ public class Core {
 		StatusPrinter.printInCaseOfErrorsOrWarnings(loggerContext);
 	}
 
-	public void init(String configFile) throws Exception {
+	private void init(String configFile) throws Exception {
 		this.configAppProperties(configFile);
+		this.addMimeTypes();
 		this.createAppDirectories();
 		this.configureLogging();
 		this.createDatabase();
@@ -120,7 +126,18 @@ public class Core {
 		this.startServices();
 	}
 
-	public void stop() {
+	/**
+	 * Add additional mime types to java's default MimetypesFileTypeMap
+	 */
+	private void addMimeTypes() {
+		List mimeTypes = this.config.getOptionalList(ApplicationProperties.MIME_TYPES);
+		MimetypesFileTypeMap defaultFileTypeMap = (MimetypesFileTypeMap) MimetypesFileTypeMap.getDefaultFileTypeMap();
+		mimeTypes.forEach((mimeType) -> {
+			defaultFileTypeMap.addMimeTypes((String) mimeType);
+		});
+	}
+
+	private void stop() {
 		log.info("Shutting down...");
 		this.stopServices();
 		log.info("Application stopped");
@@ -128,7 +145,6 @@ public class Core {
 
 	@SuppressWarnings("unchecked")
 	private void configAppProperties(String configFile) throws Exception {
-
 		// config
 		Map<String, Object> appConfig = Maps.newHashMap();
 
@@ -162,7 +178,7 @@ public class Core {
 		}
 	}
 
-	public void createDatabase() throws Exception {
+	private void createDatabase() throws Exception {
 		Flyway flyway = new Flyway();
 
 		String url = this.config.getRequiredString(ApplicationProperties.URL);
@@ -175,10 +191,10 @@ public class Core {
 
 		MigrationInfo info = flyway.info().current();
 
-		log.info("DB version: " + info.getVersion());
+		log.info("DB version: {}", info.getVersion());
 	}
 
-	public void createInjector() throws Exception {
+	private void createInjector() throws Exception {
 
 		// modules
 		final Module configModule = new AbstractModule() {
