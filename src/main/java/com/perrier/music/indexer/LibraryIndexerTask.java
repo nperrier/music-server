@@ -28,7 +28,7 @@ import com.perrier.music.indexer.event.UnknownTrackEvent;
 
 /**
  * Scan the library for tracks to index, then send an event out to the interested parties
- * 
+ * <p>
  * Returns true if task was cancelled, else false
  */
 public class LibraryIndexerTask implements Callable<Boolean> {
@@ -54,7 +54,7 @@ public class LibraryIndexerTask implements Callable<Boolean> {
 			this.track = track;
 		}
 
-		public void markScanned() {
+		private void markScanned() {
 			this.scanned = true;
 		}
 	}
