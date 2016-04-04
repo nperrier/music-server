@@ -28,14 +28,11 @@ public class HibernateDatabase extends AbstractIdleService implements IDatabase 
 
 	@Override
 	protected void startUp() throws Exception {
-		// TODO create schema
-
 		// A SessionFactory is set up once for an application
 		try {
 			SessionFactory sessionFactory = config.create();
 			SessionManager sessionManager = new SessionManager(sessionFactory);
 			this.persistence = new Persistence(sessionManager);
-
 		} catch (Exception e) {
 			throw new DBException("Error creating config", e);
 		}
@@ -64,7 +61,7 @@ public class HibernateDatabase extends AbstractIdleService implements IDatabase 
 			log.info("Failed to shut down H2. Shutdown will continue", e);
 		}
 
-		log.info("IDBService Shutdown: H2 closed successfully");
+		log.info("Shutdown: H2 closed successfully");
 	}
 
 	public <T> T find(FindQuery<T> query) throws DBException {
@@ -106,7 +103,6 @@ public class HibernateDatabase extends AbstractIdleService implements IDatabase 
 			Session session = this.beginTransaction();
 			query.query(session);
 			this.commit();
-			return;
 		} catch (DBException e) {
 			this.rollback();
 			throw e;
