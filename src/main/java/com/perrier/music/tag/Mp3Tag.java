@@ -2,6 +2,9 @@ package com.perrier.music.tag;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Year;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,13 +20,10 @@ import org.jaudiotagger.tag.id3.ID3v1Tag;
 import org.jaudiotagger.tag.id3.ID3v24Frames;
 import org.jaudiotagger.tag.id3.ID3v24Tag;
 import org.jaudiotagger.tag.reference.GenreTypes;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.DateTimeFormatterBuilder;
-import org.joda.time.format.DateTimeParser;
-import org.joda.time.format.ISODateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.ImmutableList;
 
 /**
  * TODO Perhaps this could be a "MP3MetaDataParser" class.
@@ -43,25 +43,16 @@ public class Mp3Tag extends AbstractTag {
 	 * <li>yyyy</li>
 	 * <li>yyyy-MM</li>
 	 * <li>yyyy-MM-dd</li>
-	 * <li>yyyy-MM-ddTHH</li>
-	 * <li>yyyy-MM-ddTHH:mm</li>
 	 * <li>yyyy-MM-ddTHH:mm:ss</li>
 	 * </ul>
 	 * All time stamps are UTC
 	 */
-	private static final DateTimeFormatter YEAR_FORMATTER;
-
-	static {
-		DateTimeParser[] parsers = { ISODateTimeFormat.year().getParser(), //
-				ISODateTimeFormat.yearMonth().getParser(), //
-				ISODateTimeFormat.yearMonthDay().getParser(), //
-				ISODateTimeFormat.dateHour().getParser(), //
-				ISODateTimeFormat.dateHourMinute().getParser(), //
-				ISODateTimeFormat.dateHourMinuteSecond().getParser() //
-		};
-
-		YEAR_FORMATTER = new DateTimeFormatterBuilder().append(null, parsers).toFormatter();
-	}
+	private static final List<DateTimeFormatter> YEAR_FORMATTERS = ImmutableList.of( //
+			DateTimeFormatter.ofPattern("yyyy"),
+			DateTimeFormatter.ofPattern("yyyy-MM"),
+			DateTimeFormatter.ofPattern("yyyy-MM-dd"),
+			DateTimeFormatter.ISO_LOCAL_DATE_TIME // yyyy-MM-ddTHH:mm:ss
+	);
 
 	private Mp3Tag(Builder builder) {
 		super(builder);
@@ -153,13 +144,22 @@ public class Mp3Tag extends AbstractTag {
 		b.coverArt(setCoverArt(v2tag.getFirstArtwork()));
 	}
 
-	private static String parseYear(String rawTimestampField) throws Exception {
+	private static String parseYear(String rawTimestampField) {
 		if (rawTimestampField == null) {
 			return null;
 		}
 
-		DateTime dateTime = YEAR_FORMATTER.parseDateTime(rawTimestampField);
-		return Integer.toString(dateTime.getYear());
+		Year year = null;
+		for (DateTimeFormatter formatter : YEAR_FORMATTERS) {
+			try {
+				year = Year.parse(rawTimestampField, formatter);
+				return year.toString();
+			} catch (DateTimeParseException e) {
+				// continue
+			}
+		}
+
+		return null;
 	}
 
 	private static String setTrack(String track, File file) {
