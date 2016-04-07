@@ -1,17 +1,19 @@
 package com.perrier.music.rest.resource;
 
-import java.security.Principal;
 import java.util.List;
-import javax.annotation.security.RolesAllowed;
-import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.SecurityContext;
 
-import com.google.inject.Inject;
 import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 
+import com.google.inject.Inject;
 import com.perrier.music.db.DBException;
 import com.perrier.music.entity.library.Library;
 import com.perrier.music.entity.library.LibraryProvider;
@@ -57,13 +59,14 @@ public class LibraryResource {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@RolesAllowed("Admin")
-	public Response createLibrary(Library library, @Context SecurityContext securityContext) throws DBException {
+	// @RolesAllowed("admin")
+	// TODO: create LibraryRequest object for Library - don't use hibernate entity!
+	public Response createLibrary(Library library /*, @Context SecurityContext securityContext */) throws DBException {
 
-		if (securityContext != null) {
-			Principal principal = securityContext.getUserPrincipal();
-			boolean role = securityContext.isUserInRole("Admin");
-		}
+		//		if (securityContext != null) {
+		//			Principal principal = securityContext.getUserPrincipal();
+		//			boolean role = securityContext.isUserInRole("Admin");
+		//		}
 
 		// TODO: Wrap all this logic in a separate class that throws exceptions that the API translates to Response codes
 		// TODO validate the path before creating

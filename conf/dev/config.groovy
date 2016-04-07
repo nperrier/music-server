@@ -22,8 +22,21 @@ h2 {
 server {
 	port = 8080
 	resource.base = appdir.webapp
+	mimetypes = [
+			"image/svg+xml svg",
+			"image/png png"
+	]
 }
 
 coverart {
 	nocover = 'no-cover.svg'
+}
+
+auth {
+	admin {
+		username = 'admin'
+		password = 'changeme'
+	}
+	secretkey = 'changeme'
+	disabled = true
 }
