@@ -48,6 +48,7 @@ public class Core {
 	private IDatabase db;
 	private IServer server;
 	private ILibraryService libraryService;
+	private ILibraryIndexerService libraryIndexerService;
 	private IConfiguration config;
 
 	public static void main(String[] args) throws Exception {
@@ -79,7 +80,7 @@ public class Core {
 	private static class CommandLineArgs {
 
 		@Parameter(names = "-config", description = "Config file for app")
-		public String configFile;
+		private String configFile;
 	}
 
 	private void configureLogging() {
@@ -213,37 +214,38 @@ public class Core {
 		this.injector = Guice.createInjector(configModule);
 	}
 
-	public void startServices() throws Exception {
+	private void startServices() throws Exception {
 
 		// Need to ensure the order is correct here
 		this.db = this.injector.getInstance(IDatabase.class);
 		this.db.startAsync().awaitRunning();
 
-		this.server = this.injector.getInstance(IServer.class);
-		this.server.startAsync().awaitRunning();
-
 		this.libraryService = this.injector.getInstance(ILibraryService.class);
 		this.libraryService.startAsync().awaitRunning();
+
+		this.libraryIndexerService = this.injector.getInstance(ILibraryIndexerService.class);
+		this.libraryIndexerService.startAsync().awaitRunning();
+
+		this.server = this.injector.getInstance(IServer.class);
+		this.server.startAsync().awaitRunning();
 
 		// ServiceManager manager = new ServiceManager(services);
 		// manager.startAsync().awaitHealthy();
 	}
 
 	private void stopServices() {
+		stopService(this.server);
+		stopService(this.libraryIndexerService);
+		stopService(this.libraryService);
+		stopService(this.db);
+	}
+
+	private void stopService(Service service) {
 		try {
-			this.server.stopAsync().awaitTerminated(5, TimeUnit.SECONDS);
+			log.info("Stopping service {}", service.getClass().getSimpleName());
+			service.stopAsync().awaitTerminated(5, TimeUnit.SECONDS);
 		} catch (TimeoutException e) {
-			log.error("Timeout while stopping server");
-		}
-		try {
-			this.libraryService.stopAsync().awaitTerminated(5, TimeUnit.SECONDS);
-		} catch (TimeoutException e) {
-			log.error("Timeout while stopping library service");
-		}
-		try {
-			this.db.stopAsync().awaitTerminated(5, TimeUnit.SECONDS);
-		} catch (TimeoutException e) {
-			log.error("Timeout while stopping db");
+			log.error("Timeout while stopping service {}", service.getClass().getSimpleName());
 		}
 	}
 
