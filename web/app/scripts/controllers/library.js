@@ -8,8 +8,8 @@
  * Controller of the musicApp
  */
 angular.module('musicApp').controller('LibraryCtrl', [
-  '$scope', '$log', '$modal', '$routeParams', 'Library',
-  function($scope, $log, $modal, $routeParams, Library) {
+  '$scope', '$log', '$modal', 'Library',
+  function($scope, $log, $modal, Library) {
 
     $scope.sortField = 'path';
     $scope.doneLoading = false;

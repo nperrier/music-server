@@ -30,12 +30,12 @@
               <span class="track-title track-text">{{pt.track.name}}</span>
             </td>
             <td class="col-track-artist">
-              <a ng-href="#/artist/{{pt.track.artist.id}}" class="track-text">
+              <a ui-sref="artist-detail({ id: pt.track.artist.id })" class="track-text">
                 {{pt.track.artist.name}}
               </a>
             </td>
             <td class="col-track-album">
-              <a ng-href="#/album/{{pt.track.album.id}}" class="track-text">
+              <a ui-sref="album-detail({ id: pt.track.album.id })" class="track-text">
                 {{pt.track.album.name}}
               </a>
             </td>

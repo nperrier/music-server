@@ -8,9 +8,9 @@
  * Controller of the musicApp
  */
 angular.module('musicApp').controller('GenreTracksCtrl', [
-  '$scope', '$routeParams', '$log', '$timeout', 'usSpinnerService',
+  '$scope', '$stateParams', '$log', '$timeout', 'usSpinnerService',
   'Genre', 'Track', 'Playlist', 'PlayerQueue',
-  function($scope, $routeParams, $log, $timeout, usSpinnerService,
+  function($scope, $stateParams, $log, $timeout, usSpinnerService,
     Genre, Track, Playlist, PlayerQueue) {
 
     $scope.sortField = 'name';
@@ -27,7 +27,7 @@ angular.module('musicApp').controller('GenreTracksCtrl', [
     // this is needed for the track-action-menu modal
     $scope.playlists = Playlist.query();
 
-    $scope.tracks = Genre.getTracks({ genreId: $routeParams.genreId }, function() {
+    $scope.tracks = Genre.getTracks({ genreId: $stateParams.id }, function() {
       usSpinnerService.stop('spinner-loading');
       $scope.doneLoading = true;
     });

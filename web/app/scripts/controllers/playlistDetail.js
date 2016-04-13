@@ -8,8 +8,8 @@
  * Controller of the musicApp
  */
 angular.module('musicApp').controller('PlaylistDetailCtrl', [
-  '$scope', '$log', '$routeParams', '$timeout', 'usSpinnerService', '_', 'Playlist',
-  function($scope, $log, $routeParams, $timeout, usSpinnerService, _, Playlist) {
+  '$scope', '$log', '$stateParams', '$timeout', 'usSpinnerService', '_', 'Playlist',
+  function($scope, $log, $stateParams, $timeout, usSpinnerService, _, Playlist) {
 
     $scope.doneLoading = false;
 
@@ -20,16 +20,16 @@ angular.module('musicApp').controller('PlaylistDetailCtrl', [
       }
     }, 1500);
 
-    $scope.playlist = Playlist.get({ playlistId: $routeParams.playlistId });
+    $scope.playlist = Playlist.get({ playlistId: $stateParams.id });
 
-    $scope.tracks = Playlist.getTracks({ playlistId: $routeParams.playlistId }, function() {
+    $scope.tracks = Playlist.getTracks({ playlistId: $stateParams.id }, function() {
       usSpinnerService.stop('spinner-loading');
       $scope.doneLoading = true;
     });
 
     $scope.remove = function(playlistTrack, position) {
       $log.debug('Removing playlistTrack.id: ' + playlistTrack.id + ' at position: ' + position);
-      var params = { playlistId: $routeParams.playlistId, playlistTrackId: playlistTrack.id };
+      var params = { playlistId: $stateParams.id, playlistTrackId: playlistTrack.id };
       Playlist.deleteTrack(params,
         function() {
           // remove track:
@@ -62,7 +62,7 @@ angular.module('musicApp').controller('PlaylistDetailCtrl', [
         $scope.tracks[i].position = i;
       }
 
-      Playlist.updateTracks({ playlistId: $routeParams.playlistId }, $scope.tracks);
+      Playlist.updateTracks({ playlistId: $stateParams.id }, $scope.tracks);
     };
   }
 ]);

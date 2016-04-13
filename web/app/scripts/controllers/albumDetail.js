@@ -8,9 +8,9 @@
  * Controller of the musicApp
  */
 angular.module('musicApp').controller('AlbumDetailCtrl', [
-  '$scope', '$routeParams', '$log', '$timeout', 'usSpinnerService',
+  '$scope', '$stateParams', '$log', '$timeout', 'usSpinnerService',
   'Album', 'Track', 'Playlist', 'PlayerQueue',
-  function($scope, $routeParams, $log, $timeout, usSpinnerService,
+  function($scope, $stateParams, $log, $timeout, usSpinnerService,
     Album, Track, Playlist, PlayerQueue) {
 
   	$scope.sortField = 'number';
@@ -49,12 +49,12 @@ angular.module('musicApp').controller('AlbumDetailCtrl', [
 
     $scope.playlists = Playlist.query(checkDoneLoading);
 
-  	Album.get({ albumId: $routeParams.albumId }, function(album) {
+  	Album.get({ albumId: $stateParams.id }, function(album) {
   		$scope.album = album;
       checkDoneLoading();
   	});
 
-  	Album.getTracks({ albumId: $routeParams.albumId }, function(tracks) {
+  	Album.getTracks({ albumId: $stateParams.id }, function(tracks) {
   		$scope.tracks = tracks;
       $scope.variousArtists = isVariousArtists(tracks);
       checkDoneLoading();

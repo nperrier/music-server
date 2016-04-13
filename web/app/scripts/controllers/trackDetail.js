@@ -8,9 +8,9 @@
  * Controller of the musicApp
  */
 angular.module('musicApp').controller('TrackDetailCtrl', [
-  '$scope', '$routeParams', 'Track', function($scope, $routeParams, Track) {
+  '$scope', '$stateParams', 'Track', function($scope, $stateParams, Track) {
 
-  	Track.get({ trackId: $routeParams.trackId }, function(track) {
+  	Track.get({ trackId: $stateParams.id }, function(track) {
   		$scope.track = track;
   	});
   }

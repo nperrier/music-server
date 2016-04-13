@@ -19,13 +19,13 @@
           <tr ng-repeat="album in albums | filter:albumQuery | orderBy:sortField:reverse">
             <td>
               <img class="coverart-thumb" ng-src="{{album.coverArtUrl}}" fade-in />
-              <a ng-href="#/album/{{album.id}}" class="track-text track-title">
+              <a ui-sref="album-detail({ id: album.id })" class="track-text track-title">
                 {{album.name}}
               </a>
               <album-action-menu class="action-menu"></album-action-menu>
             </td>
             <td>
-              <a ng-href="#/artist/{{album.artist.id}}" class="track-text">
+              <a ui-sref="artist-detail({ id: album.artist.id })" class="track-text">
                 {{album.artist.name}}
               </a>
             </td>

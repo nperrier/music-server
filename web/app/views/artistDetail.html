@@ -22,7 +22,7 @@
 						<tr ng-repeat="album in albums | orderBy:sortField:reverse">
 							<td>
 								<img class="coverart-thumb" ng-src="{{album.coverArtUrl}}" fade-in />
-								<a ng-href="#/album/{{album.id}}" class="track-title track-text">
+								<a ui-sref="album-detail({ id: album.id })" class="track-title track-text">
 									{{album.name}}
 								</a>
 								<album-action-menu class="action-menu"></album-action-menu>
@@ -37,7 +37,7 @@
 		</div>
 
 		<div>
-			<a ng-href="#/artist/{{artist.id}}/tracks">
+			<a ui-sref="artist-tracks({ id: artist.id })">
 				All tracks
 			</a>
 		</div>

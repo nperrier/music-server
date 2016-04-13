@@ -9,9 +9,9 @@
  */
 
 angular.module('musicApp').controller('ArtistDetailCtrl', [
-    '$scope', '$routeParams', '$log', '$timeout', '_', 'usSpinnerService',
+    '$scope', '$stateParams', '$log', '$timeout', '_', 'usSpinnerService',
     'Artist', 'Album', 'Playlist', 'PlayerQueue',
-    function($scope, $routeParams, $log, $timeout, _, usSpinnerService,
+    function($scope, $stateParams, $log, $timeout, _, usSpinnerService,
       Artist, Album, Playlist, PlayerQueue) {
 
       $scope.sortField = 'name';
@@ -35,10 +35,10 @@ angular.module('musicApp').controller('ArtistDetailCtrl', [
       };
 
       // Load artist from rest resource
-      $scope.artist = Artist.get({ artistId: $routeParams.artistId }, checkDoneLoading);
+      $scope.artist = Artist.get({ artistId: $stateParams.id }, checkDoneLoading);
 
       // Load albums from rest resource
-      $scope.albums = Artist.getAlbums({ artistId: $routeParams.artistId }, checkDoneLoading);
+      $scope.albums = Artist.getAlbums({ artistId: $stateParams.id }, checkDoneLoading);
 
       // this is needed for the album-action-menu modal
       $scope.playlists = Playlist.query(checkDoneLoading);

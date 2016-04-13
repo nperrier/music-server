@@ -24,12 +24,12 @@
               <track-action-menu class="action-menu"></track-action-menu>
             </td>
             <td>
-              <a ng-href="#/artist/{{track.artist.id}}" class="track-text">
+              <a ui-sref="artist-detail({ id: track.artist.id })" class="track-text">
                 {{track.artist.name}}
               </a>
             </td>
             <td>
-              <a ng-href="#/album/{{track.album.id}}" class="track-text">
+              <a ui-sref="album-detail({ id: track.album.id })" class="track-text">
                 {{track.album.name}}
               </a>
             </td>

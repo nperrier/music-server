@@ -2,7 +2,7 @@
 <div class="jumbotron" ng-class="{'fade-start': !doneLoading, 'fade-in': doneLoading}">
   <div class="container-fluid">
 
-    <h1><a ng-href="#/artist/{{artist.id}}">{{artist.name}}</a></h1>
+    <h1><a ui-sref="artist-detail({ id: artist.id })">{{artist.name}}</a></h1>
 
     <div ng-if="tracks.length" ng-cloak>
 
@@ -28,7 +28,7 @@
               <track-action-menu class="action-menu"></track-action-menu>
             </td>
             <td>
-              <a ng-href="#/album/{{track.album.id}}" class="track-text">
+              <a ui-sref="album-detail({ id: track.album.id })" class="track-text">
                 {{track.album.name}}
               </a>
             </td>

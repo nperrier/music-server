@@ -8,9 +8,9 @@
  * Controller of the musicApp
  */
 angular.module('musicApp').controller('ArtistTracksCtrl', [
-  '$scope', '$routeParams', '$log', '$timeout', 'usSpinnerService',
+  '$scope', '$stateParams', '$log', '$timeout', 'usSpinnerService',
   'Artist', 'Track', 'Playlist', 'PlayerQueue',
-    function($scope, $routeParams, $log, $timeout, usSpinnerService,
+    function($scope, $stateParams, $log, $timeout, usSpinnerService,
       Artist, Track, Playlist, PlayerQueue) {
 
     $scope.sortField = 'name';
@@ -29,9 +29,9 @@ angular.module('musicApp').controller('ArtistTracksCtrl', [
     // this is needed for the track-action-menu modal
     $scope.playlists = Playlist.query(checkDoneLoading);
 
-    $scope.artist = Artist.get({ artistId: $routeParams.artistId }, checkDoneLoading);
+    $scope.artist = Artist.get({ artistId: $stateParams.id }, checkDoneLoading);
 
-    $scope.tracks = Artist.getTracks({ artistId: $routeParams.artistId }, checkDoneLoading);
+    $scope.tracks = Artist.getTracks({ artistId: $stateParams.id }, checkDoneLoading);
 
     // wait 1.5 seconds before showing spinner
     $timeout(function () {

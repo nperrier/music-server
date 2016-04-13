@@ -23,82 +23,102 @@ var musicApp = angular.module('musicApp', [
 	'vs-repeat',
 	'underscore',
 	'moment',
-	'angular-sortable-view'
+	'angular-sortable-view',
+	'ui.router'
 ]);
 
-musicApp.config(['$routeProvider', function($routeProvider) {
+musicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
 
-	$routeProvider.when('/', {
-		templateUrl : 'views/dashboard.html',
-		controller  : 'DashboardCtrl'
+	$urlRouterProvider.otherwise('/dashboard');
+
+	$stateProvider.state('root', {
+		url: '/',
+		templateUrl: 'views/dashboard.html',
+		controller: 'DashboardCtrl'
 	})
 
-	.when('/dashboard', {
-		templateUrl : 'views/dashboard.html',
-		controller  : 'DashboardCtrl'
+	.state('dashboard', {
+		url: '/dashboard',
+		templateUrl: 'views/dashboard.html',
+		controller: 'DashboardCtrl'
 	})
 
-	.when('/library', {
-		templateUrl : 'views/library.html',
-		controller  : 'LibraryCtrl'
+  .state('authentication', {
+		url: '/authentication',
+		templateUrl: 'views/authentication.html',
+		controller: 'AuthenticationCtrl'
 	})
 
-	.when('/artists', {
+	.state('library', {
+		url: '/library',
+		templateUrl: 'views/library.html',
+		controller: 'LibraryCtrl'
+	})
+
+	.state('artists', {
+		url : '/artists',
 		templateUrl: 'views/artists.html',
 		controller: 'ArtistsCtrl'
 	})
 
-	.when('/artist/:artistId', {
+	.state('artist-detail', {
+		url: '/artist/:id',
 		templateUrl: 'views/artistDetail.html',
 		controller: 'ArtistDetailCtrl'
 	})
 
-	.when('/artist/:artistId/tracks', {
+	.state('artist-tracks', {
+		url: '/artist/:id/tracks',
 		templateUrl: 'views/artistTracks.html',
 		controller: 'ArtistTracksCtrl'
 	})
 
-	.when('/albums', {
+	.state('albums', {
+		url: '/albums',
 		templateUrl: 'views/albums.html',
 		controller: 'AlbumsCtrl'
 	})
 
-	.when('/album/:albumId', {
+	.state('album-detail', {
+		url: '/album/:id',
 		templateUrl: 'views/albumDetail.html',
 		controller: 'AlbumDetailCtrl'
 	})
 
-	.when('/tracks', {
+	.state('tracks', {
+		url: '/tracks',
 		templateUrl: 'views/tracks.html',
 		controller: 'TracksCtrl'
 	})
 
-	.when('/genres', {
+	.state('genres', {
+		url: '/genres',
 		templateUrl: 'views/genres.html',
 		controller: 'GenresCtrl'
 	})
 
-	.when('/genre/:genreId', {
+	.state('genre-tracks', {
+		url: '/genre/:id',
 		templateUrl: 'views/genreTracks.html',
 		controller: 'GenreTracksCtrl'
 	})
 
-	.when('/playlists', {
+	.state('playlists', {
+		url: '/playlists',
 		templateUrl: 'views/playlists.html',
 		controller: 'PlaylistsCtrl'
 	})
 
-	.when('/playlist/:playlistId', {
+	.state('playlist-detail', {
+		url: '/playlist/:id',
 		templateUrl: 'views/playlistDetail.html',
 		controller: 'PlaylistDetailCtrl'
 	})
 
-  .when('/queue', {
+  .state('queue', {
+  	url: '/queue',
 		templateUrl: 'views/queue.html',
 		controller: 'QueueCtrl'
-	})
-
-	.otherwise({
-		redirectTo: '/dashboard'
 	});
+
 }]);

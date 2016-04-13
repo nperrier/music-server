@@ -34,12 +34,12 @@
               </span>
             </td>
             <td>
-              <a ng-href="#/artist/{{t.artist.id}}" class="track-text">
+              <a ui-sref="artist-detail({ id: t.artist.id })" class="track-text">
                 {{t.artist.name}}
               </a>
             </td>
             <td>
-              <a ng-href="#/album/{{t.album.id}}" class="track-text">
+              <a ui-sref="album-detail({ id: t.album.id })" class="track-text">
                 {{t.album.name}}
               </a>
             </td>

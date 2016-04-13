@@ -13,7 +13,7 @@
         <tbody vs-repeat vs-scroll-parent=".main-content" vs-excess="40">
           <tr ng-repeat="a in artists | orderBy:sortField:reverse">
             <td>
-              <a ng-href="#/artist/{{a.id}}" class="track-title">
+              <a ui-sref="artist-detail({ id: a.id })" class="track-title">
                 {{a.name}}
               </a>
             </td>

@@ -9,7 +9,7 @@
 
       <div class="col-md-8 album-detail">
         <h1>{{album.name}}<br>
-          <small><a ng-href="#/artist/{{album.artist.id}}">{{album.artist.name}}</a></small>
+          <small><a ui-sref="artist-detail({ id: album.artist.id })">{{album.artist.name}}</a></small>
         </h1>
       </div>
     </div>
@@ -38,7 +38,7 @@
                 <track-action-menu class="action-menu" track="track"></track-action-menu>
               </td>
               <td ng-if="variousArtists">
-                <a ng-href="#/artist/{{track.artist.id}}" class="track-text">
+                <a ui-sref="artist-detail({ id: track.artist.id})" class="track-text">
                   {{track.artist.name}}
                 </a>
               <td class="track-length">

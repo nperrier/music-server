@@ -13,7 +13,7 @@
         <tbody>
           <tr ng-repeat="g in genres | orderBy:sortField:reverse">
             <td>
-              <a ng-href="#/genre/{{g.id}}" class="track-text">
+              <a ui-sref="genre-tracks({ id: g.id })" class="track-text">
                 {{g.name}}
               </a>
             </td>
