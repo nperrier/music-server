@@ -265,6 +265,11 @@ body {
   background-color: yellow;
 }
 
+/* ng-dirty and ng-invalid appear at the same time - errors should be visible */
+#loginModal input.ng-invalid {
+  background-color: red !important;
+}
+
 .fade-start {
   opacity: 0;
   height: 0;

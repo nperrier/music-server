@@ -2,12 +2,20 @@ package com.perrier.music.rest.resource;
 
 import java.util.Collection;
 import java.util.List;
-import javax.ws.rs.*;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.google.inject.Inject;
-
 import com.perrier.music.db.DBException;
 import com.perrier.music.dto.playlist.PlaylistDto;
 import com.perrier.music.dto.playlist.PlaylistDtoMapper;
@@ -67,7 +75,8 @@ public class PlaylistResource {
 	@POST
 	@Path("{id}/tracks")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addTracks(@PathParam("id") Long id, @QueryParam("position") Integer pos, List<Long> trackIds) throws DBException {
+	public Response addTracks(@PathParam("id") Long id, @QueryParam("position") Integer pos, List<Long> trackIds)
+			throws DBException {
 		Playlist playlist = getPlaylist(id, true);
 		this.playlistProvider.addTracksToPlaylist(playlist, trackIds, pos);
 		return Response.status(Response.Status.CREATED).build();
@@ -82,10 +91,10 @@ public class PlaylistResource {
 		return Response.status(Response.Status.CREATED).build();
 	}
 
-
 	@DELETE
 	@Path("{id}/tracks/{playlistTrackId}")
-	public Response deleteTracks(@PathParam("id") Long id, @PathParam("playlistTrackId") Long playlistTrackId) throws DBException {
+	public Response deleteTracks(@PathParam("id") Long id, @PathParam("playlistTrackId") Long playlistTrackId)
+			throws DBException {
 		Playlist playlist = getPlaylist(id, true);
 		this.playlistProvider.removeTrack(playlist, playlistTrackId);
 		return Response.status(Response.Status.OK).build();
@@ -105,7 +114,7 @@ public class PlaylistResource {
 
 	private Playlist getPlaylist(Long id, boolean includeTracks) throws DBException {
 		Playlist playlist = this.playlistProvider.findById(id, includeTracks);
-		if (playlist != null) {
+		if (playlist == null) {
 			throw new EntityNotFoundException("Playlist not found");
 		}
 		return playlist;

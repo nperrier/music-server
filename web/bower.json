@@ -19,6 +19,7 @@
     "bootstrap-css-only": "~3.3.1",
     "angular-vs-repeat": "~1.1.4",
     "angular-sortable-view": "^0.0.15",
+    "a0-angular-storage": "^0.0.14",
     "angular-ui-router": "^0.2.18"
   },
   "devDependencies": {

@@ -59,7 +59,7 @@ public class LoginAuthenticator {
 
 		// validate username and password
 		// TODO: use hash of password
-		if (!authUser.equals(username) && !authPass.equals(password)) {
+		if (!authUser.equals(username) || !authPass.equals(password)) {
 			throw new UnauthorizedException();
 		}
 

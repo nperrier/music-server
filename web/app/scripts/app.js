@@ -24,6 +24,7 @@ var musicApp = angular.module('musicApp', [
 	'underscore',
 	'moment',
 	'angular-sortable-view',
+	'angular-storage',
 	'ui.router'
 ]);
 
@@ -46,7 +47,10 @@ musicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvider
   .state('authentication', {
 		url: '/authentication',
 		templateUrl: 'views/authentication.html',
-		controller: 'AuthenticationCtrl'
+		controller: 'AuthenticationCtrl',
+    data: {
+      requireLogin: false
+    }
 	})
 
 	.state('library', {
@@ -122,3 +126,48 @@ musicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvider
 	});
 
 }]);
+
+
+musicApp.config(function($httpProvider) {
+
+  $httpProvider.interceptors.push(function($timeout, $q, $injector) {
+    var LoginModal;
+    var $http;
+    var $state;
+
+    // this trick must be done so that we don't receive
+    // `Uncaught Error: [$injector:cdep] Circular dependency found`
+    $timeout(function() {
+      LoginModal = $injector.get('LoginModal');
+      $http = $injector.get('$http');
+      $state = $injector.get('$state');
+    });
+
+    return {
+      responseError: function(rejection) {
+        if (rejection.status !== 401 || rejection.url !== 'api/authentication') {
+          return rejection;
+        }
+
+        var deferred = $q.defer();
+
+        new LoginModal()
+          .then(function() {
+            deferred.resolve($http(rejection.config));
+          })
+          .catch(function() {
+            $state.go('authentication');
+            deferred.reject(rejection);
+          });
+
+        return deferred.promise;
+      }
+    };
+  });
+
+});
+
+// musicApp.run(function( /* injectables */ ) { // instance-injector
+  // This is an example of a run block. You can have as many of these as you want.
+  // You can only inject instances (not Providers) into run blocks
+// });

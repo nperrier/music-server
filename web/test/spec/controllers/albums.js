@@ -51,16 +51,15 @@ ddescribe('Controller: AlbumsCtrl', function () {
   // Initialize the controller and a mock scope
   beforeEach(inject(function($injector) {
     // Set up the mock http service responses
-    $rootScope = $injector.get('$rootScope');
-    $controller = $injector.get('$controller');
-
-    $log = $injector.get('$log');
-    $timeout = $injector.get('$timeout');
-    _ = $injector.get('_');
+    $rootScope       = $injector.get('$rootScope');
+    $controller      = $injector.get('$controller');
+    $log             = $injector.get('$log');
+    $timeout         = $injector.get('$timeout');
+    _                = $injector.get('_');
     usSpinnerService = $injector.get('usSpinnerService');
-    Album = $injector.get('Album');
-    Playlist = $injector.get('Playlist');
-    PlayerQueue = $injector.get('PlayerQueue');
+    Album            = $injector.get('Album');
+    Playlist         = $injector.get('Playlist');
+    PlayerQueue      = $injector.get('PlayerQueue');
 
     scope = $rootScope.$new();
     AlbumsCtrl = $controller('AlbumsCtrl', {
@@ -87,7 +86,7 @@ ddescribe('Controller: AlbumsCtrl', function () {
   });
 
   it('should add an album to a playlist', function () {
-    debugger;
+    // debugger;
     var album = { id: 1 };
     var playlist = { id: 1 };
     scope.addAlbumToPlaylist(album, playlist);

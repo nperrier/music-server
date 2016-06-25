@@ -1,0 +1,36 @@
+<!-- authentication.html -->
+<div class="jumbotron text-center">
+
+  <h1>Enter Credentials</h1>
+
+  <form id="authenticationForm" class="form-horizontal" name="authenticationForm" novalidate>
+
+    <div class="help-block" ng-if="authFailed">
+      Invalid credentials. Please try again
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label" for="username">Username</label>
+
+      <div class="col-xs-6">
+        <input ng-model="username" name="username" placeholder="username" type="text" size="10" class="form-control" />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-xs-3 control-label" for="password">Password</label>
+      <div class="col-xs-6">
+        <input ng-model="password" name="password" placeholder="password" type="password" size="10" class="form-control" />
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="col-xs-1 col-xs-offset-3">
+        <button class="btn btn-primary" ng-disabled="authenticationForm.$invalid" ng-click="login(username, password)">Login</button>
+      </div>
+    </div>
+
+  </form>
+
+</div>
+

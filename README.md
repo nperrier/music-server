@@ -44,4 +44,10 @@ A simple web app to stream music built using modern Java libraries and AngularJS
 * Add auto-completer suggestions for Edit input fields (i.e., suggest a genre)
 * Use 'ETag' header to cache cover art
 * Generate small and large cover art
+* Add menu to first col of queue list items to play/pause
+* Add 000 migration with user and grants for db (so it can only read, not to privelged sql cmds)
+* Malicious script could come from ID3 tags of mp3's (e.g., artist name or even image).  Ensure input is validated
+* Ensure 'Edit track' input is validated
+* Redirect 401 to login page
+* Fix track numbers to not default to 0 in UI?
 
