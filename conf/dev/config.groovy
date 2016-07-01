@@ -38,5 +38,5 @@ auth {
 		password = 'changeme'
 	}
 	secretkey = 'changeme'
-	disabled = true
+	disabled = false
 }

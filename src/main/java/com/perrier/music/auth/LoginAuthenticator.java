@@ -100,6 +100,10 @@ public class LoginAuthenticator {
 	 * @throws UnauthorizedException if the token is invalid
 	 */
 	public ReadOnlyJWTClaimsSet validateToken(String token) throws UnauthorizedException {
+		if (token == null) {
+			throw new UnauthorizedException();
+		}
+
 		final byte[] secretKey = config.getRequiredString(SECRET_KEY).getBytes();
 
 		SignedJWT signedJWT = null;

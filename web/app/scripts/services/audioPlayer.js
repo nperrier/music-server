@@ -8,7 +8,7 @@
  * Service in the musicApp.
  */
 angular.module('musicApp').service('AudioPlayer', [
-  '$log', '$rootScope', function ($log, $rootScope) {
+  '$log', '$rootScope', 'User', function ($log, $rootScope, User) {
 
     var self = this;
 
@@ -105,7 +105,7 @@ angular.module('musicApp').service('AudioPlayer', [
     self.playNow = function(track) {
       self.resetPlayer();
       self.track = track;
-      self.audio.src = track.streamUrl;
+      self.audio.src = self.buildStreamURL(track);
       self.audio.load();
       self.audio.play();
     };
@@ -132,6 +132,10 @@ angular.module('musicApp').service('AudioPlayer', [
         return self.track.id === track.id;
       }
       return !!self.track; //!!self.audio.src;
+    };
+
+    self.buildStreamURL = function(track) {
+      return track.streamUrl + '?token=' + User.getToken();
     };
 
     // listen for audio-element events, and broadcast stuff

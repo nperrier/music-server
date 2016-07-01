@@ -8,23 +8,21 @@
  * Controller of the musicApp
  */
 angular.module('musicApp').controller('AuthenticationCtrl', [
-  '$scope', '$rootScope', '$log', '$state', 'Authentication', 'store',
-  function($scope, $rootScope, $log, $state, Authentication, store) {
+  '$scope', '$rootScope', '$log', '$state', 'Authentication', 'User',
+  function($scope, $rootScope, $log, $state, Authentication, User) {
 
     $scope.authFailed = false;
 
     $scope.login = function(username, password) {
       Authentication.login({ username: username, password: password },
       function (response) {
-        console.log('username: ' + username + ', token: ' + response.token);
+        $log.debug('username: ' + username + ', token: ' + response.token);
         if (response.token) {
           $scope.authFailed = false;
-          $rootScope.currentUser = username;
-          // store token:
-          store.set('auth-token', response.token);
+          User.login(username, response.token);
           $state.go('dashboard');
         }
-        else if (response.status === 401) {
+        else if (response.status < 200 || response.status >= 300 ) {
           $scope.authFailed = true;
         }
       });

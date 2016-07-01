@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js">
+<html ng-app="musicApp" class="no-js">
 
 <head>
   <title></title>
@@ -24,78 +24,12 @@
 
 </head>
 
-<body ng-app="musicApp">
+<body>
   <!--[if lt IE 7]>
   <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
   <![endif]-->
 
-  <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container-fluid">
-
-      <!-- Brand and toggle get grouped for better mobile display -->
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-        </button>
-        <a href="#/dashboard" class="navbar-brand glyphicon glyphicon-headphones"></a>
-      </div>
-
-      <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-          <li>
-            <a href="#library"><i class="fa fa-book"></i> Libraries</a>
-          </li>
-        </ul>
-
-        <form class="navbar-form navbar-left" role="search">
-          <div class="form-group">
-            <input type="text" class="form-control" placeholder="Search">
-          </div>
-          <button type="submit" class="btn btn-default">Submit</button>
-        </form>
-
-      </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-  </nav>
-
-  <!-- sidebar -->
-  <div ng-controller="LeftNavCtrl" class="column col-sm-3 col-md-2 sidebar" id="sidebar">
-    <ul class="nav nav-pills nav-stacked">
-      <li ng-class="{ active: isActive('/artists')}">
-        <a href="#artists">Artists</a>
-      </li>
-      <li ng-class="{ active: isActive('/albums')}">
-        <a href="#albums">Albums</a>
-      </li>
-      <li ng-class="{ active: isActive('/tracks')}">
-        <a href="#tracks">Songs</a>
-      </li>
-      <li ng-class="{ active: isActive('/genres')}">
-        <a href="#genres">Genres</a>
-      </li>
-      <li ng-class="{ active: isActive('/playlists')}">
-        <a href="#playlists">Playlists</a>
-      </li>
-      <li ng-class="{ active: isActive('/queue')}">
-        <a href="#queue">Queue</a>
-      </li>
-    </ul>
-  </div>
-
-  <!-- /sidebar -->
-  <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-    <!-- this is where content will be injected -->
-    <div ui-view class="main-content"></div>
-  </div>
-
-  <footer id="footer" class="navbar-fixed-bottom">
-    <div class="container-fluid">
-      <audio-player-controls></audio-player-controls>
-    </div>
-  </footer>
-
+  <div ui-view></div>
 
   <!-- build:js(.) scripts/oldieshim.js -->
     <!--[if lt IE 9]>
@@ -128,6 +62,9 @@
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="scripts/app.js"></script>
 
+    <script src="scripts/controllers/main.js"></script>
+    <script src="scripts/controllers/authentication.js"></script>
+
     <script src="scripts/controllers/dashboard.js"></script>
     <script src="scripts/controllers/leftNav.js"></script>
     <script src="scripts/controllers/library.js"></script>
@@ -152,6 +89,8 @@
     <script src="scripts/services/playlist.js"></script>
     <script src="scripts/services/playerQueue.js"></script>
     <script src="scripts/services/audioPlayer.js"></script>
+    <script src="scripts/services/authentication.js"></script>
+    <script src="scripts/services/user.js"></script>
 
     <script src="scripts/filters/duration.js"></script>
 
@@ -163,11 +102,6 @@
     <script src="scripts/directives/emptyToNull.js"></script>
     <script src="scripts/directives/textToNumber.js"></script>
     <script src="scripts/directives/fadeIn.js"></script>
-
-    <script src="scripts/services/authentication.js"></script>
-    <script src="scripts/controllers/authentication.js"></script>
-    <script src="scripts/services/loginModal.js"></script>
-    <script src="scripts/controllers/loginModal.js"></script>
     <!-- endbuild -->
 
   </body>

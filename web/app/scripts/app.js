@@ -3,15 +3,15 @@
 
 // hack to inject underscore lib
 angular.module('underscore', [])
-  .factory('_', ['$window', function($window) {
-    return $window._; // assumes underscore has already been loaded on the page
-  }]);
+	.factory('_', ['$window', function($window) {
+		return $window._; // assumes underscore has already been loaded on the page
+	}]);
 
 // hack to inject moment lib
 angular.module('moment', [])
-  .factory('moment', ['$window', function($window) {
-    return $window.moment; // assumes moment has already been loaded on the page
-  }]);
+	.factory('moment', ['$window', function($window) {
+		return $window.moment; // assumes moment has already been loaded on the page
+	}]);
 
 // depends on ngRoute module
 var musicApp = angular.module('musicApp', [
@@ -30,144 +30,187 @@ var musicApp = angular.module('musicApp', [
 
 musicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
 
-	$urlRouterProvider.otherwise('/dashboard');
+	$urlRouterProvider.otherwise(function ($injector, $location) {
+		var $state = $injector.get("$state");
+		$state.go("main.dashboard");
+	});
 
-	$stateProvider.state('root', {
+	$stateProvider.state('main', {
+		abstract: true,
+		templateUrl: 'views/main.html',
+		controller: 'MainCtrl',
+		data: {
+			requiresLogin: true
+		}
+	})
+
+	.state('authentication', {
+		url: '/authentication',
+		templateUrl: 'views/authentication.html',
+		controller: 'AuthenticationCtrl',
+		data: {
+			requiresLogin: false
+		}
+	})
+
+	.state('root', {
 		url: '/',
 		templateUrl: 'views/dashboard.html',
-		controller: 'DashboardCtrl'
+		controller: 'DashboardCtrl',
+		parent: 'main'
 	})
 
 	.state('dashboard', {
 		url: '/dashboard',
 		templateUrl: 'views/dashboard.html',
-		controller: 'DashboardCtrl'
-	})
-
-  .state('authentication', {
-		url: '/authentication',
-		templateUrl: 'views/authentication.html',
-		controller: 'AuthenticationCtrl',
-    data: {
-      requireLogin: false
-    }
+		controller: 'DashboardCtrl',
+		parent: 'main'
 	})
 
 	.state('library', {
 		url: '/library',
 		templateUrl: 'views/library.html',
-		controller: 'LibraryCtrl'
+		controller: 'LibraryCtrl',
+		parent: 'main'
 	})
 
 	.state('artists', {
 		url : '/artists',
 		templateUrl: 'views/artists.html',
-		controller: 'ArtistsCtrl'
+		controller: 'ArtistsCtrl',
+		parent: 'main'
 	})
 
 	.state('artist-detail', {
 		url: '/artist/:id',
 		templateUrl: 'views/artistDetail.html',
-		controller: 'ArtistDetailCtrl'
+		controller: 'ArtistDetailCtrl',
+		parent: 'main'
 	})
 
 	.state('artist-tracks', {
 		url: '/artist/:id/tracks',
 		templateUrl: 'views/artistTracks.html',
-		controller: 'ArtistTracksCtrl'
+		controller: 'ArtistTracksCtrl',
+		parent: 'main'
 	})
 
 	.state('albums', {
 		url: '/albums',
 		templateUrl: 'views/albums.html',
-		controller: 'AlbumsCtrl'
+		controller: 'AlbumsCtrl',
+		parent: 'main'
 	})
 
 	.state('album-detail', {
 		url: '/album/:id',
 		templateUrl: 'views/albumDetail.html',
-		controller: 'AlbumDetailCtrl'
+		controller: 'AlbumDetailCtrl',
+		parent: 'main'
 	})
 
 	.state('tracks', {
 		url: '/tracks',
 		templateUrl: 'views/tracks.html',
-		controller: 'TracksCtrl'
+		controller: 'TracksCtrl',
+		parent: 'main'
 	})
 
 	.state('genres', {
 		url: '/genres',
 		templateUrl: 'views/genres.html',
-		controller: 'GenresCtrl'
+		controller: 'GenresCtrl',
+		parent: 'main'
 	})
 
 	.state('genre-tracks', {
 		url: '/genre/:id',
 		templateUrl: 'views/genreTracks.html',
-		controller: 'GenreTracksCtrl'
+		controller: 'GenreTracksCtrl',
+		parent: 'main'
 	})
 
 	.state('playlists', {
 		url: '/playlists',
 		templateUrl: 'views/playlists.html',
-		controller: 'PlaylistsCtrl'
+		controller: 'PlaylistsCtrl',
+		parent: 'main'
 	})
 
 	.state('playlist-detail', {
 		url: '/playlist/:id',
 		templateUrl: 'views/playlistDetail.html',
-		controller: 'PlaylistDetailCtrl'
+		controller: 'PlaylistDetailCtrl',
+		parent: 'main'
 	})
 
-  .state('queue', {
-  	url: '/queue',
+	.state('queue', {
+		url: '/queue',
 		templateUrl: 'views/queue.html',
-		controller: 'QueueCtrl'
+		controller: 'QueueCtrl',
+		parent: 'main'
 	});
-
 }]);
 
 
 musicApp.config(function($httpProvider) {
+	$httpProvider.interceptors.push(function($log, $timeout, $q, $injector, User) {
+		var $state;
 
-  $httpProvider.interceptors.push(function($timeout, $q, $injector) {
-    var LoginModal;
-    var $http;
-    var $state;
+		// this trick must be done so that we don't receive
+		// `Uncaught Error: [$injector:cdep] Circular dependency found`
+		$timeout(function() {
+			$state = $injector.get('$state');
+		});
 
-    // this trick must be done so that we don't receive
-    // `Uncaught Error: [$injector:cdep] Circular dependency found`
-    $timeout(function() {
-      LoginModal = $injector.get('LoginModal');
-      $http = $injector.get('$http');
-      $state = $injector.get('$state');
-    });
+		return {
+			request: function(config) {
+				if (!config.url.startsWith('api/')) {
+					return config;
+				}
 
-    return {
-      responseError: function(rejection) {
-        if (rejection.status !== 401 || rejection.url !== 'api/authentication') {
-          return rejection;
-        }
+				var token = User.getToken(); // store.get('auth-token');
+				if (token) {
+					config.headers.authorization = 'Bearer ' + token;
+				}
 
-        var deferred = $q.defer();
+				return config;
+			},
+			responseError: function(rejection) {
+				if (rejection.config.url === 'api/authentication') {
+					return rejection;
+				}
 
-        new LoginModal()
-          .then(function() {
-            deferred.resolve($http(rejection.config));
-          })
-          .catch(function() {
-            $state.go('authentication');
-            deferred.reject(rejection);
-          });
+				if (rejection.status !== 401) {
+					return rejection;
+				}
 
-        return deferred.promise;
-      }
-    };
-  });
+				var deferred = $q.defer();
+				$state.go('authentication');
+				deferred.reject(rejection);
 
+				return deferred.promise;
+			}
+		};
+	});
 });
 
-// musicApp.run(function( /* injectables */ ) { // instance-injector
-  // This is an example of a run block. You can have as many of these as you want.
-  // You can only inject instances (not Providers) into run blocks
-// });
+musicApp.run(['$rootScope', '$state', 'User', function($rootScope, $state, User) {
+	$rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
+		var requiresLogin = true;
+		if (toState.name === 'authentication') {
+			return;
+		}
+
+		if (typeof toState.data !== 'undefined' && typeof toState.data.requiresLogin !== 'undefined') {
+			requiresLogin = toState.data.requiresLogin;
+		}
+
+		var token = User.getToken();
+
+		if (requiresLogin && !token) {
+			event.preventDefault();
+			return $state.go('authentication');
+		}
+	});
+}]);

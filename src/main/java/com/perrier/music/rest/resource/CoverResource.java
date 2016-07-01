@@ -9,12 +9,12 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-import com.google.common.net.MediaType;
 import com.google.inject.Inject;
 import com.perrier.music.coverart.CoverArtException;
 import com.perrier.music.coverart.CoverArtService.Type;
 import com.perrier.music.coverart.ICoverArtService;
 import com.perrier.music.rest.stream.FileStreamer;
+import com.perrier.music.server.auth.NoAuthentication;
 
 @Path("api/cover")
 @Produces({ "application/svg+xml", "image/png" })
@@ -25,18 +25,21 @@ public class CoverResource {
 
 	@GET
 	@Path("artist/{id}")
+	@NoAuthentication
 	public Response getByArtist(@PathParam("id") Long id) {
 		return get(Type.ARTIST, id);
 	}
 
 	@GET
 	@Path("album/{id}")
+	@NoAuthentication
 	public Response getByAlbum(@PathParam("id") Long id) {
 		return get(Type.ALBUM, id);
 	}
 
 	@GET
 	@Path("track/{id}")
+	@NoAuthentication
 	public Response getByTrack(@PathParam("id") Long id) {
 		return get(Type.TRACK, id);
 	}

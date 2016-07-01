@@ -3,6 +3,7 @@ package com.perrier.music.server.auth;
 import java.security.Principal;
 
 import javax.ws.rs.core.HttpHeaders;
+import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.SecurityContext;
 import javax.ws.rs.ext.Provider;
 
@@ -28,13 +29,7 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 			return request;
 		}
 
-		String authorizationHeader = request.getHeaderValue(HttpHeaders.AUTHORIZATION);
-		if (StringUtils.isBlank(authorizationHeader) || !authorizationHeader.startsWith("Bearer ")) {
-			throw new UnauthorizedException();
-		}
-
-		// Extract the token from the HTTP Authorization header
-		String token = authorizationHeader.substring("Bearer".length()).trim();
+		String token = extractToken(request);
 
 		// create Principle with User (extract user from token)
 		ReadOnlyJWTClaimsSet claims = loginAuthenticator.validateToken(token);
@@ -43,6 +38,22 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 		//		request.setSecurityContext(new MySecurityContext(null));
 
 		return request;
+	}
+
+	private String extractToken(ContainerRequest request) {
+		String token = null;
+		// Extract the token from the HTTP Authorization header
+		String authorizationHeader = request.getHeaderValue(HttpHeaders.AUTHORIZATION);
+		if (!StringUtils.isBlank(authorizationHeader) && authorizationHeader.startsWith("Bearer ")) {
+			token = authorizationHeader.substring("Bearer".length()).trim();
+		} else {
+			// Check 'token' query param which should only be set for StreamingResource:
+			MultivaluedMap<String, String> queryParameters = request.getQueryParameters();
+			token = queryParameters.getFirst("token");
+			return token;
+		}
+
+		return token;
 	}
 
 	private static class MySecurityContext implements SecurityContext {
