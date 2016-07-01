@@ -371,8 +371,12 @@ body {
   font-size: 2em;
 }
 
-.username {
+.login-info {
+  margin-right: 0px
+}
+
+.login-username {
+  display: inline-block;
   padding-top: 15px;
   padding-bottom: 15px;
-  margin-right: 0px
 }

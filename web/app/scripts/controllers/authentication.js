@@ -8,10 +8,16 @@
  * Controller of the musicApp
  */
 angular.module('musicApp').controller('AuthenticationCtrl', [
-  '$scope', '$rootScope', '$log', '$state', 'Authentication', 'User',
-  function($scope, $rootScope, $log, $state, Authentication, User) {
+  '$scope', '$rootScope', '$log', '$state', '$timeout', 'Authentication', 'User',
+  function($scope, $rootScope, $log, $state, $timeout, Authentication, User) {
 
     $scope.authFailed = false;
+    $scope.doneLoading = false;
+
+    // Fade the page in:
+    $timeout(function() {
+      $scope.doneLoading = true;
+    }, 10);
 
     $scope.login = function(username, password) {
       Authentication.login({ username: username, password: password },
