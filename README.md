@@ -6,7 +6,7 @@ A simple web app to stream music built using modern Java libraries and AngularJS
 
 ###Dependencies
 
-* Install Java 7 SDK
+* Install Java 8 SDK
 * Install Groovy
 * Install Node
 * Install Node Package Manager
@@ -38,8 +38,6 @@ A simple web app to stream music built using modern Java libraries and AngularJS
 * Add a 'Play Now' feature (currently can only add songs to end of queue)
 * Ensure that artist/album/genre/song names are being queried case-insensitive
 * TrackAlbumUpdater: Creating a new album should associate the cover art with the album
-* Add ability to Edit a Playlist (remove tracks, move position of tracks
-* Add the version number to the menu bar
 * Show 'Scanning...' when library is currently scanning on Library page
 * Add auto-completer suggestions for Edit input fields (i.e., suggest a genre)
 * Use 'ETag' header to cache cover art

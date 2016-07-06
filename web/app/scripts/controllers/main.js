@@ -16,6 +16,8 @@ angular.module('musicApp').controller('MainCtrl',
       isLoggedIn: User.isLoggedIn()
     };
 
+    $scope.version = '0.4.0';
+
     $scope.logout = function() {
       User.logout();
       $state.go('authentication');

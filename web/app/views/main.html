@@ -14,14 +14,11 @@
 
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-          <li>
-            <a href="#library"><i class="fa fa-book"></i> Libraries</a>
-          </li>
-        </ul>
-
+        <div class="navbar-left version">
+          Version: <span style="font-weight: bold">{{version}}</span>
+        </div>
 <!--
-        <form class="navbar-form navbar-left" role="search">
+        <form class="navbar-form" role="search">
           <div class="form-group">
             <input type="text" class="form-control" placeholder="Search">
           </div>
@@ -42,22 +39,25 @@
   <div ng-controller="LeftNavCtrl" class="column col-sm-3 col-md-2 sidebar" id="sidebar">
     <ul class="nav nav-pills nav-stacked">
       <li ng-class="{ active: isActive('/artists')}">
-        <a href="#artists">Artists</a>
+        <a href="#artists"><i class="fa fa-user"></i>&nbsp;Artists</a>
       </li>
       <li ng-class="{ active: isActive('/albums')}">
-        <a href="#albums">Albums</a>
+        <a href="#albums"><i class="fa fa-bullseye"></i>&nbsp;Albums</a>
       </li>
       <li ng-class="{ active: isActive('/tracks')}">
-        <a href="#tracks">Songs</a>
+        <a href="#tracks"><i class="fa fa-music"></i>&nbsp;Songs</a>
       </li>
       <li ng-class="{ active: isActive('/genres')}">
-        <a href="#genres">Genres</a>
+        <a href="#genres"><i class="fa fa-tag"></i>&nbsp;Genres</a>
       </li>
       <li ng-class="{ active: isActive('/playlists')}">
-        <a href="#playlists">Playlists</a>
+        <a href="#playlists"><i class="fa fa-list-alt"></i>&nbsp;Playlists</a>
       </li>
       <li ng-class="{ active: isActive('/queue')}">
-        <a href="#queue">Queue</a>
+        <a href="#queue"><i class="fa fa-list"></i>&nbsp;Queue</a>
+      </li>
+      <li>
+        <a href="#library"><i class="fa fa-book"></i>&nbsp;Libraries</a>
       </li>
     </ul>
   </div>
