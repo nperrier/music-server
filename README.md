@@ -49,7 +49,6 @@ A simple web app to stream music built using modern Java libraries and AngularJS
 * Malicious script could come from ID3 tags of mp3's (e.g., artist name or even image).  Ensure input is validated
 * Ensure 'Edit track' input is validated
 * Redirect 401 to login page
-* Fix track numbers to not default to 0 in UI?
 * Add auth header to img source url's so they don't have to be unauthenticated
 * Find a way to serve audio files in an authenticated way.  Currently they include the auth token in the query param of the src url
-* Fix 'Download' link in action menus - authentication broke them
+
