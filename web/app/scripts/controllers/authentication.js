@@ -27,6 +27,7 @@ angular.module('musicApp').controller('AuthenticationCtrl', [
           $scope.authFailed = false;
           User.login(username, response.token);
           $state.go('dashboard');
+          $rootScope.$emit('authenticated', true);
         }
         else if (response.status < 200 || response.status >= 300 ) {
           $scope.authFailed = true;

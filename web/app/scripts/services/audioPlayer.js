@@ -155,5 +155,10 @@ angular.module('musicApp').service('AudioPlayer', [
     //   $rootScope.$emit('audio.time', self);
     // });
 
+    $rootScope.$on('authenticated', function(event, authenticated) {
+      $log.debug('AudioPlayer.on(\'authenticated\'): ' + authenticated);
+      self.resetPlayer();
+    });
+
   }
 ]);

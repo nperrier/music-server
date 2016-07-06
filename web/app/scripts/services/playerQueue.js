@@ -132,5 +132,11 @@ angular.module('musicApp').service('PlayerQueue', [
     self.hasPrevious = function() {
       return self.current > 0;
     };
+
+    $rootScope.$on('authenticated', function(event, authenticated) {
+      $log.debug('PlayerQueue.on(\'authenticated\'): ' + authenticated);
+      self.clear();
+    });
+
   }
 ]);
