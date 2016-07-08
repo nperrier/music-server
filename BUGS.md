@@ -1,9 +1,6 @@
 
 #Bugs
 
-* FIX: track numbers to not default to 0 in UI?
-
-
 ##Issue 1
 
 * Add track to queue (starts playing)
