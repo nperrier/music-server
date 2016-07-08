@@ -106,7 +106,11 @@ public abstract class AbstractTag implements ITag {
 			String trackNumber = removeTrackTotalIfPresent(rawTrackNumber);
 
 			try {
-				number = Integer.parseInt(trackNumber);
+				int num = Integer.parseInt(trackNumber);
+				// only set if positive integer
+				if (num > 0) {
+					number = num;
+				}
 			} catch (final NumberFormatException e) {
 				log.warn("Could not parse track number: {}", trackNumber);
 			}
@@ -119,7 +123,7 @@ public abstract class AbstractTag implements ITag {
 	 * Some tags store track number and total tracks (example: 01/12)
 	 * <p>
 	 * Returns the track number "01", removing the total
-	 * 
+	 *
 	 * @param trackNumber
 	 * @return
 	 */
