@@ -2,9 +2,9 @@
 #Bugs
 
 * FIX: track numbers to not default to 0 in UI?
-* FIX: 'Download' link in action menus - authentication broke them
 
-##Issue 1 
+
+##Issue 1
 
 * Add track to queue (starts playing)
 * Add another track to queue
@@ -20,11 +20,12 @@ Previous track starts playing
 
 Queue has track but doesn't starting playing and controls are greyed out
 
+
 ##Issue 2
 
-If a track is playing and we are on the all tracks page, quickly scrolling the list (flinging scroll bar) causes the music to stutter.  There might be too many HTTP requests for the cover art happening at the same time which overloads the server CPU. Also could be the browswer stuttering.  Might need to throttle the requests to the cover art
+If a track is playing and we are on the 'all tracks' page, quickly scrolling the list (flinging scroll bar) causes the music to stutter.  There might be too many HTTP requests for the cover art happening at the same time which overloads the server CPU. Also could be the browswer stuttering.  Might need to throttle the requests to the cover art.
 
-#Upgrading
+##Upgrading
 
 replace /bin
 replace /lib

@@ -7,13 +7,21 @@
  * # trackActionMenu
  */
 angular.module('musicApp').directive('trackActionMenu', [
-  '$log', '$modal', function($log, $modal) {
+  '$log', '$modal', 'User', function($log, $modal, User) {
 
     return {
       restrict: 'E',
       templateUrl: '/views/trackActionMenu.html',
       scope: false, // inherit from parent scope
-      controller: function ($scope) {
+      controller: function($scope) {
+
+        var buildDownloadURL = function(trackId) {
+          var url = '/api/track/download/' + trackId;
+          url += '?token=' + User.getToken();
+          return url;
+        };
+
+        $scope.track.downloadURL = buildDownloadURL($scope.track.id);
 
         $scope.editTrack = function() {
 
@@ -21,14 +29,14 @@ angular.module('musicApp').directive('trackActionMenu', [
             templateUrl: 'views/editTrack.html',
             backdrop: false,
             resolve: {
-              track: function () {
+              track: function() {
                 return $scope.track;
               }
             },
-            controller: function ($scope, $modalInstance, track) {
+            controller: function($scope, $modalInstance, track) {
 
               // private
-              var createTrackModel = function (track) {
+              var createTrackModel = function(track) {
                 // TODO: need to consider null artist/album/etc..
                 return {
                     name: track.name,
@@ -45,16 +53,16 @@ angular.module('musicApp').directive('trackActionMenu', [
               // save our original track in order to reset form and check for changes
               $scope.originalTrack = angular.copy($scope.track);
 
-              $scope.save = function (track) {
+              $scope.save = function(track) {
                 // TODO: Need to add client-side validation
                 $modalInstance.close(track);
               };
 
-              $scope.cancel = function () {
+              $scope.cancel = function() {
                 $modalInstance.dismiss('cancelled');
               };
 
-              $scope.reset = function () {
+              $scope.reset = function() {
                 $scope.track = angular.copy($scope.originalTrack);
                 // $scope.editTrackForm.$setPristine();
                 this.editTrackForm.$setPristine();
@@ -72,16 +80,16 @@ angular.module('musicApp').directive('trackActionMenu', [
           });
 
           modalInstance.result.then(
-            function (track) {
+            function(track) {
               $scope.updateTrack($scope.track.id, track);
             },
-            function (reason) {
+            function(reason) {
               $log.debug('Modal dismissed: ' + reason);
             }
           );
         };
 
-        $scope.selectPlaylist = function (track) {
+        $scope.selectPlaylist = function(track) {
 
           var modalInstance = $modal.open({
             templateUrl: 'views/playlistsModal.html',
@@ -92,7 +100,7 @@ angular.module('musicApp').directive('trackActionMenu', [
                 return $scope.playlists;
               }
             },
-            controller: function ($scope, $modalInstance, playlists) {
+            controller: function($scope, $modalInstance, playlists) {
 
               $scope.playlists = playlists;
 
@@ -100,22 +108,22 @@ angular.module('musicApp').directive('trackActionMenu', [
                 playlist: $scope.playlists[0]
               };
 
-              $scope.ok = function () {
+              $scope.ok = function() {
                 $modalInstance.close($scope.selected.playlist);
               };
 
-              $scope.cancel = function () {
+              $scope.cancel = function() {
                 $modalInstance.dismiss('cancelled');
               };
             }
           });
 
           modalInstance.result.then(
-            function (playlist) {
+            function(playlist) {
               $scope.selected = playlist;
               $scope.addTrackToPlaylist(track, playlist);
             },
-            function (reason) {
+            function(reason) {
               $log.debug('Modal dismissed: ' + reason);
             }
           );
