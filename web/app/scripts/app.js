@@ -28,6 +28,10 @@ var musicApp = angular.module('musicApp', [
 	'ui.router'
 ]);
 
+musicApp.constant("ServerInfo", {
+  "version": '0.4.0'
+});
+
 musicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
 
 	$urlRouterProvider.otherwise(function ($injector, $location) {

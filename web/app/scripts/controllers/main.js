@@ -9,16 +9,16 @@
  */
 angular.module('musicApp').controller('MainCtrl',[
   '$rootScope', '$scope', '$log', '$window', '$state',
-  'User', 'AudioPlayer', 'PlayerQueue', 'Shuffle',
+  'User', 'AudioPlayer', 'PlayerQueue', 'Shuffle', 'ServerInfo',
   function($rootScope, $scope, $log, $window, $state,
-    User, AudioPlayer, PlayerQueue, Shuffle) {
+    User, AudioPlayer, PlayerQueue, Shuffle, ServerInfo) {
 
     $scope.user = {
       name: User.getUsername(),
       isLoggedIn: User.isLoggedIn()
     };
 
-    $scope.version = '0.4.0';
+    $scope.version = ServerInfo.version;
 
     $scope.shuffle = function() {
       $log.info("Shuffling tracks");
