@@ -9,9 +9,9 @@
  */
 angular.module('musicApp').controller('MainCtrl',[
   '$rootScope', '$scope', '$log', '$window', '$state',
-  'User', 'AudioPlayer', 'PlayerQueue', 'Shuffle', 'ServerInfo',
+  'User', 'AudioPlayer', 'PlayerQueue', 'Shuffle', 'Search', 'ServerInfo',
   function($rootScope, $scope, $log, $window, $state,
-    User, AudioPlayer, PlayerQueue, Shuffle, ServerInfo) {
+    User, AudioPlayer, PlayerQueue, Shuffle, Search, ServerInfo) {
 
     $scope.user = {
       name: User.getUsername(),
@@ -23,6 +23,9 @@ angular.module('musicApp').controller('MainCtrl',[
 
     $scope.search = function() {
       $log.info("Search clicked: " + $scope.searchText);
+      Search.get({ q: $scope.searchText }).$promise.then(function(results) {
+        $log.debug('Search results: ' + results);
+      });
     };
 
     $scope.shuffle = function() {
