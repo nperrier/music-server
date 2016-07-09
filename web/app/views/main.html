@@ -15,8 +15,16 @@
 
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-
         <p class="navbar-text">Version: <span class="version">{{version}}</span></p>
+
+        <div class="nav navbar-nav navbar-left">
+          <form class="navbar-form" role="search" ng-submit="search()">
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Search" ng-model="searchText">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+          </form>
+        </div>
 
         <div class="nav navbar-nav navbar-right">
           <button class="btn btn-default navbar-btn" ng-click="shuffle()">

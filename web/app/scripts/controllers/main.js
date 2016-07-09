@@ -19,6 +19,11 @@ angular.module('musicApp').controller('MainCtrl',[
     };
 
     $scope.version = ServerInfo.version;
+    $scope.searchText = '';
+
+    $scope.search = function() {
+      $log.info("Search clicked: " + $scope.searchText);
+    };
 
     $scope.shuffle = function() {
       $log.info("Shuffling tracks");
