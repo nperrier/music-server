@@ -73,12 +73,23 @@ angular.module('musicApp').service('PlayerQueue', [
     };
 
     self.moveTrack = function(fromIndex, toIndex) {
-      if (fromIndex === self.current) {
-        self.current = toIndex;
-      } else if (fromIndex > self.current) {
+      if (fromIndex > self.current) {
+        if (toIndex > self.current) {
+          // We're moving the track below the current. Do nothing
+        } else if (toIndex <= self.current) {
+          // We're moving the track above the current. Increment current
           self.current++;
+        }
       } else if (fromIndex < self.current) {
+        if (toIndex >= self.current) {
+          // We're moving the track below the current. Decrement current
           self.current--;
+        } else if (toIndex < self.current) {
+          // We're moving the track above the current. Do nothing
+        }
+      } else { // fromIndex == current
+        // We're moving the current track to a new position. Set it to the toIndex
+        self.current = toIndex;
       }
     };
 
