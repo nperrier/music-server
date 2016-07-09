@@ -7,9 +7,11 @@
  * # MainCtrl
  * Controller of the musicApp
  */
-angular.module('musicApp').controller('MainCtrl',
-  ['$rootScope', '$scope', '$window', '$state', 'User',
-  function($rootScope, $scope, $window, $state, User) {
+angular.module('musicApp').controller('MainCtrl',[
+  '$rootScope', '$scope', '$log', '$window', '$state',
+  'User', 'AudioPlayer', 'PlayerQueue', 'Shuffle',
+  function($rootScope, $scope, $log, $window, $state,
+    User, AudioPlayer, PlayerQueue, Shuffle) {
 
     $scope.user = {
       name: User.getUsername(),
@@ -17,6 +19,16 @@ angular.module('musicApp').controller('MainCtrl',
     };
 
     $scope.version = '0.4.0';
+
+    $scope.shuffle = function() {
+      $log.info("Shuffling tracks");
+      Shuffle.query(function(tracks) {
+        // on retrieval of tracks, clear queue and add tracks.
+        // Player should start automatically
+        PlayerQueue.clear();
+        PlayerQueue.addTracks(tracks);
+      });
+    };
 
     $scope.logout = function() {
       User.logout();

@@ -49,12 +49,17 @@ public class TrackProvider {
 
 	// TODO limit fetch size
 	public List<Track> findAll() throws DBException {
-		List<Track> tracks = this.db.find(new TrackFindAllQuery());
+		List<Track> tracks = this.db.find(new TrackFindRandomQuery());
 		return tracks;
 	}
 
 	public Track update(Track track, TrackUpdateDto trackUpdateDto) throws DBException {
 		TrackUpdater updater = trackUpdaterFactory.create(track);
 		return updater.handleUpdates(trackUpdateDto);
+	}
+
+	public List<Track> findRandom() throws DBException {
+		List<Track> tracks = this.db.find(new TrackFindRandomQuery());
+		return tracks;
 	}
 }

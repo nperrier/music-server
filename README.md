@@ -22,6 +22,7 @@ A simple web app to stream music built using modern Java libraries and AngularJS
 * In browser, open http://localhost:9000
 
 ##TODO
+
 * Add persisted history to record when a track was played
 * Add a settings/config page for configuring various things
 * Integration with other media player accounts:
@@ -34,7 +35,6 @@ A simple web app to stream music built using modern Java libraries and AngularJS
 * Implement search: (client-side or server-side?)
 * Implement handling of changed metadata for media files in indexer
 * Add ability to delete Library
-* Add a 'Shuffle' feature
 * Add a 'Play Now' feature (currently can only add songs to end of queue)
 * Ensure that artist/album/genre/song names are being queried case-insensitive
 * TrackAlbumUpdater: Creating a new album should associate the cover art with the album
