@@ -1,6 +1,6 @@
 package com.perrier.music.db;
 
-public class DBException extends Exception {
+public class DBException extends RuntimeException {
 
 	private static final long serialVersionUID = 235174298935083120L;
 

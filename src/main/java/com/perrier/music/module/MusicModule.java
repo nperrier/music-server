@@ -31,6 +31,7 @@ import com.perrier.music.indexer.ILibraryIndexerTaskFactory;
 import com.perrier.music.indexer.ILibraryService;
 import com.perrier.music.indexer.LibraryIndexerService;
 import com.perrier.music.indexer.LibraryService;
+import com.perrier.music.search.SearchProvider;
 import com.perrier.music.server.IServer;
 import com.perrier.music.server.JettyHttpServer;
 import com.perrier.music.server.auth.AuthorizationFilterFactory;
@@ -64,6 +65,7 @@ public class MusicModule extends AbstractModule {
 		bind(LibraryProvider.class).in(Singleton.class);
 		bind(GenreProvider.class).in(Singleton.class);
 		bind(PlaylistProvider.class).in(Singleton.class);
+		bind(SearchProvider.class).in(Singleton.class);
 
 	}
 

@@ -1,4 +1,4 @@
-<!-- genretracks.html -->
+<!-- genreTracks.html -->
 <div class="jumbotron" ng-class="{'fade-start': !doneLoading, 'fade-in': doneLoading}">
   <div class="container">
 
@@ -21,7 +21,7 @@
             <td>
               <img class="coverart-thumb" ng-src="{{track.coverArtUrl}}" fade-in />
               <span class="track-title track-text">{{track.name}}</span>
-              <track-action-menu class="action-menu"></track-action-menu>
+              <track-action-menu track="track" class="action-menu"></track-action-menu>
             </td>
             <td>
               <a ui-sref="artist-detail({ id: track.artist.id })" class="track-text">

@@ -8,3 +8,5 @@ create table artist (
   primary key(id),
   unique(name)
 );
+
+call ft_create_index('PUBLIC', 'ARTIST', 'NAME');

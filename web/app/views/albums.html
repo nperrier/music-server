@@ -3,35 +3,7 @@
   <div class="container">
 
     <div ng-if="albums.length" ng-cloak>
-
-      Search: <input ng-model="albumQuery" ng-minlength="3">
-
-      <table class="table table-condensed table-hover">
-        <thead>
-          <tr>
-            <th class="col-album-title" ng-click="sortField = 'name'; reverse = !reverse">
-              <span class="track-title-header">Title</span>
-            </th>
-            <th class="col-album-artist" ng-click="sortField = 'artist.name'; reverse = !reverse">Artist</th>
-          </tr>
-        </thead>
-        <tbody vs-repeat vs-scroll-parent=".main-content" vs-excess="40">
-          <tr ng-repeat="album in albums | filter:albumQuery | orderBy:sortField:reverse">
-            <td>
-              <img class="coverart-thumb" ng-src="{{album.coverArtUrl}}" fade-in />
-              <a ui-sref="album-detail({ id: album.id })" class="track-text track-title">
-                {{album.name}}
-              </a>
-              <album-action-menu class="action-menu"></album-action-menu>
-            </td>
-            <td>
-              <a ui-sref="artist-detail({ id: album.artist.id })" class="track-text">
-                {{album.artist.name}}
-              </a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <albums-table artist="artist" albums="albums"></albums-table>
     </div>
 
     <div class="text-center" ng-if="albums.length == 0" ng-cloak>

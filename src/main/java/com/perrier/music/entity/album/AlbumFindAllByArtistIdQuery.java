@@ -11,11 +11,11 @@ import com.perrier.music.db.DBException;
 import com.perrier.music.db.FindQuery;
 import com.perrier.music.entity.artist.Artist;
 
-public class AlbumsFindAllByArtistIdQuery extends FindQuery<List<Album>> {
+public class AlbumFindAllByArtistIdQuery extends FindQuery<List<Album>> {
 
 	private final long id;
 
-	public AlbumsFindAllByArtistIdQuery(long id) {
+	public AlbumFindAllByArtistIdQuery(long id) {
 		this.id = id;
 	}
 
@@ -26,14 +26,14 @@ public class AlbumsFindAllByArtistIdQuery extends FindQuery<List<Album>> {
 				.setFetchMode("albums", FetchMode.JOIN) //
 				.add(Restrictions.idEq(id)) //
 				.uniqueResult();
-		
+
 		if (artist == null) {
 			// TODO Throw exception, return empty list or null?
 			return Collections.emptyList();
 		}
 
 		List<Album> albums = artist.getAlbums();
-		
+
 		return albums;
 	}
 

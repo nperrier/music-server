@@ -7,13 +7,28 @@
  * # trackActionMenu
  */
 angular.module('musicApp').directive('trackActionMenu', [
-  '$log', '$modal', 'User', function($log, $modal, User) {
+  '$log',
+  '$modal',
+  'User',
+  'Track',
+  'Playlist',
+  'PlayerQueue',
+  function(
+    $log,
+    $modal,
+    User,
+    Track,
+    Playlist,
+    PlayerQueue
+    ) {
 
     return {
       restrict: 'E',
       templateUrl: '/views/trackActionMenu.html',
-      scope: false, // inherit from parent scope
-      controller: function($scope) {
+      scope: {
+        track: '='
+      },
+      link: function(scope) {
 
         var buildDownloadURL = function(trackId) {
           var url = '/api/track/download/' + trackId;
@@ -21,16 +36,33 @@ angular.module('musicApp').directive('trackActionMenu', [
           return url;
         };
 
-        $scope.track.downloadURL = buildDownloadURL($scope.track.id);
+        scope.track.downloadURL = buildDownloadURL(scope.track.id);
 
-        $scope.editTrack = function() {
+        scope.updateTrack = function(trackId, trackInfo) {
+          $log.debug('updateTrack, trackId: ' + trackId);
+          Track.update({ trackId: trackId }, trackInfo, function () {
+            // do something after updating
+          });
+        };
+
+        scope.addTrackToQueue = function(track) {
+          PlayerQueue.addTrack(track);
+          $log.debug('Added track to player queue, track.id: ' + track.id);
+        };
+
+        scope.addTrackToPlaylist = function(track, playlist) {
+          Playlist.addTracks({ playlistId: playlist.id }, [ track.id ]);
+          $log.debug('Added track.id: ' + track.id + ' to playlist.id: ' + playlist.id);
+        };
+
+        scope.editTrack = function() {
 
           var modalInstance = $modal.open({
             templateUrl: 'views/editTrack.html',
             backdrop: false,
             resolve: {
               track: function() {
-                return $scope.track;
+                return scope.track;
               }
             },
             controller: function($scope, $modalInstance, track) {
@@ -64,7 +96,6 @@ angular.module('musicApp').directive('trackActionMenu', [
 
               $scope.reset = function() {
                 $scope.track = angular.copy($scope.originalTrack);
-                // $scope.editTrackForm.$setPristine();
                 this.editTrackForm.$setPristine();
               };
 
@@ -81,7 +112,7 @@ angular.module('musicApp').directive('trackActionMenu', [
 
           modalInstance.result.then(
             function(track) {
-              $scope.updateTrack($scope.track.id, track);
+              scope.updateTrack(scope.track.id, track);
             },
             function(reason) {
               $log.debug('Modal dismissed: ' + reason);
@@ -89,7 +120,13 @@ angular.module('musicApp').directive('trackActionMenu', [
           );
         };
 
-        $scope.selectPlaylist = function(track) {
+        // PLAYLIST
+
+        // TODO: this takes time to load and functions depend on the result
+        // What to do if result doesn't come?
+        scope.playlists = Playlist.query();
+
+        scope.selectPlaylist = function(track) {
 
           var modalInstance = $modal.open({
             templateUrl: 'views/playlistsModal.html',
@@ -97,15 +134,14 @@ angular.module('musicApp').directive('trackActionMenu', [
             backdrop: false,
             resolve: {
               playlists: function () {
-                return $scope.playlists;
+                return scope.playlists;
               }
             },
             controller: function($scope, $modalInstance, playlists) {
-
               $scope.playlists = playlists;
 
               $scope.selected = {
-                playlist: $scope.playlists[0]
+                playlist: scope.playlists[0]
               };
 
               $scope.ok = function() {
@@ -120,8 +156,8 @@ angular.module('musicApp').directive('trackActionMenu', [
 
           modalInstance.result.then(
             function(playlist) {
-              $scope.selected = playlist;
-              $scope.addTrackToPlaylist(track, playlist);
+              scope.selected = playlist;
+              scope.addTrackToPlaylist(track, playlist);
             },
             function(reason) {
               $log.debug('Modal dismissed: ' + reason);

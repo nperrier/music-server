@@ -109,22 +109,28 @@ dependencies {
 	)
 }
 
-// println "projectDir: $projectDir"
 description = 'A personal music server'
-version = '0.4.0'
 sourceCompatibility = 1.8
 //targetCompatability = 1.8
 mainClassName = 'com.perrier.music.Core'
 
+printInfo()
 setEnvironment()
 loadConfig()
+
+def printInfo() {
+    println "version: $version"
+    println "projectDir: $projectDir"
+}
 
 def setEnvironment() {
 	if (!hasProperty('env')) {
 		ext.env = 'dev'
-	}
+	} else {
+        ext.env = property('env')
+    }
 
-	println "Environment is set to $env"
+	println "Environment: $env"
 }
 
 def loadConfig() {
@@ -138,6 +144,7 @@ flyway {
 	url = config.h2.url
 	user = config.h2.username
 	password = config.h2.password
+	schemas = config.h2.schemas
 }
 
 jar {

@@ -14,3 +14,6 @@ create table album (
   foreign key(genre_id) references genre (id),
   unique(name, artist_id)
 );
+
+call ft_create_index('PUBLIC', 'ALBUM', 'NAME');
+

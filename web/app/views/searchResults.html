@@ -1,0 +1,44 @@
+<!-- searchResults.html -->
+<div class="jumbotron" ng-class="{'fade-start': !doneLoading, 'fade-in': doneLoading}">
+  <div class="container">
+
+    <h2>Search Results</h2>
+
+    <div ng-if="artists.length" ng-cloak>
+      <h3>Artists</h3>
+      <artists-table artists="artists"></artists-table>
+      <div ng-if="artistsTotal > searchLimit" ng-cloak>
+        <a ui-sref="artist-search-results({ q: query })" class="">
+          See All Results
+        </a>
+      </div>
+    </div>
+
+    <div ng-if="albums.length" ng-cloak>
+      <h3>Albums</h3>
+      <albums-table albums="albums"></albums-table>
+      <div ng-if="albumsTotal > searchLimit" ng-cloak>
+        <a ui-sref="album-search-results({ q: query })" class="">
+          See All Results
+        </a>
+      </div>
+    </div>
+
+    <div ng-if="tracks.length" ng-cloak>
+      <h3>Tracks</h3>
+      <tracks-table tracks="tracks"></tracks-table>
+      <div ng-if="tracksTotal > searchLimit" ng-cloak>
+        <a ui-sref="track-search-results({ q: query })" class="">
+          See All Results
+        </a>
+      </div>
+    </div>
+
+    <div class="text-center" ng-if="artists.length == 0 && albums.length == 0 && tracks.length == 0" ng-cloak>
+      <span class="glyphicon glyphicon-headphones" style="font-size: 200px"></span>
+      <h3>No results found</h3>
+    </div>
+
+  </div>
+</div>
+

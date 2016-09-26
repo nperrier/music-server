@@ -41,7 +41,7 @@ public class HibernateConfiguration implements IDBConfiguration {
 
 		// TODO Search for these dynamically
 		// See: HibernateConfigurationFactory.initializeAnnotations()
-		Set<? extends Class<?>> entities = Sets.<Class<?>> newHashSet( //
+		Set<? extends Class<?>> entities = Sets.<Class<?>>newHashSet( //
 				Artist.class, //
 				Genre.class, //
 				Album.class, //

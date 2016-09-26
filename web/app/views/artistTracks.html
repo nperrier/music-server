@@ -1,4 +1,4 @@
-<!-- albumdetail.html -->
+<!-- artistTracks.html -->
 <div class="jumbotron" ng-class="{'fade-start': !doneLoading, 'fade-in': doneLoading}">
   <div class="container-fluid">
 
@@ -25,7 +25,7 @@
             <td>
               <img class="coverart-thumb" ng-src="{{track.coverArtUrl}}" fade-in />
               <span class="track-title track-text">{{track.name}}</span>
-              <track-action-menu class="action-menu"></track-action-menu>
+              <track-action-menu track="track" class="action-menu"></track-action-menu>
             </td>
             <td>
               <a ui-sref="album-detail({ id: track.album.id })" class="track-text">

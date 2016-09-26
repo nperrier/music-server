@@ -10,11 +10,15 @@
 angular.module('musicApp').factory('Search', [
   '$resource', function($resource) {
 
-    return $resource('api/search', {}, {
+    return $resource('api/search/:table', {}, {
       query: {
         method: 'GET',
-        isArray: true
-      }
+        isArray: false
+      },
+      get: {
+        method: 'GET',
+        params: { table: '@table' }
+      },
     });
   }
 ]);

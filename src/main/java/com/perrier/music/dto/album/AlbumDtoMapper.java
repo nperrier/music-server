@@ -8,7 +8,7 @@ import com.perrier.music.entity.album.Album;
 
 public class AlbumDtoMapper {
 
-	public static final AlbumDto EMPTY_ALBUM = new AlbumDto();
+	private static final AlbumDto EMPTY_ALBUM = new AlbumDto();
 
 	private AlbumDtoMapper() {
 	}

@@ -4,7 +4,6 @@
   <h1>Enter Credentials</h1>
 
   <form id="authenticationForm" class="form-horizontal" name="authenticationForm" novalidate>
-
     <div class="help-block" ng-if="authFailed">
       Invalid credentials. Please try again
     </div>
@@ -29,7 +28,6 @@
         <button class="btn btn-primary" ng-disabled="authenticationForm.$invalid" ng-click="login(username, password)">Login</button>
       </div>
     </div>
-
   </form>
 
 </div>

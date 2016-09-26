@@ -7,27 +7,52 @@
  * # albumActionMenu
  */
 angular.module('musicApp').directive('albumActionMenu', [
-  '$log', '$modal', function($log, $modal) {
+  '$log',
+  '$modal',
+  'Album',
+  'Playlist',
+  'PlayerQueue',
+  function(
+    $log,
+    $modal,
+    Album,
+    Playlist,
+    PlayerQueue
+  ) {
 
     return {
       restrict: 'E',
       templateUrl: '/views/albumActionMenu.html',
-      scope: false, // inherit from parent scope - assumes 'album' is in scope
-      controller: function ($scope) {
+      scope: {
+        album: '='
+        // playlist: '='
+      },
+      link: function(scope) {
 
-        $scope.editAlbum = function() {
+        // Add an Album to the player queue:
+        scope.addAlbumToQueue = function(album) {
+          $log.debug('Add album to player queue, id: ' + album.id);
+          Album.getTracks({ albumId: album.id }, function(tracks) {
+            var orderedTracks = _.sortBy(tracks, function(t) { return t.number; });
+            PlayerQueue.addTracks(orderedTracks);
+          });
+        };
+
+/*
+ // TODO: Not Yet Implemented!
+        scope.editAlbum = function() {
 
           var modalInstance = $modal.open({
             templateUrl: 'views/editAlbum.html',
             backdrop: false,
             resolve: {
               album: function () {
-                return $scope.album;
+                return scope.album;
               }
             },
             controller: function ($scope, $modalInstance, album) {
 
-              // private
+              // private function
               var createAlbumModel = function (album) {
                 // TODO: need to consider null artist/album/etc..
                 return {
@@ -67,17 +92,20 @@ angular.module('musicApp').directive('albumActionMenu', [
 
           modalInstance.result.then(
             function (album) {
-              $scope.updateTrack($scope.album.id, album);
+              $log.info('TODO: Album updating Not Yet Implemented');
+              // $scope.updateTrack($scope.album.id, album);
             },
             function (reason) {
               $log.debug('Modal dismissed: ' + reason);
             }
           );
         };
+*/
 
-        // add to queue moved to album controller
+        // TODO: Pass in via attribute? What happens if the response takes a long time?
+        scope.playlists = Playlist.query();
 
-        $scope.selectPlaylist = function (album) {
+        scope.selectPlaylist = function(album) {
 
           var modalInstance = $modal.open({
             templateUrl: 'views/playlistsModal.html',
@@ -85,21 +113,21 @@ angular.module('musicApp').directive('albumActionMenu', [
             backdrop: false,
             resolve: {
               playlists: function () {
-                return $scope.playlists;
+                return scope.playlists;
               }
             },
-            controller: function ($scope, $modalInstance, playlists) {
+            controller: function($scope, $modalInstance, playlists) {
               $scope.playlists = playlists;
 
               $scope.selected = {
-                playlist: $scope.playlists[0]
+                playlist: scope.playlists[0]
               };
 
-              $scope.ok = function () {
+              $scope.ok = function() {
                 $modalInstance.close($scope.selected.playlist);
               };
 
-              $scope.cancel = function () {
+              $scope.cancel = function() {
                 $modalInstance.dismiss('cancelled');
               };
             }
@@ -107,8 +135,9 @@ angular.module('musicApp').directive('albumActionMenu', [
 
           modalInstance.result.then(
             function (playlist) {
-              $scope.selected = playlist;
-              $scope.addAlbumToPlaylist(album, playlist);
+              scope.selected = playlist;
+              $log.debug('Add album.id: ' + album.id + ' to playlist.id: ' + playlist.id);
+              Playlist.addAlbum({ playlistId: playlist.id, albumId: album.id });
             },
             function (reason) {
               $log.debug('Modal dismissed: ' + reason);

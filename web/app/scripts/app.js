@@ -28,15 +28,16 @@ var musicApp = angular.module('musicApp', [
 	'ui.router'
 ]);
 
-musicApp.constant("ServerInfo", {
-  "version": '0.4.0'
+// TODO: Get version from server instead of hardcoding in UI
+musicApp.constant('ServerInfo', {
+  version: '0.5.0'
 });
 
 musicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
 
 	$urlRouterProvider.otherwise(function ($injector, $location) {
-		var $state = $injector.get("$state");
-		$state.go("main.dashboard");
+		var $state = $injector.get('$state');
+		$state.go('dashboard');
 	});
 
 	$stateProvider.state('main', {
@@ -68,6 +69,34 @@ musicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvider
 		url: '/dashboard',
 		templateUrl: 'views/dashboard.html',
 		controller: 'DashboardCtrl',
+		parent: 'main'
+	})
+
+	.state('track-search-results', {
+		url : '/search-results/track?q',
+		templateUrl: 'views/tracks.html',
+		controller: 'TrackSearchResultsCtrl',
+		parent: 'main'
+	})
+
+	.state('album-search-results', {
+		url : '/search-results/album?q',
+		templateUrl: 'views/albums.html',
+		controller: 'AlbumSearchResultsCtrl',
+		parent: 'main'
+	})
+
+	.state('artist-search-results', {
+		url : '/search-results/artist?q',
+		templateUrl: 'views/artists.html',
+		controller: 'ArtistSearchResultsCtrl',
+		parent: 'main'
+	})
+
+	.state('search-results', {
+		url : '/search-results?q',
+		templateUrl: 'views/searchResults.html',
+		controller: 'SearchResultsCtrl',
 		parent: 'main'
 	})
 

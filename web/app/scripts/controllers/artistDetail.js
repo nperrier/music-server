@@ -9,15 +9,27 @@
  */
 
 angular.module('musicApp').controller('ArtistDetailCtrl', [
-    '$scope', '$stateParams', '$log', '$timeout', '_', 'usSpinnerService',
-    'Artist', 'Album', 'Playlist', 'PlayerQueue',
-    function($scope, $stateParams, $log, $timeout, _, usSpinnerService,
-      Artist, Album, Playlist, PlayerQueue) {
+    '$scope',
+    '$stateParams',
+    '$log',
+    '$timeout',
+    'usSpinnerService',
+    'Artist',
+    'Album',
+    function(
+      $scope,
+      $stateParams,
+      $log,
+      $timeout,
+      usSpinnerService,
+      Artist,
+      Album) {
 
       $scope.sortField = 'name';
       $scope.reverse = false;
       $scope.doneLoading = false;
-      var numberPendingRequests = 3;
+
+      var numberPendingRequests = 2;
 
       // wait 1.5 seconds before showing spinner
       $timeout(function () {
@@ -39,29 +51,5 @@ angular.module('musicApp').controller('ArtistDetailCtrl', [
 
       // Load albums from rest resource
       $scope.albums = Artist.getAlbums({ artistId: $stateParams.id }, checkDoneLoading);
-
-      // this is needed for the album-action-menu modal
-      $scope.playlists = Playlist.query(checkDoneLoading);
-
-      $scope.addAlbumToPlaylist = function(album, playlist) {
-        $log.debug('Add album.id: ' + album.id + ' to playlist.id: ' + playlist.id);
-
-        Album.getTracks({ albumId: album.id }, function(tracks) {
-          var orderedTracks = _.sortBy(tracks, function(t) { return t.number; });
-          var trackIds = _.pluck(orderedTracks, 'id');
-          $log.debug('Add track ids: ' + trackIds + ' to playlist.id: ' + playlist.id);
-          Playlist.addTracks({ playlistId: playlist.id }, trackIds);
-        });
-      };
-
-      // Add an Album to the player queue:
-      $scope.addAlbumToQueue = function(album) {
-        $log.debug('Add album to player queue, id: ' + album.id);
-
-        Album.getTracks({ albumId: album.id }, function(tracks) {
-          var orderedTracks = _.sortBy(tracks, function(t) { return t.number; });
-          PlayerQueue.addTracks(orderedTracks);
-        });
-      };
     }
   ]);

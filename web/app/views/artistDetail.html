@@ -1,4 +1,4 @@
-<!-- artistdetail.html -->
+<!-- artistDetail.html -->
 <div class="jumbotron" ng-class="{'fade-start': !doneLoading, 'fade-in': doneLoading}">
 	<div class="container">
 
@@ -25,7 +25,7 @@
 								<a ui-sref="album-detail({ id: album.id })" class="track-title track-text">
 									{{album.name}}
 								</a>
-								<album-action-menu class="action-menu"></album-action-menu>
+								<album-action-menu album="album" class="action-menu"></album-action-menu>
 							</td>
 							<td>
 								{{album.year}}

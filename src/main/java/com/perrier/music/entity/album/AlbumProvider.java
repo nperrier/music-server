@@ -34,7 +34,7 @@ public class AlbumProvider {
 	}
 
 	public List<Album> findAllByArtistId(Long id) throws DBException {
-		List<Album> albums = this.db.find(new AlbumsFindAllByArtistIdQuery(id));
+		List<Album> albums = this.db.find(new AlbumFindAllByArtistIdQuery(id));
 		return albums;
 	}
 

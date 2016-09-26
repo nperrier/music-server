@@ -25,3 +25,5 @@ create table track (
   foreign key(library_id) references library (id),
   unique(name, artist_id, album_id)
 );
+
+call ft_create_index('PUBLIC', 'TRACK', 'NAME');

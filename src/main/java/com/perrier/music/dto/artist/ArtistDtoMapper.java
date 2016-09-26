@@ -7,7 +7,7 @@ import com.perrier.music.entity.artist.Artist;
 
 public class ArtistDtoMapper {
 
-	public static final ArtistDto EMPTY_ARTIST = new ArtistDto();
+	private static final ArtistDto EMPTY_ARTIST = new ArtistDto();
 
 	private ArtistDtoMapper() {
 	}
