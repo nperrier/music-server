@@ -49,7 +49,7 @@ public class TrackProvider {
 
 	// TODO limit fetch size
 	public List<Track> findAll() throws DBException {
-		List<Track> tracks = this.db.find(new TrackFindRandomQuery());
+		List<Track> tracks = this.db.find(new TrackFindAllQuery());
 		return tracks;
 	}
 
