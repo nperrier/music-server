@@ -1,0 +1,23 @@
+/* track edit styles */
+
+/* ng-dirty and ng-invalid appear at the same time - errors should be visible */
+#editTrackForm input.ng-invalid {
+  background-color: red !important;
+}
+
+#editTrackForm input.ng-dirty {
+  background-color: yellow;
+}
+
+.track-edit-input {
+  margin-bottom: 10px;
+}
+
+.track-edit-image {
+  width: 115px;
+}
+
+.track-edit-table td {
+  padding-left: 25px;
+  vertical-align: top;
+}
