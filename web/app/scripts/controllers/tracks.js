@@ -11,30 +11,27 @@ angular.module('musicApp').controller('TracksCtrl', [
   '$scope',
   '$log',
   '$timeout',
-  'usSpinnerService',
+  'LoadingSpinner',
   'Track',
+  'Playlist',
   function(
     $scope,
     $log,
     $timeout,
-    usSpinnerService,
-    Track
+    LoadingSpinner,
+    Track,
+    Playlist
   ) {
 
     $scope.sortField = 'name';
     $scope.reverse = false;
-    $scope.doneLoading = false;
 
-    // wait 1.5 seconds before showing spinner
-    $timeout(function () {
-      if (!$scope.doneLoading) {
-        usSpinnerService.spin('spinner-loading');
-      }
-    }, 1500);
+    var spinner = new LoadingSpinner($scope, 2);
+    spinner.start();
 
-    $scope.tracks = Track.query(function () {
-      usSpinnerService.stop('spinner-loading');
-      $scope.doneLoading = true;
-    });
+    // this is needed for the track-action-menu modal
+    $scope.playlists = Playlist.query(spinner.checkDoneLoading);
+
+    $scope.tracks = Track.query(spinner.checkDoneLoading);
   }
 ]);

@@ -12,40 +12,27 @@ angular.module('musicApp').controller('AlbumDetailCtrl', [
   '$stateParams',
   '$log',
   '$timeout',
-  'usSpinnerService',
+  'LoadingSpinner',
   'Album',
   'Track',
   'Playlist',
-  'PlayerQueue',
   function(
     $scope,
     $stateParams,
     $log,
     $timeout,
-    usSpinnerService,
-    Album
+    LoadingSpinner,
+    Album,
+    Track,
+    Playlist
   ) {
 
   	$scope.sortField = 'number';
   	$scope.reverse = false;
     $scope.variousArtists = false; /* whether the album is a 'Various Artists' */
 
-    var numberPendingRequests = 2;
-
-    // wait 1.5 seconds before showing spinner
-    $timeout(function () {
-      if (!$scope.doneLoading) {
-        usSpinnerService.spin('spinner-loading');
-      }
-    }, 1500);
-
-    var checkDoneLoading = function() {
-      numberPendingRequests--;
-      if (numberPendingRequests <= 0) {
-        usSpinnerService.stop('spinner-loading');
-        $scope.doneLoading = true;
-      }
-    };
+    var spinner = new LoadingSpinner($scope, 3);
+    spinner.start();
 
     /* TODO: compare by artist.name? */
     var isVariousArtists = function(tracks) {
@@ -61,16 +48,15 @@ angular.module('musicApp').controller('AlbumDetailCtrl', [
       return false;
     };
 
-  	Album.get({ albumId: $stateParams.id }, function(album) {
-  		$scope.album = album;
-      checkDoneLoading();
-  	});
+    // this is needed for the track-action-menu modal
+    $scope.playlists = Playlist.query(spinner.checkDoneLoading);
+
+  	$scope.album = Album.get({ albumId: $stateParams.id }, spinner.checkDoneLoading);
 
   	Album.getTracks({ albumId: $stateParams.id }, function(tracks) {
   		$scope.tracks = tracks;
       $scope.variousArtists = isVariousArtists(tracks);
-      checkDoneLoading();
+      spinner.checkDoneLoading();
   	});
-
   }
 ]);

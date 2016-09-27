@@ -7,23 +7,24 @@
  * # ArtistsCtrl
  * Controller of the musicApp
  */
-angular.module('musicApp')
-  .controller('ArtistsCtrl', ['$scope', '$timeout', 'Artist', 'usSpinnerService',
-    function($scope, $timeout, Artist, usSpinnerService) {
+angular.module('musicApp').controller('ArtistsCtrl', [
+  '$scope',
+  '$timeout',
+  'Artist',
+  'LoadingSpinner',
+  function(
+    $scope,
+    $timeout,
+    Artist,
+    LoadingSpinner
+  ) {
 
     $scope.sortField = 'name';
     $scope.reverse = false;
-    $scope.doneLoading = false;
 
-    // wait 1.5 seconds before showing spinner
-    $timeout(function () {
-      if (!$scope.doneLoading) {
-        usSpinnerService.spin('spinner-loading');
-      }
-    }, 1500);
+    var spinner = new LoadingSpinner($scope, 1);
+    spinner.start();
 
-    $scope.artists = Artist.query(function () {
-      usSpinnerService.stop('spinner-loading');
-      $scope.doneLoading = true;
-    });
-  }]);
+    $scope.artists = Artist.query(spinner.checkDoneLoading);
+  }
+]);

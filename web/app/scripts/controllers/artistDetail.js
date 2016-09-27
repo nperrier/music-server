@@ -7,49 +7,40 @@
  * # ArtistDetailCtrl
  * Controller of the musicApp
  */
-
 angular.module('musicApp').controller('ArtistDetailCtrl', [
-    '$scope',
-    '$stateParams',
-    '$log',
-    '$timeout',
-    'usSpinnerService',
-    'Artist',
-    'Album',
-    function(
-      $scope,
-      $stateParams,
-      $log,
-      $timeout,
-      usSpinnerService,
-      Artist,
-      Album) {
+  '$scope',
+  '$stateParams',
+  '$log',
+  '$timeout',
+  'LoadingSpinner',
+  'Artist',
+  'Album',
+  'Playlist',
+  function(
+    $scope,
+    $stateParams,
+    $log,
+    $timeout,
+    LoadingSpinner,
+    Artist,
+    Album,
+    Playlist
+  ) {
 
-      $scope.sortField = 'name';
-      $scope.reverse = false;
-      $scope.doneLoading = false;
+    $scope.sortField = 'name';
+    $scope.reverse = false;
 
-      var numberPendingRequests = 2;
+    var spinner = new LoadingSpinner($scope, 3);
+    spinner.start();
 
-      // wait 1.5 seconds before showing spinner
-      $timeout(function () {
-        if (!$scope.doneLoading) {
-          usSpinnerService.spin('spinner-loading');
-        }
-      }, 1500);
+    // Load artist from rest resource
+    $scope.artist = Artist.get({ artistId: $stateParams.id }, spinner.checkDoneLoading);
 
-      var checkDoneLoading = function() {
-        numberPendingRequests--;
-        if (numberPendingRequests <= 0) {
-          usSpinnerService.stop('spinner-loading');
-          $scope.doneLoading = true;
-        }
-      };
+    // Load albums from rest resource
+    $scope.albums = Artist.getAlbums({ artistId: $stateParams.id }, spinner.checkDoneLoading);
 
-      // Load artist from rest resource
-      $scope.artist = Artist.get({ artistId: $stateParams.id }, checkDoneLoading);
+    // this is needed for the track-action-menu modal
+    $scope.playlists = Playlist.query(spinner.checkDoneLoading);
 
-      // Load albums from rest resource
-      $scope.albums = Artist.getAlbums({ artistId: $stateParams.id }, checkDoneLoading);
-    }
-  ]);
+  }
+]);

@@ -8,29 +8,37 @@
  * Controller of the musicApp
  */
 angular.module('musicApp').controller('GenreTracksCtrl', [
-  '$scope', '$stateParams', '$log', '$timeout', 'usSpinnerService',
-  'Genre', 'Track', 'Playlist', 'PlayerQueue',
-  function($scope, $stateParams, $log, $timeout, usSpinnerService,
-    Genre, Track, Playlist, PlayerQueue) {
+  '$scope',
+  '$stateParams',
+  '$log',
+  '$timeout',
+  'LoadingSpinner',
+  'Genre',
+  'Track',
+  'Playlist',
+  'PlayerQueue',
+  function(
+    $scope,
+    $stateParams,
+    $log,
+    $timeout,
+    LoadingSpinner,
+    Genre,
+    Track,
+    Playlist,
+    PlayerQueue
+  ) {
 
     $scope.sortField = 'name';
     $scope.reverse = false;
-    $scope.doneLoading = false;
 
-    // wait 1.5 seconds before showing spinner
-    $timeout(function () {
-      if (!$scope.doneLoading) {
-        usSpinnerService.spin('spinner-loading');
-      }
-    }, 1500);
+    var spinner = new LoadingSpinner($scope, 2);
+    spinner.start();
 
     // this is needed for the track-action-menu modal
-    $scope.playlists = Playlist.query();
+    $scope.playlists = Playlist.query(spinner.checkDoneLoading);
 
-    $scope.tracks = Genre.getTracks({ genreId: $stateParams.id }, function() {
-      usSpinnerService.stop('spinner-loading');
-      $scope.doneLoading = true;
-    });
+    $scope.tracks = Genre.getTracks({ genreId: $stateParams.id }, spinner.checkDoneLoading);
 
     $scope.updateTrack = function(trackId, trackInfo) {
       $log.debug('updateTrack, trackId: ' + trackId);

@@ -6,7 +6,8 @@ angular.module('musicApp').directive('tracksTable', [
     return {
       restrict: 'E',
       scope: {
-        tracks: '='
+        tracks: '=',
+        playlists: '='
       },
       templateUrl: '/views/tracksTable.html',
       link: function(scope, element, attrs) {

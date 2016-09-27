@@ -8,7 +8,12 @@
  * Service in the musicApp.
  */
 angular.module('musicApp').service('PlayerQueue', [
-  '$log', '$rootScope', function ($log, $rootScope) {
+  '$log',
+  '$rootScope',
+  function(
+    $log,
+    $rootScope
+  ) {
 
     var self = this;
 

@@ -8,7 +8,14 @@
  * Service in the musicApp.
  */
 angular.module('musicApp').service('AudioPlayer', [
-  '$log', '$rootScope', 'User', function ($log, $rootScope, User) {
+  '$log',
+  '$rootScope',
+  'User',
+  function (
+    $log,
+    $rootScope,
+    User
+  ) {
 
     var self = this;
 

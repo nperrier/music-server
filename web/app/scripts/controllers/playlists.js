@@ -7,25 +7,30 @@
  * # PlaylistsCtrl
  * Controller of the musicApp
  */
-angular.module('musicApp')
-  .controller('PlaylistsCtrl', [
-    '$scope', '$log', '$modal', '$timeout', 'usSpinnerService', 'Playlist', 'PlayerQueue',
-    function ($scope, $log, $modal, $timeout, usSpinnerService, Playlist, PlayerQueue) {
+angular.module('musicApp').controller('PlaylistsCtrl', [
+  '$scope',
+  '$log',
+  '$modal',
+  '$timeout',
+  'LoadingSpinner',
+  'Playlist',
+  'PlayerQueue',
+  function(
+    $scope,
+    $log,
+    $modal,
+    $timeout,
+    LoadingSpinner,
+    Playlist,
+    PlayerQueue
+  ) {
 
     $scope.sortField = 'name';
-    $scope.doneLoading = false;
 
-    // wait 1.5 seconds before showing spinner
-    $timeout(function () {
-      if (!$scope.doneLoading) {
-        usSpinnerService.spin('spinner-loading');
-      }
-    }, 1500);
+    var spinner = new LoadingSpinner($scope, 1);
+    spinner.start();
 
-    $scope.playlists = Playlist.query(function() {
-      usSpinnerService.stop('spinner-loading');
-      $scope.doneLoading = true;
-    });
+    $scope.playlists = Playlist.query(spinner.checkDoneLoading);
 
     $scope.createPlaylist = function(playlist) {
       Playlist.save(playlist, function (p) {

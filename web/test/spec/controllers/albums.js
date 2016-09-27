@@ -43,7 +43,7 @@ ddescribe('Controller: AlbumsCtrl', function () {
   var $log;
   var $timeout;
   var _;
-  var usSpinnerService;
+  var LoadingSpinner;
   var Album;
   var Playlist;
   var PlayerQueue;
@@ -56,7 +56,7 @@ ddescribe('Controller: AlbumsCtrl', function () {
     $log             = $injector.get('$log');
     $timeout         = $injector.get('$timeout');
     _                = $injector.get('_');
-    usSpinnerService = $injector.get('usSpinnerService');
+    LoadingSpinner   = $injector.get('LoadingSpinner');
     Album            = $injector.get('Album');
     Playlist         = $injector.get('Playlist');
     PlayerQueue      = $injector.get('PlayerQueue');
@@ -67,14 +67,13 @@ ddescribe('Controller: AlbumsCtrl', function () {
       '$log': $log,
       '$timeout': $timeout,
       '_': _,
-      'usSpinnerService': usSpinnerService,
+      'LoadingSpinner': LoadingSpinner,
       'Album': Album,
       'Playlist': Playlist,
       'PlayerQueue': PlayerQueue
     });
 
   }));
-
 
 
   it('should get all albums on load', function () {

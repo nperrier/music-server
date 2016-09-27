@@ -16,7 +16,7 @@
 
     <div ng-if="albums.length" ng-cloak>
       <h3>Albums</h3>
-      <albums-table albums="albums"></albums-table>
+      <albums-table albums="albums" playlists="playlists"></albums-table>
       <div ng-if="albumsTotal > searchLimit" ng-cloak>
         <a ui-sref="album-search-results({ q: query })" class="">
           See All Results
@@ -26,7 +26,7 @@
 
     <div ng-if="tracks.length" ng-cloak>
       <h3>Tracks</h3>
-      <tracks-table tracks="tracks"></tracks-table>
+      <tracks-table tracks="tracks" playlists="playlists"></tracks-table>
       <div ng-if="tracksTotal > searchLimit" ng-cloak>
         <a ui-sref="track-search-results({ q: query })" class="">
           See All Results

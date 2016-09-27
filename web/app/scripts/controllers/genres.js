@@ -8,23 +8,23 @@
  * Controller of the musicApp
  */
 angular.module('musicApp').controller('GenresCtrl', [
-  '$scope', '$timeout', 'usSpinnerService', 'Genre',
-  function($scope, $timeout, usSpinnerService, Genre) {
+  '$scope',
+  '$timeout',
+  'LoadingSpinner',
+  'Genre',
+  function(
+    $scope,
+    $timeout,
+    LoadingSpinner,
+    Genre
+  ) {
 
     $scope.sortField = 'name';
     $scope.reverse = false;
-    $scope.doneLoading = false;
 
-    // wait 1.5 seconds before showing spinner
-    $timeout(function () {
-      if (!$scope.doneLoading) {
-        usSpinnerService.spin('spinner-loading');
-      }
-    }, 1500);
+    var spinner = new LoadingSpinner($scope, 1);
+    spinner.start();
 
-	  $scope.genres = Genre.query(function () {
-      usSpinnerService.stop('spinner-loading');
-      $scope.doneLoading = true;
-    });
+	  $scope.genres = Genre.query(spinner.checkDoneLoading);
   }
 ]);

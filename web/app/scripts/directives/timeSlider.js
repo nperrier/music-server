@@ -1,7 +1,14 @@
 'use strict';
 
 angular.module('musicApp').directive('timeSlider', [
-  '$rootScope', '$timeout', '$document', function($rootScope, $timeout, $document) {
+  '$rootScope',
+  '$timeout',
+  '$document',
+  function(
+    $rootScope,
+    $timeout,
+    $document
+  ) {
 
     return {
       restrict: 'E',
