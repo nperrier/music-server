@@ -109,7 +109,10 @@ public class CoverArtService extends AbstractIdleService implements ICoverArtSer
 			return null;
 		}
 
-		return new File(album.getCoverArt());
+		String coversDir = this.config.getRequiredString(ApplicationProperties.COVERS_DIR);
+		File file = new File(coversDir + File.separator + album.getCoverArt());
+
+		return file;
 	}
 
 	private File getTrackCoverFile(long id) throws DBException {
@@ -118,14 +121,17 @@ public class CoverArtService extends AbstractIdleService implements ICoverArtSer
 			return null;
 		}
 
-		return new File(track.getCoverArt());
+		String coversDir = this.config.getRequiredString(ApplicationProperties.COVERS_DIR);
+		File file = new File(coversDir + File.separator + track.getCoverArt());
+
+		return file;
 	}
 
 	/**
 	 * TODO
-	 * 
+	 * <p>
 	 * Returns generic artwork
-	 * 
+	 *
 	 * @param type
 	 * @return
 	 */
@@ -153,15 +159,16 @@ public class CoverArtService extends AbstractIdleService implements ICoverArtSer
 		BufferedImage scaledImg = image;
 
 		String extension = this.config.getOptionalString(ARTWORK_FORMAT);
-		String imgPath = this.generateImageName(scaledImg);
+		String imgName = this.generateImageName(scaledImg);
 
 		String coverDir = this.config.getRequiredString(ApplicationProperties.COVERS_DIR);
 		String appRoot = this.config.getRequiredString(ApplicationProperties.APP_ROOT);
 
-		File imageFile = new File(appRoot + File.separator + coverDir + File.separator + imgPath + "." + extension);
+		String imgPath = imgName + "." + extension;
+		File imageFile = new File(appRoot + File.separator + coverDir + File.separator + imgPath);
 		ImageIO.write(scaledImg, extension, imageFile);
 
-		return imageFile.getAbsolutePath();
+		return imgPath;
 	}
 
 	private String generateImageName(BufferedImage image) {
@@ -176,7 +183,7 @@ public class CoverArtService extends AbstractIdleService implements ICoverArtSer
 			case DataBuffer.TYPE_BYTE: {
 				bytes = ((DataBufferByte) raster.getDataBuffer()).getData();
 			}
-				break;
+			break;
 			case DataBuffer.TYPE_INT: {
 				int[] data = ((DataBufferInt) raster.getDataBuffer()).getData();
 				ByteBuffer byteBuffer = ByteBuffer.allocate(data.length * Integer.BYTES);
@@ -184,7 +191,7 @@ public class CoverArtService extends AbstractIdleService implements ICoverArtSer
 				intBuffer.put(data);
 				bytes = byteBuffer.array();
 			}
-				break;
+			break;
 			case DataBuffer.TYPE_SHORT: {
 				final short[] data = ((DataBufferShort) raster.getDataBuffer()).getData();
 				ByteBuffer byteBuffer = ByteBuffer.allocate(data.length * Short.BYTES);
@@ -199,7 +206,7 @@ public class CoverArtService extends AbstractIdleService implements ICoverArtSer
 				shortBuffer.put(data);
 				bytes = byteBuffer.array();
 			}
-				break;
+			break;
 			case DataBuffer.TYPE_FLOAT: {
 				final float[] data = ((DataBufferFloat) raster.getDataBuffer()).getData();
 				ByteBuffer byteBuffer = ByteBuffer.allocate(data.length * Float.BYTES);
@@ -207,7 +214,7 @@ public class CoverArtService extends AbstractIdleService implements ICoverArtSer
 				floatBuffer.put(data);
 				bytes = byteBuffer.array();
 			}
-				break;
+			break;
 			case DataBuffer.TYPE_DOUBLE: {
 				final double[] data = ((DataBufferDouble) raster.getDataBuffer()).getData();
 				ByteBuffer byteBuffer = ByteBuffer.allocate(data.length * Double.BYTES);
@@ -215,7 +222,7 @@ public class CoverArtService extends AbstractIdleService implements ICoverArtSer
 				doubleBuffer.put(data);
 				bytes = byteBuffer.array();
 			}
-				break;
+			break;
 			case DataBuffer.TYPE_UNDEFINED:
 			default:
 				log.error("Unable to generate image path");
@@ -251,12 +258,10 @@ public class CoverArtService extends AbstractIdleService implements ICoverArtSer
 
 	/**
 	 * Scale the image by the specified factor
-	 * 
+	 *
 	 * @param image
 	 * @param dScaleFactor
-	 * 
 	 * @return
-	 * 
 	 */
 	private static BufferedImage scale(BufferedImage image, double dScaleFactor) {
 		// calculate new width and height
@@ -282,14 +287,12 @@ public class CoverArtService extends AbstractIdleService implements ICoverArtSer
 
 	/**
 	 * Calculate the factor to scale the image by
-	 * 
+	 *
 	 * @param srcWidth
 	 * @param srcHeight
 	 * @param targetWidth
 	 * @param targetHeight
-	 * 
 	 * @return
-	 * 
 	 */
 	private static double calcScalingFactor(int srcWidth, int srcHeight, int targetWidth, int targetHeight) {
 		boolean tall = (srcHeight > srcWidth);

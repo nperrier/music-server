@@ -94,10 +94,8 @@ public class Core {
 		SLF4JBridgeHandler.removeHandlersForRootLogger();
 		SLF4JBridgeHandler.install();
 
-		String appDir = this.config.getRequiredString(ApplicationProperties.APP_ROOT);
 		String logDir = this.config.getRequiredString(ApplicationProperties.LOG_DIR);
-		String logPath = appDir + File.separator + logDir;
-		System.setProperty("log_path", logPath);
+		System.setProperty("log_path", logDir);
 
 		// Load logback config
 		LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
@@ -168,12 +166,12 @@ public class Core {
 			throw new Exception("Unable to create application root: " + appRoot);
 		}
 
-		File coverDir = new File(appRoot, this.config.getRequiredString(ApplicationProperties.COVERS_DIR));
+		File coverDir = new File(this.config.getRequiredString(ApplicationProperties.COVERS_DIR));
 		if (!coverDir.exists() && !coverDir.mkdir()) {
 			throw new Exception("Unable to create cover dir: " + coverDir);
 		}
 
-		File logDir = new File(appRoot, this.config.getRequiredString(ApplicationProperties.LOG_DIR));
+		File logDir = new File(this.config.getRequiredString(ApplicationProperties.LOG_DIR));
 		if (!logDir.exists() && !logDir.mkdir()) {
 			throw new Exception("Unable to create log dir: " + logDir);
 		}
