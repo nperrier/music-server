@@ -32,7 +32,6 @@ A simple web app to stream music built using modern Java libraries and AngularJS
 * Download albums
 * Edit meta data of tracks/albums and remember to override when re-scanning (unless some kind of "force tag" option is set)
 * Smart meta-info from source (e.g., musicbrainz)
-* Implement search: (client-side or server-side?)
 * Implement handling of changed metadata for media files in indexer
 * Add ability to delete Library
 * Add a 'Play Now' feature (currently can only add songs to end of queue)
@@ -46,7 +45,5 @@ A simple web app to stream music built using modern Java libraries and AngularJS
 * Add 000 migration with user and grants for db (so it can only read, not to privelged sql cmds)
 * Malicious script could come from ID3 tags of mp3's (e.g., artist name or even image).  Ensure input is validated
 * Ensure 'Edit track' input is validated
-* Redirect 401 to login page
 * Add auth header to img source url's so they don't have to be unauthenticated
 * Find a way to serve audio files in an authenticated way.  Currently they include the auth token in the query param of the src url
-
