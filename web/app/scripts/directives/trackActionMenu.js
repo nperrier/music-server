@@ -20,13 +20,14 @@ angular.module('musicApp').directive('trackActionMenu', [
     Track,
     Playlist,
     PlayerQueue
-    ) {
+  ) {
 
     return {
       restrict: 'E',
       templateUrl: '/views/trackActionMenu.html',
       scope: {
-        track: '='
+        track: '=',
+        playlists: '='
       },
       link: function(scope) {
 
@@ -119,12 +120,6 @@ angular.module('musicApp').directive('trackActionMenu', [
             }
           );
         };
-
-        // PLAYLIST
-
-        // TODO: this takes time to load and functions depend on the result
-        // What to do if result doesn't come?
-        scope.playlists = Playlist.query();
 
         scope.selectPlaylist = function(track) {
 

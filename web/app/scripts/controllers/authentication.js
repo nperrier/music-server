@@ -8,8 +8,22 @@
  * Controller of the musicApp
  */
 angular.module('musicApp').controller('AuthenticationCtrl', [
-  '$scope', '$rootScope', '$log', '$state', '$timeout', 'Authentication', 'User',
-  function($scope, $rootScope, $log, $state, $timeout, Authentication, User) {
+  '$scope',
+  '$rootScope',
+  '$log',
+  '$state',
+  '$timeout',
+  'Authentication',
+  'User',
+  function(
+    $scope,
+    $rootScope,
+    $log,
+    $state,
+    $timeout,
+    Authentication,
+    User
+  ) {
 
     $scope.authFailed = false;
     $scope.doneLoading = false;
@@ -29,7 +43,7 @@ angular.module('musicApp').controller('AuthenticationCtrl', [
           $state.go('dashboard');
           $rootScope.$emit('authenticated', true);
         }
-        else if (response.status < 200 || response.status >= 300 ) {
+        else if (response.status < 200 || response.status >= 300) {
           $scope.authFailed = true;
         }
       });

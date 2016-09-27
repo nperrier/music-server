@@ -8,15 +8,25 @@
  * Controller of the musicApp
  */
 angular.module('musicApp').controller('LibraryCtrl', [
-  '$scope', '$log', '$modal', 'Library',
-  function($scope, $log, $modal, Library) {
+  '$scope',
+  '$log',
+  '$modal',
+  'Library',
+  'LoadingSpinner',
+  function(
+    $scope,
+    $log,
+    $modal,
+    Library,
+    LoadingSpinner
+  ) {
 
     $scope.sortField = 'path';
-    $scope.doneLoading = false;
 
-    $scope.libraries = Library.query(function() {
-      $scope.doneLoading = true;
-    });
+    var spinner = new LoadingSpinner($scope, 1);
+    spinner.start();
+
+    $scope.libraries = Library.query(spinner.checkDoneLoading);
 
     $scope.createLibrary = function(library) {
       Library.save(library, function (l) {

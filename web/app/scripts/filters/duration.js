@@ -9,9 +9,14 @@
  * Filter in the musicApp.
  */
 angular.module('musicApp').filter('duration', [
-  '_', 'moment', function (_, moment) {
+  '_',
+  'moment',
+  function(
+    _,
+    moment
+  ) {
 
-    return function (duration, unit) {
+    return function(duration, unit) {
       // default to milliseconds
       if (_.isUndefined(unit)) {
         unit = 'milliseconds';

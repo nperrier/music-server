@@ -12,46 +12,33 @@ angular.module('musicApp').controller('ArtistTracksCtrl', [
   '$stateParams',
   '$log',
   '$timeout',
-  'usSpinnerService',
+  'LoadingSpinner',
   'Artist',
   'Track',
   'Playlist',
-  'PlayerQueue',
-    function(
-      $scope,
-      $stateParams,
-      $log,
-      $timeout,
-      usSpinnerService,
-      Artist,
-      Track,
-      PlayerQueue) {
+  function(
+    $scope,
+    $stateParams,
+    $log,
+    $timeout,
+    LoadingSpinner,
+    Artist,
+    Track,
+    Playlist
+  ) {
 
     $scope.sortField = 'name';
     $scope.reverse = false;
-    $scope.doneLoading = false;
 
-    var numberPendingRequests = 2;
+    var spinner = new LoadingSpinner($scope, 3);
+    spinner.start();
 
-    var checkDoneLoading = function() {
-      numberPendingRequests--;
-      if (numberPendingRequests <= 0) {
-        usSpinnerService.stop('spinner-loading');
-        $scope.doneLoading = true;
-      }
-    };
+    $scope.artist = Artist.get({ artistId: $stateParams.id }, spinner.checkDoneLoading);
 
-    $scope.artist = Artist.get({ artistId: $stateParams.id }, checkDoneLoading);
+    $scope.tracks = Artist.getTracks({ artistId: $stateParams.id }, spinner.checkDoneLoading);
 
-    $scope.tracks = Artist.getTracks({ artistId: $stateParams.id }, checkDoneLoading);
-
-    // wait 1.5 seconds before showing spinner
-    $timeout(function () {
-      if (!$scope.doneLoading) {
-        usSpinnerService.spin('spinner-loading');
-      }
-    }, 1500);
-
+    // this is needed for the track-action-menu modal
+    $scope.playlists = Playlist.query(spinner.checkDoneLoading);
   }
 ]);
 

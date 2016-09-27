@@ -12,18 +12,17 @@ angular.module('musicApp').controller('SearchResultsCtrl', [
   '$log',
   '$timeout',
   '$stateParams',
-  'usSpinnerService',
+  'LoadingSpinner',
   'Search',
   function(
     $scope,
     $log,
     $timeout,
     $stateParams,
-    usSpinnerService,
+    LoadingSpinner,
     Search
   ) {
 
-    $scope.doneLoading = false;
     $scope.searchLimit = 10;
     $scope.query = $stateParams.q;
 
@@ -31,6 +30,8 @@ angular.module('musicApp').controller('SearchResultsCtrl', [
     $scope.albums = [];
     $scope.tracks = [];
 
+    var spinner = new LoadingSpinner($scope, 1);
+    spinner.start();
 
     Search.query({ q: $stateParams.q }).$promise.then(function(results) {
       $scope.artists = results.artists || [];
@@ -42,15 +43,7 @@ angular.module('musicApp').controller('SearchResultsCtrl', [
       $scope.tracks = results.tracks || [];
       $scope.tracksTotal = results.tracksTotal;
 
-      usSpinnerService.stop('spinner-loading');
-      $scope.doneLoading = true;
+      spinner.checkDoneLoading();
     });
-
-    // wait 1.5 seconds before showing spinner
-    $timeout(function () {
-      if (!$scope.doneLoading) {
-        usSpinnerService.spin('spinner-loading');
-      }
-    }, 1500);
-
-}]);
+  }
+]);

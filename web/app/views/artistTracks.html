@@ -6,8 +6,6 @@
 
     <div ng-if="tracks.length" ng-cloak>
 
-      Search: <input ng-model="trackQuery" ng-minlength="3">
-
       <table class="table table-condensed table-hover">
         <thead>
           <tr>
@@ -21,11 +19,11 @@
           </tr>
         </thead>
         <tbody vs-repeat vs-scroll-parent=".main-content" vs-excess="40">
-          <tr class="track-list-item" ng-repeat="track in tracks | filter:trackQuery | orderBy:sortField:reverse">
+          <tr class="track-list-item" ng-repeat="track in tracks | orderBy:sortField:reverse">
             <td>
               <img class="coverart-thumb" ng-src="{{track.coverArtUrl}}" fade-in />
               <span class="track-title track-text">{{track.name}}</span>
-              <track-action-menu track="track" class="action-menu"></track-action-menu>
+              <track-action-menu track="track" playlists="playlists" class="action-menu"></track-action-menu>
             </td>
             <td>
               <a ui-sref="album-detail({ id: track.album.id })" class="track-text">

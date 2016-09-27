@@ -7,7 +7,8 @@
  * # textToNumber
  */
 angular.module('musicApp').directive('textToNumber',
-  function () {
+  function() {
+
     return {
       restrict: 'A',
       require: 'ngModel',

@@ -7,9 +7,19 @@
  * # QueueCtrl
  * Controller of the musicApp
  */
-angular.module('musicApp')
-  .controller('QueueCtrl', ['$scope', '$log', '$rootScope', '$timeout', 'PlayerQueue',
-    function ($scope, $log, $rootScope, $timeout, PlayerQueue) {
+angular.module('musicApp').controller('QueueCtrl', [
+  '$scope',
+  '$log',
+  '$rootScope',
+  '$timeout',
+  'PlayerQueue',
+  function(
+    $scope,
+    $log,
+    $rootScope,
+    $timeout,
+    PlayerQueue
+  ) {
 
     $scope.tracks = PlayerQueue.getTracks();
     $scope.doneLoading = false;

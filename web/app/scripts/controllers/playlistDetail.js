@@ -8,24 +8,29 @@
  * Controller of the musicApp
  */
 angular.module('musicApp').controller('PlaylistDetailCtrl', [
-  '$scope', '$log', '$stateParams', '$timeout', 'usSpinnerService', '_', 'Playlist',
-  function($scope, $log, $stateParams, $timeout, usSpinnerService, _, Playlist) {
+  '$scope',
+  '$log',
+  '$stateParams',
+  '$timeout',
+  'LoadingSpinner',
+  '_',
+  'Playlist',
+  function(
+    $scope,
+    $log,
+    $stateParams,
+    $timeout,
+    LoadingSpinner,
+    _,
+    Playlist
+  ) {
 
-    $scope.doneLoading = false;
+    var spinner = new LoadingSpinner($scope, 2);
+    spinner.start();
 
-    // wait 1.5 seconds before showing spinner
-    $timeout(function () {
-      if (!$scope.doneLoading) {
-        usSpinnerService.spin('spinner-loading');
-      }
-    }, 1500);
+    $scope.playlist = Playlist.get({ playlistId: $stateParams.id }, spinner.checkDoneLoading);
 
-    $scope.playlist = Playlist.get({ playlistId: $stateParams.id });
-
-    $scope.tracks = Playlist.getTracks({ playlistId: $stateParams.id }, function() {
-      usSpinnerService.stop('spinner-loading');
-      $scope.doneLoading = true;
-    });
+    $scope.tracks = Playlist.getTracks({ playlistId: $stateParams.id }, spinner.checkDoneLoading);
 
     $scope.remove = function(playlistTrack, position) {
       $log.debug('Removing playlistTrack.id: ' + playlistTrack.id + ' at position: ' + position);

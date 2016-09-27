@@ -7,7 +7,8 @@
  * # emptyToNull
  */
 angular.module('musicApp').directive('emptyToNull',
-  function () {
+  function() {
+
     return {
       restrict: 'A',
       require: 'ngModel',

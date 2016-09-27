@@ -7,7 +7,8 @@
  * # User
  * Service in the musicApp.
  */
-angular.module('musicApp').service('User', ['store', function (store) {
+angular.module('musicApp').service('User', [
+  'store', function(store) {
 
     var self = this;
 

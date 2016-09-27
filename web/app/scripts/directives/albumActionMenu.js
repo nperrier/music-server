@@ -24,8 +24,8 @@ angular.module('musicApp').directive('albumActionMenu', [
       restrict: 'E',
       templateUrl: '/views/albumActionMenu.html',
       scope: {
-        album: '='
-        // playlist: '='
+        album: '=',
+        playlists: '='
       },
       link: function(scope) {
 
@@ -101,9 +101,6 @@ angular.module('musicApp').directive('albumActionMenu', [
           );
         };
 */
-
-        // TODO: Pass in via attribute? What happens if the response takes a long time?
-        scope.playlists = Playlist.query();
 
         scope.selectPlaylist = function(album) {
 

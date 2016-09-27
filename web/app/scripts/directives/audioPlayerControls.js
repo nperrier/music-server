@@ -8,8 +8,18 @@
  *
  */
 angular.module('musicApp').directive('audioPlayerControls', [
-  '$log', '$rootScope', '$interval', 'AudioPlayer', 'PlayerQueue',
-    function ($log, $rootScope, $interval, AudioPlayer, PlayerQueue) {
+  '$log',
+  '$rootScope',
+  '$interval',
+  'AudioPlayer',
+  'PlayerQueue',
+  function(
+    $log,
+    $rootScope,
+    $interval,
+    AudioPlayer,
+    PlayerQueue
+  ) {
 
     return {
       restrict: 'E',
