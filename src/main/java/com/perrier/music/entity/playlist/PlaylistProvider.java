@@ -43,8 +43,9 @@ public class PlaylistProvider {
 	}
 
 	public void addAlbumToPlaylist(Playlist playlist, Long albumId, Integer position) throws DBException {
-		this.db.beginTransaction();
 		try {
+			this.db.beginTransaction();
+
 			Album album = this.db.find(new AlbumFindByIdQuery(albumId));
 			final List<Track> albumTracks = album.getTracks();
 			final List<PlaylistTrack> playlistTracks = appendTracksToPlaylist(playlist, albumTracks, position);
@@ -59,8 +60,9 @@ public class PlaylistProvider {
 	}
 
 	public void addTracksToPlaylist(Playlist playlist, List<Long> trackIds, Integer position) throws DBException {
-		this.db.beginTransaction();
 		try {
+			this.db.beginTransaction();
+
 			List<Track> tracks = this.db.find(new TrackFindByIds(trackIds));
 			// Sort tracks by the order specified by the trackIds list:
 			Collections.sort(tracks, (left, right) -> {

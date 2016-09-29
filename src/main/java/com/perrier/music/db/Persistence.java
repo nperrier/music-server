@@ -36,7 +36,7 @@ public class Persistence {
 	/**
 	 * Call once at system start. Must be called before any sessions can be provided.
 	 * 
-	 * @param sm
+	 * @param sessionManager
 	 */
 	public Persistence(SessionManager sessionManager) {
 		this.sessionManager = sessionManager;
@@ -332,7 +332,7 @@ public class Persistence {
 	/**
 	 * Issue a 'CHECKPOINT SYNC' to h2 databases.
 	 */
-	private static final void sync(Session session) {
+	private static void sync(Session session) {
 		session.doWork(new Work() {
 
 			@Override
@@ -489,7 +489,7 @@ public class Persistence {
 	 * Use this to commit and restart your tx when processing a large number of items. You can use this in conjunction
 	 * with 'manual' to process large groups of items efficiently. The tx will be restarted when the count is reached.
 	 * 
-	 * @param maxCount
+	 * @param numItemsPerBatch
 	 * @return true if the tx was committed
 	 */
 	public boolean restartTransaction(int numItemsPerBatch) {
