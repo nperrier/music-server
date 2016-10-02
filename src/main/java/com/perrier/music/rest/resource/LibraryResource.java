@@ -11,8 +11,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
-
 import com.google.inject.Inject;
 import com.perrier.music.db.DBException;
 import com.perrier.music.entity.library.Library;
@@ -42,7 +40,7 @@ public class LibraryResource {
 
 		Library library = this.libraryProvider.findById(id);
 
-		if (!DefaultGroovyMethods.asBoolean(library)) {
+		if (library == null) {
 			throw new EntityNotFoundException("Library not found");
 		}
 
@@ -72,7 +70,7 @@ public class LibraryResource {
 		// TODO validate the path before creating
 		Library lib = this.libraryProvider.findByPath(library.getPath());
 
-		if (DefaultGroovyMethods.asBoolean(lib)) {
+		if (lib != null) {
 			throw new EntityExistsException("Library already exists");
 		}
 
@@ -90,7 +88,7 @@ public class LibraryResource {
 	public Response scan(@PathParam("id") Long id) throws DBException {
 
 		Library library = this.libraryProvider.findById(id);
-		if (!DefaultGroovyMethods.asBoolean(library)) {
+		if (library == null) {
 			throw new EntityExistsException("Library does not exist");
 		}
 
