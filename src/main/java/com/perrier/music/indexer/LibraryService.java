@@ -118,7 +118,7 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 			this.db.beginTransaction();
 
 			// delete tracks from playlist
-			// NOTE: keeping playlist, even though it will be empty
+			// NOTE: keeping playlist, even if it has no tracks as a result
 			this.db.delete(new PlaylistTrackDeleteQuery(track.getId()));
 
 			// delete the track
@@ -173,10 +173,10 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 
 			final Artist artist = this.addArtist(tag.getArtist());
 			final Artist albumArtist = this.addAlbumArtist(tag.getAlbumArtist(), artist);
-			final Genre genre = this.addGenre(tag.getGenre());
 			final Album album = this.addAlbum(albumArtist, tag.getAlbum(), tag.getYear(), tag.getCoverArt());
-			final Track track = this.addTrack(artist, album, genre, tag.getTrack(), tag.getYear(), tag.getNumber(), tag.getLength(), tag
-					.getCoverArt(), file, event.getLibrary());
+			final Genre genre = this.addGenre(tag.getGenre());
+			final Track track = this.addTrack(artist, album, genre, tag.getTrack(), tag.getYear(), tag.getNumber(),
+					tag.getLength(), tag.getCoverArt(), file, event.getLibrary());
 
 			if (track != null) {
 				log.info("Track added: {}", track);
@@ -247,7 +247,7 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 	}
 
 	private Track updateTrack(Track track, Artist artist, Album album, Genre genre, String rawName, Integer number,
-	                          Long length, BufferedImage image, File file, Library library) {
+			Long length, BufferedImage image, File file, Library library) {
 		// track name MUST have a value
 		if (StringUtils.isBlank(rawName)) {
 			log.error("Cannot update track: name was blank, path={}", track.getPath());
@@ -285,8 +285,8 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 		return null;
 	}
 
-	private Track addTrack(Artist artist, Album album, Genre genre, String rawName, String year, Integer number, Long length,
-	                       BufferedImage image, File file, Library library) {
+	private Track addTrack(Artist artist, Album album, Genre genre, String rawName, String year, Integer number,
+			Long length, BufferedImage image, File file, Library library) {
 		// track name MUST have a value
 		if (StringUtils.isBlank(rawName)) {
 			log.error("Cannot add track: name was blank, file={}", file);
@@ -339,13 +339,17 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 			return null;
 		}
 
+		// Don't create an album if it has no associated artist.
+		// The album name is not enough to uniquely identify it.
+		if (artist == null) {
+			log.debug("Skipping adding album '{}': artist was null", rawName);
+			return null;
+		}
+
 		final String name = StringUtils.trim(rawName);
 
 		try {
-			Album album = null;
-			if (artist != null) {
-				album = this.db.find(new AlbumFindByNameAndArtistIdQuery(name, artist.getId()));
-			}
+			Album album = this.db.find(new AlbumFindByNameAndArtistIdQuery(name, artist.getId()));
 
 			if (album == null) {
 				album = new Album();
@@ -382,6 +386,7 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 				artist = new Artist();
 				artist.setName(name);
 				this.db.create(new ArtistCreateQuery(artist));
+				log.debug("Added artist: {}", artist);
 			}
 
 			return artist;
