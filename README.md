@@ -29,7 +29,6 @@ A simple web app to stream music built using modern Java libraries and AngularJS
   * SoundCloud
   * GrooveShark
   * Spotify
-* Download albums
 * Edit meta data of tracks/albums and remember to override when re-scanning (unless some kind of "force tag" option is set)
 * Smart meta-info from source (e.g., musicbrainz)
 * Implement handling of changed metadata for media files in indexer
@@ -47,3 +46,6 @@ A simple web app to stream music built using modern Java libraries and AngularJS
 * Ensure 'Edit track' input is validated
 * Add auth header to img source url's so they don't have to be unauthenticated
 * Find a way to serve audio files in an authenticated way.  Currently they include the auth token in the query param of the src url
+* Add a way to play a specific track on the queue page
+* Multi-edit tracks
+* Edit albums

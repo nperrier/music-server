@@ -1,14 +1,10 @@
 package com.perrier.music.rest.resource;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.Collection;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -29,7 +25,6 @@ import com.perrier.music.entity.track.Track;
 import com.perrier.music.entity.track.TrackProvider;
 import com.perrier.music.rest.stream.FileStreamer;
 import com.perrier.music.server.EntityNotFoundException;
-import org.apache.commons.io.IOUtils;
 
 @Path("api/album")
 @Produces(MediaType.APPLICATION_JSON)

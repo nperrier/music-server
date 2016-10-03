@@ -20,8 +20,9 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import com.perrier.music.entity.track.Track;
 import org.apache.commons.io.IOUtils;
+
+import com.perrier.music.entity.track.Track;
 
 /**
  * Creates a zip file of all the tracks for an album
@@ -36,7 +37,7 @@ public class AlbumZipper {
 		File zipFile = zipPath.toFile();
 
 		try (ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(zipFile))) {
-			List<Track> tracks = album.getTracks(); // TODO: Load track eagerly
+			List<Track> tracks = album.getTracks();
 			for (Track t : tracks) {
 				File path = new File(t.getPath());
 				ZipEntry zipEntry = new ZipEntry(path.getName());
