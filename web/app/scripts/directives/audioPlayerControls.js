@@ -104,17 +104,17 @@ angular.module('musicApp').directive('audioPlayerControls', [
           AudioPlayer.resetPlayer();
         };
 
-        $rootScope.$on('audio.play', function() {
+        var audioPlay = $rootScope.$on('audio.play', function() {
           $log.debug('Event: audio.play');
           startTimeUpdater();
         });
 
-        $rootScope.$on('audio.pause', function() {
+        var audioPause = $rootScope.$on('audio.pause', function() {
           $log.debug('Event: audio.pause');
           stopTimeUpdater();
         });
 
-        $rootScope.$on('audio.ended', function() {
+        var audioEnd = $rootScope.$on('audio.ended', function() {
           $log.debug('Event: audio.ended');
           // play next track
           var nextTrack = PlayerQueue.getNext();
@@ -126,7 +126,7 @@ angular.module('musicApp').directive('audioPlayerControls', [
           }
         });
 
-        $rootScope.$on('queue.track.added', function(evt, track) {
+        var queueTrackAdded = $rootScope.$on('queue.track.added', function(evt, track) {
           $log.debug('Event: queue.track.added, track: ' + track);
           // If there is no track loaded, play it:
           if (!AudioPlayer.isTrackLoaded()) {
@@ -136,7 +136,7 @@ angular.module('musicApp').directive('audioPlayerControls', [
           }
         });
 
-        $rootScope.$on('queue.tracks.removed', function(evt, tracks) {
+        var queueTrackRemoved = $rootScope.$on('queue.tracks.removed', function(evt, tracks) {
           $log.debug('Event: queue.track.removed, tracks: ' + tracks);
           for (var i = 0; i < tracks.length; i++) {
             var t = tracks[i];
@@ -186,6 +186,12 @@ angular.module('musicApp').directive('audioPlayerControls', [
 
         $scope.$on('$destroy', function() {
           stopTimeUpdater();
+          // unbind listeners from $rootScope events:
+          audioPlay();
+          audioPause();
+          audioEnd();
+          queueTrackAdded();
+          queueTrackRemoved();
         });
       }
     };

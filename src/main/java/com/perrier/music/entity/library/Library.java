@@ -79,4 +79,12 @@ public class Library extends AbstractAuditableEntity {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "Library{" +
+				"id=" + id +
+				", path='" + path + '\'' +
+				", lastIndexedDate=" + lastIndexedDate +
+				'}';
+	}
 }

@@ -8,9 +8,19 @@
       </div>
 
       <div class="col-md-8 album-detail">
-        <h1>{{album.name}}<br>
-          <small><a ui-sref="artist-detail({ id: album.artist.id })">{{album.artist.name}}</a></small>
-        </h1>
+        <div>
+          <span class="album-name">
+            {{album.name}}
+          </span>
+          <div class="album-action-menu">
+            <album-action-menu album="album" playlists="playlists" class="action-menu"></album-action-menu>
+          </div>
+        </div>
+
+        <div class="artist-name">
+          <a ui-sref="artist-detail({ id: album.artist.id })">{{album.artist.name}}</a>
+        </div>
+
       </div>
     </div>
 
