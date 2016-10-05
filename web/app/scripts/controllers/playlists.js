@@ -38,24 +38,6 @@ angular.module('musicApp').controller('PlaylistsCtrl', [
       });
     };
 
-    $scope.deletePlaylist = function(playlist, index) {
-      $log.debug('Deleting playlist, id: ' + playlist.id);
-      Playlist.delete({ playlistId: playlist.id }, function () {
-        $scope.playlists.splice(index, 1);
-      });
-    };
-
-    $scope.addPlaylistToQueue = function(playlist) {
-      $log.debug('Add playlist to queue, id: ' + playlist.id);
-
-      $scope.tracks = Playlist.getTracks({ playlistId: playlist.id }, function(tracks) {
-        tracks.forEach(function(playlistTrack) {
-          $log.debug('Add track to player queue, id: ' + playlistTrack.track.id);
-          PlayerQueue.addTrack(playlistTrack.track);
-        });
-      });
-    };
-
     $scope.createPlaylistDialog = function() {
       var modalInstance = $modal.open({
         templateUrl: 'views/playlistCreateModal.html',

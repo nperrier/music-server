@@ -7,30 +7,50 @@
  * # playlistActionMenu
  */
 angular.module('musicApp').directive('playlistActionMenu', [
-  '$log', '$modal', function($log, $modal) {
+  '$log',
+  '$modal',
+  'Playlist',
+  'PlayerQueue',
+  function(
+    $log,
+    $modal,
+    Playlist,
+    PlayerQueue
+  ) {
 
     return {
       restrict: 'E',
       templateUrl: '/views/playlistActionMenu.html',
-      // inherits scope from parent:
-      scope: false,
-      controller: function ($scope) {
+      scope: {
+        playlist: '='
+      },
+      link: function(scope) {
 
-        $scope.delete = function () {
+        scope.addPlaylistToQueue = function(playlist) {
+          $log.debug('Add playlist to queue, id: ' + playlist.id);
+
+          scope.tracks = Playlist.getTracks({ playlistId: playlist.id }, function(tracks) {
+            tracks.forEach(function(playlistTrack) {
+              $log.debug('Add track to player queue, id: ' + playlistTrack.track.id);
+              PlayerQueue.addTrack(playlistTrack.track);
+            });
+          });
+        };
+
+        scope.delete = function () {
           var modalInstance = $modal.open({
             templateUrl: 'views/playlistDeleteModal.html',
             size: 'sm',
             backdrop: false,
             resolve: {
               playlist: function () {
-                return $scope.p;
+                return scope.playlist;
               },
               index: function() {
-                return $scope.$index;
+                return scope.$index;
               }
             },
             controller: function ($scope, $modalInstance, playlist, index) {
-
               $scope.playlist = playlist;
 
               $scope.ok = function (playlist) {
@@ -46,13 +66,21 @@ angular.module('musicApp').directive('playlistActionMenu', [
 
           modalInstance.result.then(
             function (playlist, index) {
-              $scope.deletePlaylist(playlist, index);
+              scope.deletePlaylist(playlist, index);
             },
             function () {
               $log.debug('Modal dismissed');
             }
           );
         };
+
+        scope.deletePlaylist = function(playlist, index) {
+          $log.debug('Deleting playlist, id: ' + playlist.id);
+          Playlist.delete({ playlistId: playlist.id }, function () {
+            scope.playlists.splice(index, 1);
+          });
+        };
+
       }
     };
   }
