@@ -2,7 +2,6 @@ package com.perrier.music.entity.album;
 
 import java.util.List;
 
-import com.perrier.music.entity.track.Track;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -28,15 +27,18 @@ public class AlbumProvider {
 
 	public Album findByIdWithTracks(final long id) throws DBException {
 		try {
-			this.db.beginTransaction();
+			this.db.openSession();
 
 			Album album = this.db.find(new AlbumFindByIdQuery(id));
+			if (album == null) {
+				return null;
+			}
 			// Force Tracks to load, otherwise we'll get LazyInitializationException if the session is closed
 			Hibernate.initialize(album.getTracks());
 
 			return album;
 		} finally {
-			this.db.endTransaction();
+			this.db.closeSession();
 		}
 	}
 

@@ -16,6 +16,7 @@ public class TrackDto extends AuditableDto {
 	private Long length;
 	private String coverArtUrl;
 	private String streamUrl;
+	private String downloadUrl;
 	private String year;
 	private Date fileModificationDate;
 
@@ -111,4 +112,11 @@ public class TrackDto extends AuditableDto {
 		this.streamUrl = streamUrl;
 	}
 
+	public String getDownloadUrl() {
+		return downloadUrl;
+	}
+
+	public void setDownloadUrl(String downloadUrl) {
+		this.downloadUrl = downloadUrl;
+	}
 }

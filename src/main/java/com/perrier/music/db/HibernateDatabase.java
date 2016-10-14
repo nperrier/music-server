@@ -178,7 +178,8 @@ public class HibernateDatabase extends AbstractIdleService implements IDatabase 
 		return end;
 	}
 
-	private Session openSession() throws DBException {
+	@Override
+	public Session openSession() throws DBException {
 		try {
 			final Session s = this.persistence.openSession();
 			return s;
@@ -187,7 +188,8 @@ public class HibernateDatabase extends AbstractIdleService implements IDatabase 
 		}
 	}
 
-	private void closeSession() {
+	@Override
+	public void closeSession() {
 		this.persistence.closeSession();
 	}
 

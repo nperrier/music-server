@@ -36,7 +36,6 @@ public class AuthenticationFilter implements ContainerRequestFilter {
 		//		String role = "admin"; /// TODO: roles
 		//		User user = new User(claims.getSubjectClaim(), role);
 		//		request.setSecurityContext(new MySecurityContext(null));
-
 		return request;
 	}
 

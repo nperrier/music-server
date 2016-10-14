@@ -3,13 +3,19 @@ package com.perrier.music.rest.resource;
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
-import javax.ws.rs.*;
+
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.google.inject.Inject;
 import org.codehaus.groovy.runtime.DefaultGroovyMethods;
 
+import com.google.inject.Inject;
 import com.perrier.music.db.DBException;
 import com.perrier.music.dto.track.TrackDto;
 import com.perrier.music.dto.track.TrackDtoMapper;
@@ -26,6 +32,9 @@ public class TrackResource {
 
 	@Inject
 	private TrackProvider trackProvider;
+
+	//	@Inject
+	//	private ILibraryService libraryService;
 
 	@GET
 	@Path("{id}")
@@ -68,7 +77,7 @@ public class TrackResource {
 
 	@GET
 	@Path("download/{id}")
-	@Produces({"audio/mpeg", "application/json"})
+	@Produces({ "audio/mpeg", "application/json" })
 	public Response download(@PathParam("id") Long id) throws DBException {
 
 		Track track = this.trackProvider.findById(id);
@@ -86,4 +95,24 @@ public class TrackResource {
 				.header("Content-Disposition", "attachment; filename=\"" + filename + "\"") //
 				.build();
 	}
+
+	//	@GET
+	//	@Path("scan/{id}")
+	//	@Produces({ "application/json" })
+	//	public Response scan(@PathParam("id") Long id) throws DBException {
+	//
+	//		Track track = this.trackProvider.findById(id);
+	//
+	//		if (track == null) {
+	//			throw new EntityNotFoundException("track not found");
+	//		}
+	//
+	//		File trackFile = new File(track.getPath());
+	//
+	//		ChangedTrackEvent evt = new ChangedTrackEvent(trackFile, track, track.getLibrary());
+	//		libraryService.handle(evt);
+	//
+	//		return Response.ok() //
+	//				.build();
+	//	}
 }

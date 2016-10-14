@@ -20,6 +20,10 @@ public interface IDatabase extends Service {
 
 	boolean endTransaction();
 
+	Session openSession();
+
+	void closeSession();
+
 	boolean commit() throws DBException;
 
 	boolean rollback();

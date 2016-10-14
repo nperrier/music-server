@@ -11,6 +11,7 @@ public class AlbumDto extends AuditableDto {
 	// private GenreDto genre;
 	private String year;
 	private String coverArtUrl;
+	private String downloadUrl;
 
 	public Long getId() {
 		return id;
@@ -50,5 +51,13 @@ public class AlbumDto extends AuditableDto {
 
 	public void setCoverArtUrl(String coverArtUrl) {
 		this.coverArtUrl = coverArtUrl;
+	}
+
+	public String getDownloadUrl() {
+		return downloadUrl;
+	}
+
+	public void setDownloadUrl(String downloadUrl) {
+		this.downloadUrl = downloadUrl;
 	}
 }

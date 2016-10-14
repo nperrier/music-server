@@ -27,6 +27,7 @@ public class TrackDtoMapper {
 		// TODO: would be nice if the url were derived from somewhere...
 		dto.setCoverArtUrl("/api/cover/track/" + track.getId());
 		dto.setStreamUrl("/api/stream/" + track.getId());
+		dto.setDownloadUrl("/api/track/download/" + track.getId());
 		dto.setFileModificationDate(track.getFileModificationDate());
 		dto.setCreationDate(track.getCreationDate());
 		dto.setModificationDate(track.getModificationDate());

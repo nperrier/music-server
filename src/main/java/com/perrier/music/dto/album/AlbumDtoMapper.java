@@ -25,6 +25,7 @@ public class AlbumDtoMapper {
 		dto.setYear(album.getYear());
 		dto.setArtist(ArtistDtoMapper.build(album.getArtist()));
 		dto.setCoverArtUrl("/api/cover/album/" + album.getId());
+		dto.setDownloadUrl("/api/album/download/" + album.getId());
 		dto.setCreationDate(album.getCreationDate());
 		dto.setModificationDate(album.getModificationDate());
 
