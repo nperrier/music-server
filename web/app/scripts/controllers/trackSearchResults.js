@@ -25,10 +25,10 @@ angular.module('musicApp').controller('TrackSearchResultsCtrl', [
 
     $scope.tracks = [];
 
-    var spinner = new LoadingSpinner($scope, 1);
+    var spinner = new LoadingSpinner($scope);
     spinner.start();
 
-    Search.get({ q: $stateParams.q, table: 'track' }).$promise.then(function(results) {
+    Search.get({ q: $stateParams.q, table: 'track' }, function(results) {
       $scope.tracks = results.tracks;
       spinner.checkDoneLoading();
     });

@@ -12,14 +12,12 @@ angular.module('musicApp').directive('albumActionMenu', [
   'Album',
   'Playlist',
   'PlayerQueue',
-  'User',
   function(
     $log,
     $modal,
     Album,
     Playlist,
-    PlayerQueue,
-    User
+    PlayerQueue
   ) {
 
     return {
@@ -30,14 +28,6 @@ angular.module('musicApp').directive('albumActionMenu', [
         playlists: '='
       },
       link: function(scope) {
-
-        var buildDownloadURL = function(albumId) {
-          var url = '/api/album/download/' + albumId;
-          url += '?token=' + User.getToken();
-          return url;
-        };
-
-        scope.album.downloadURL = buildDownloadURL(scope.album.id);
 
         // Add an Album to the player queue:
         scope.addAlbumToQueue = function(album) {

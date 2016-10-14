@@ -28,7 +28,7 @@ angular.module('musicApp').controller('AlbumSearchResultsCtrl', [
     var spinner = new LoadingSpinner($scope, 1);
     spinner.start();
 
-    Search.get({ q: $stateParams.q, table: 'album' }).$promise.then(function(results) {
+    Search.get({ q: $stateParams.q, table: 'album' }, function(results) {
       $scope.albums = results.albums;
       spinner.checkDoneLoading();
     });

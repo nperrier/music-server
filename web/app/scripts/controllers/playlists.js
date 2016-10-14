@@ -27,10 +27,13 @@ angular.module('musicApp').controller('PlaylistsCtrl', [
 
     $scope.sortField = 'name';
 
-    var spinner = new LoadingSpinner($scope, 1);
+    var spinner = new LoadingSpinner($scope);
     spinner.start();
 
-    $scope.playlists = Playlist.query(spinner.checkDoneLoading);
+    Playlist.query(function(playlists) {
+      $scope.playlists = playlists;
+      spinner.checkDoneLoading();
+    });
 
     $scope.createPlaylist = function(playlist) {
       Playlist.save(playlist, function (p) {

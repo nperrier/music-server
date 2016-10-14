@@ -14,8 +14,7 @@
  $bootstrap-blue: #337ab7;
 
 .coverart-thumb.ng-hide-add,
-.coverart-thumb.ng-hide-remove,
-.queuepage {
+.coverart-thumb.ng-hide-remove {
   transition: all linear 0.5s;
   display: block !important;
 }
@@ -99,26 +98,16 @@ body {
   }
 }
 
-/* Sidebar navigation */
-.nav-sidebar {
-  margin-right: -21px; /* 20px padding + 1px border */
-  margin-bottom: 20px;
-  margin-left: -20px;
-}
-
-.nav-sidebar > li > a {
-  padding-right: 20px;
-  padding-left: 20px;
-}
-
-.nav-sidebar > .active > a {
-  color: #fff;
-  background-color: #428bca;
-}
-
 /*
  * Main content
  */
+
+@media (min-width: 768px) {
+  .main {
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+}
 
 .main {
   position: absolute;
@@ -139,37 +128,18 @@ body {
   overflow-y: scroll;
 }
 
-@media (min-width: 768px) {
-  .main {
-    padding-right: 0px;
-    padding-left: 0px;
-  }
-}
-
 .main .page-header {
   margin-top: 0px;
 }
 
-/*
- * Placeholder dashboard ideas
- */
+/* top nav bar  */
 
-.placeholders {
-  margin-bottom: 30px;
-  text-align: center;
+.login-info {
+  margin-right: 10px;
 }
 
-.placeholders h4 {
-  margin-bottom: 0px;
-}
-
-.placeholder {
-  margin-bottom: 20px;
-}
-
-.placeholder img {
-  display: inline-block;
-  border-radius: 50%;
+.version {
+  font-weight: bold;
 }
 
 #footer {
@@ -179,6 +149,7 @@ body {
   padding-bottom: 5px;
   background-color: #e5e5e5;
 }
+
 
 .coverart-medium {
   width: 300px;
@@ -196,25 +167,15 @@ body {
   background-color: $bootstrap-blue;
 }
 
-.track-menu,
-.album-menu,
-.playlist-menu {
+.action-menu {
+  width: 30px;
+  margin-left: 8px;
+  display: block;
   float: right;
 }
 
-.library-create-input {
-  width: 50%;
-  /* center it: */
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.queue-remove {
+.track-remove {
   font-size: 10px;
-}
-
-.confirm-dialog {
-  padding: 10px;
 }
 
 .page-toolbar {
@@ -252,23 +213,6 @@ body {
   transition: 0.5s linear all;
 }
 
-/*
-.album-info {
-  overflow: hidden;
-}
-
-.album-detail {
-  float: left;
-  padding: 20px;
-  margin: 10px;
-  position: relative;
-}
-
-.album-cover {
-  float: left;
-}
-*/
-
 .track-title {
   width: 75% !important;
 }
@@ -280,13 +224,6 @@ body {
   text-overflow: ellipsis;
   overflow: hidden;
   width: 100%;
-}
-
-.action-menu {
-  width: 30px;
-  margin-left: 8px;
-  display: block;
-  float: right;
 }
 
 .col-track-number {
@@ -305,8 +242,7 @@ body {
   padding-left: 50px;
 }
 
-.col-track-length,
-.col-queue-length {
+.col-track-length {
   text-align: right;
   width: 50px;
 }
@@ -320,38 +256,10 @@ body {
 }
 
 .col-track-artist,
-.col-track-album,
-.col-queue-artist,
-.col-queue-album {
+.col-track-album {
   width: 30%;
 }
 
-.col-album-title {
-  width: 60%;
-}
-.col-album-artist {
-  width: 40%;
-}
-
-.col-queue-status {
-  width: 40px;
-}
-.col-queue-title {
-  width: 40%;
-}
-.col-queue-button,
 .col-track-button {
   width: 46px;
-}
-
-.queue-playing {
-  font-size: 2em;
-}
-
-.login-info {
-  margin-right: 10px;
-}
-
-.version {
-  font-weight: bold;
 }

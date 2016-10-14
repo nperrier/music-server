@@ -11,24 +11,37 @@ angular.module('musicApp').controller('AlbumsCtrl', [
   '$scope',
   '$log',
   '$timeout',
+  '$q',
   'Album',
   'Playlist',
   'LoadingSpinner',
+  'User',
   function(
     $scope,
     $log,
     $timeout,
+    $q,
     Album,
     Playlist,
-    LoadingSpinner
+    LoadingSpinner,
+    User
   ) {
 
-    var spinner = new LoadingSpinner($scope, 2);
+    var spinner = new LoadingSpinner($scope);
     spinner.start();
 
-    $scope.albums = Album.query(spinner.checkDoneLoading);
-
-    // this is needed for the track-action-menu modal
-    $scope.playlists = Playlist.query(spinner.checkDoneLoading);
+    $q.all({
+      albums: Album.query().$promise.then(function(albums) {
+        albums.forEach(function(a) {
+          a.downloadUrl += '?token=' + User.getToken();
+        });
+        return $q.resolve(albums);
+      }),
+      playlists: Playlist.query()
+    }).then(function(result) {
+      $scope.albums = result.albums;
+      $scope.playlists = result.playlists;
+      spinner.checkDoneLoading();
+    });
   }
 ]);

@@ -26,11 +26,11 @@ angular.module('musicApp').controller('ArtistSearchResultsCtrl', [
     $scope.doneLoading = false;
     $scope.artists = [];
 
-    var spinner = new LoadingSpinner($scope, 1);
+    var spinner = new LoadingSpinner($scope);
     spinner.start();
 
-    Search.get({ q: $stateParams.q, table: 'artist' }).$promise.then(function(results) {
-      $scope.artists = results.artists;
+    Search.get({ q: $stateParams.q, table: 'artist' }, function(artists) {
+      $scope.artists = artists;
       spinner.checkDoneLoading();
     });
   }

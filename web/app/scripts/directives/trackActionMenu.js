@@ -31,14 +31,6 @@ angular.module('musicApp').directive('trackActionMenu', [
       },
       link: function(scope) {
 
-        var buildDownloadURL = function(trackId) {
-          var url = '/api/track/download/' + trackId;
-          url += '?token=' + User.getToken();
-          return url;
-        };
-
-        scope.track.downloadURL = buildDownloadURL(scope.track.id);
-
         scope.updateTrack = function(trackId, trackInfo) {
           $log.debug('updateTrack, trackId: ' + trackId);
           Track.update({ trackId: trackId }, trackInfo, function () {

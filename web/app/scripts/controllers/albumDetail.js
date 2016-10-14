@@ -12,51 +12,65 @@ angular.module('musicApp').controller('AlbumDetailCtrl', [
   '$stateParams',
   '$log',
   '$timeout',
+  '$q',
   'LoadingSpinner',
   'Album',
   'Track',
   'Playlist',
+  'User',
   function(
     $scope,
     $stateParams,
     $log,
     $timeout,
+    $q,
     LoadingSpinner,
     Album,
     Track,
-    Playlist
+    Playlist,
+    User
   ) {
 
   	$scope.sortField = 'number';
   	$scope.reverse = false;
     $scope.variousArtists = false; /* whether the album is a 'Various Artists' */
 
-    var spinner = new LoadingSpinner($scope, 3);
+    var spinner = new LoadingSpinner($scope);
     spinner.start();
 
     /* TODO: compare by artist.name? */
     var isVariousArtists = function(tracks) {
-      if (tracks.length) {
-        var artist = tracks[0].artist;
-        for (var i = 0; i < tracks.length; i++) {
-          if (artist.id !== tracks[i].artist.id) {
-            $log.debug('artist.id: ' + artist.id + ' <=> ' + tracks[i].artist.id);
-            return true;
-          }
+      if (!tracks.length) {
+        return false;
+      }
+      var artist = tracks[0].artist;
+      for (var i = 0; i < tracks.length; i++) {
+        if (artist.id !== tracks[i].artist.id) {
+          $log.debug('artist.id: ' + artist.id + ' <=> ' + tracks[i].artist.id);
+          return true;
         }
       }
-      return false;
     };
 
-    // this is needed for the track-action-menu modal
-    $scope.playlists = Playlist.query(spinner.checkDoneLoading);
-
-  	$scope.album = Album.get({ albumId: $stateParams.id }, spinner.checkDoneLoading);
-
-  	Album.getTracks({ albumId: $stateParams.id }, function(tracks) {
-  		$scope.tracks = tracks;
-      $scope.variousArtists = isVariousArtists(tracks);
+    $q.all({
+      album: Album.get({ albumId: $stateParams.id }).$promise.then(function(album) {
+        album.downloadUrl += '?token=' + User.getToken();
+        spinner.checkDoneLoading();
+        return $q.resolve(album);
+      }),
+      playlists: Playlist.query().$promise,
+      tracks: Album.getTracks({ albumId: $stateParams.id }).$promise.then(function(tracks) {
+        tracks.forEach(function(t) {
+          t.downloadUrl += '?token=' + User.getToken();
+        });
+        $scope.variousArtists = isVariousArtists(tracks);
+        return $q.resolve(tracks);
+      })
+    }).then(function(result) {
+      $scope.album = result.album;
+      $scope.playlists = result.playlists;
+      $scope.tracks = result.tracks;
       spinner.checkDoneLoading();
-  	});
+    });
   }
 ]);

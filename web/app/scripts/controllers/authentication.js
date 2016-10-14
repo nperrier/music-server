@@ -34,8 +34,7 @@ angular.module('musicApp').controller('AuthenticationCtrl', [
     }, 10);
 
     $scope.login = function(username, password) {
-      Authentication.login({ username: username, password: password },
-      function (response) {
+      Authentication.login({ username: username, password: password }, function (response) {
         $log.debug('username: ' + username + ', token: ' + response.token);
         if (response.token) {
           $scope.authFailed = false;

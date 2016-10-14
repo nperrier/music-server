@@ -2,7 +2,14 @@
 <div class="jumbotron" ng-class="{'fade-start': !doneLoading, 'fade-in': doneLoading}">
   <div class="container">
 
-    <h2>{{playlist.name}}</h2>
+    <div class="playlist-detail">
+      <span class="playlist-name">
+        {{playlist.name}}
+      </span>
+      <div class="playlist-action-menu">
+        <playlist-action-menu playlist="playlist"></playlist-action-menu>
+      </div>
+    </div>
 
     <div ng-if="tracks.length" ng-cloak>
       <table class="table table-condensed table-hover track-table">
@@ -43,7 +50,7 @@
               {{pt.track.length | duration}}
             </td>
             <td>
-              <button class="btn btn-default queue-remove" ng-click="remove(pt, $index)">
+              <button class="btn btn-default track-remove" ng-click="remove(pt, $index)">
                 <span class="glyphicon glyphicon-remove"></span>
               </button>
             </td>

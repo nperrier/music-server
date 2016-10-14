@@ -23,7 +23,7 @@ angular.module('musicApp').controller('LibraryCtrl', [
 
     $scope.sortField = 'path';
 
-    var spinner = new LoadingSpinner($scope, 1);
+    var spinner = new LoadingSpinner($scope);
     spinner.start();
 
     $scope.libraries = Library.query(spinner.checkDoneLoading);

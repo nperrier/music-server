@@ -56,27 +56,28 @@ angular.module('musicApp').controller('QueueCtrl', [
     };
 
     // TODO: This should update the view
-    $rootScope.$on('track.added', function() {
+    // $rootScope.$on('track.added', function() {
+    $scope.$on('track.added', function() {
       $log.debug('track.added called');
     });
 
     // TODO: This should update the view
-    $rootScope.$on('track.removed', function() {
+    $scope.$on('track.removed', function() {
       $log.debug('track.removed called');
     });
 
     // sent by audio player when track begins playing
-    $rootScope.$on('audio.play', function() {
+    $scope.$on('audio.play', function() {
       $log.debug('audio.play called');
     });
 
     // sent by audio player when track has ended
-    $rootScope.$on('audio.ended', function() {
+    $scope.$on('audio.ended', function() {
       $log.debug('audio.ended called');
     });
 
     // sent by audio player when track has paused
-    $rootScope.$on('audio.pause', function() {
+    $scope.$on('audio.pause', function() {
       $log.debug('audio.pause called');
     });
   }

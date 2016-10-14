@@ -23,7 +23,7 @@
             <td>
               <img class="coverart-thumb" ng-src="{{track.coverArtUrl}}" fade-in />
               <span class="track-title track-text">{{track.name}}</span>
-              <track-action-menu track="track" playlists="playlists" class="action-menu"></track-action-menu>
+              <track-action-menu track="track" playlists="playlists"></track-action-menu>
             </td>
             <td>
               <a ui-sref="album-detail({ id: track.album.id })" class="track-text">

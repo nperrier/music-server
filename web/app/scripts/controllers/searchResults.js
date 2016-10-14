@@ -30,10 +30,10 @@ angular.module('musicApp').controller('SearchResultsCtrl', [
     $scope.albums = [];
     $scope.tracks = [];
 
-    var spinner = new LoadingSpinner($scope, 1);
+    var spinner = new LoadingSpinner($scope);
     spinner.start();
 
-    Search.query({ q: $stateParams.q }).$promise.then(function(results) {
+    Search.query({ q: $stateParams.q }, function(results) {
       $scope.artists = results.artists || [];
       $scope.artistsTotal = results.artistsTotal;
 

@@ -1,8 +1,10 @@
 <!-- playlistDeleteModal.html -->
-<div class="confirm-dialog">
-  <p>Are you sure you want to delete playlist {{playlist.name}}?</p>
-  <div class="ngdialog-buttons">
-    <button class="btn btn-default" ng-click="ok(playlist)">Delete</button>
-    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+<form ng-submit="ok(playlist)">
+  <div class="modal-body">
+    Are you sure you want to delete playlist '{{playlist.name}}'?
   </div>
-</div>
+  <div class="modal-footer">
+    <button class="btn btn-warning">Delete</button>
+    <button class="btn btn-default" ng-click="cancel()">Cancel</button>
+  </div>
+</form>

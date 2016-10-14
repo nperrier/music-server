@@ -20,7 +20,7 @@ angular.module('musicApp').factory('LoadingSpinner', [
       var self = this;
 
       self.scope = scope;
-      self.numberPendingRequests = numberPendingRequests;
+      self.numberPendingRequests = numberPendingRequests || 1;
 
       self.start = function() {
         // wait 1.5 seconds before showing spinner

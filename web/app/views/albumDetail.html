@@ -7,20 +7,19 @@
         <img class="coverart-medium img-responsive" ng-src="{{album.coverArtUrl}}"  fade-in />
       </div>
 
-      <div class="col-md-8 album-detail">
+      <div class="col-md-8">
         <div>
           <span class="album-name">
             {{album.name}}
           </span>
           <div class="album-action-menu">
-            <album-action-menu album="album" playlists="playlists" class="action-menu"></album-action-menu>
+            <album-action-menu album="album" playlists="playlists"></album-action-menu>
           </div>
         </div>
 
         <div class="artist-name">
           <a ui-sref="artist-detail({ id: album.artist.id })">{{album.artist.name}}</a>
         </div>
-
       </div>
     </div>
 
@@ -45,7 +44,7 @@
               </td>
               <td>
                 <span class="track-title track-text">{{track.name}}</span>
-                <track-action-menu track="track" playlists="playlists" class="action-menu" track="track"></track-action-menu>
+                <track-action-menu track="track" playlists="playlists" track="track"></track-action-menu>
               </td>
               <td ng-if="variousArtists">
                 <a ui-sref="artist-detail({ id: track.artist.id})" class="track-text">
