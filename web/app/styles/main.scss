@@ -2,32 +2,13 @@
 // bower:scss
 // endbower
 
+@import "variables";
+
 /*
  * Variables
  */
-
- $header-height: 50px;
- $footer-height: 60px;
- $cover-thumb-width: 40px;
- $cover-thumb-height: 40px;
-
- $bootstrap-blue: #337ab7;
-
-.coverart-thumb.ng-hide-add,
-.coverart-thumb.ng-hide-remove {
-  transition: all linear 0.5s;
-  display: block !important;
-}
-
-.coverart-thumb.ng-hide-add.ng-hide-add-active,
-.coverart-thumb.ng-hide-remove {
-  opacity: 0;
-}
-
-.coverart-thumb.ng-hide-add,
-.coverart-thumb.ng-hide-remove.ng-hide-remove-active {
-  opacity: 1;
-}
+$header-height: 50px;
+$footer-height: 60px;
 
 /*
  * Base structure
@@ -41,27 +22,6 @@ body {
 }
 
 /*
- * Bootstrap overrides
- */
-
-.jumbotron {
-  margin-bottom: 0px;
-  background-color: white;
-}
-
-.table {
-  table-layout: fixed;
-}
-
-.table tbody tr {
-  height: $cover-thumb-height + 10px + 1px; /* cover-img + padding + border */
-}
-
-.track-table {
-  background-color: white;
-}
-
-/*
  * Sidebar
  */
 
@@ -69,18 +29,6 @@ body {
 .sidebar {
   display: none;
 }
-
-/* angular-sortable-view style overrides */
-.sv-helper {
-  opacity: .9;
-  background-color: white;
-}
-/*
-.sv-candidate {}
-.sv-placeholder {}
-.sv-sorting-in-progress {}
-.sv-visibility-hidden {}
-*/
 
 @media (min-width: 768px) {
   .sidebar {
@@ -123,16 +71,9 @@ body {
     width: 100%;
 }
 
-.scrollable {
-  /* need this rule to allow scrolling */
-  overflow-y: scroll;
-}
-
-.main .page-header {
-  margin-top: 0px;
-}
-
-/* top nav bar  */
+/*
+ * Top nav bar
+ */
 
 .login-info {
   margin-right: 10px;
@@ -142,57 +83,21 @@ body {
   font-weight: bold;
 }
 
+/*
+ * Footer tool bar
+ */
+
 #footer {
   width: 100%;
   height: $footer-height;
   padding-top: 5px;
   padding-bottom: 5px;
-  background-color: #e5e5e5;
+  background-color: $page-toolbar-color;
 }
 
-
-.coverart-medium {
-  width: 300px;
-  height: 300px; /* svg crops the width if aspect ratio is different */
-  background-repeat: no-repeat;
-  background-color: $bootstrap-blue;
-}
-
-.coverart-thumb {
-  width: $cover-thumb-width;
-  height: $cover-thumb-height; /* NOTE: svg crops the width if aspect ratio is different */
-  float: left;
-  margin-right: 10px;
-  background-repeat: no-repeat;
-  background-color: $bootstrap-blue;
-}
-
-.action-menu {
-  width: 30px;
-  margin-left: 8px;
-  display: block;
-  float: right;
-}
-
-.track-remove {
-  font-size: 10px;
-}
-
-.page-toolbar {
-  position: fixed;
-  background-color: #e5e5e5;
-  height: 50px;
-  top: 50px;
-  width: 100%;
-  z-index: 10;
-  padding: 8px 20px;
-}
-
-.page-content {
-  margin-top: 50px;
-}
-
-/* angular styles */
+/*
+ * Angular styles
+ */
 
 /*
   Allow angular.js to be loaded in body, hiding cloaked elements until
@@ -203,63 +108,3 @@ body {
   display: none !important;
 }
 
-.fade-start {
-  opacity: 0;
-  height: 0;
-  overflow: hidden;
-}
-
-.fade-in {
-  transition: 0.5s linear all;
-}
-
-.track-title {
-  width: 75% !important;
-}
-
-.track-text {
-  display: inline-block;
-  float: left;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  width: 100%;
-}
-
-.col-track-number {
-  width: 20px;
-}
-
-.col-track-year {
-  width: 50px;
-}
-
-.col-track-title {
-  width: 40%;
-}
-
-.track-title-header {
-  padding-left: 50px;
-}
-
-.col-track-length {
-  text-align: right;
-  width: 50px;
-}
-
-.col-track-position {
-  width: 30px;
-}
-
-.track-length {
-  text-align: right;
-}
-
-.col-track-artist,
-.col-track-album {
-  width: 30%;
-}
-
-.col-track-button {
-  width: 46px;
-}
