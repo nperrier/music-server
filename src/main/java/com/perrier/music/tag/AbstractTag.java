@@ -132,7 +132,7 @@ public abstract class AbstractTag implements ITag {
 		return m.matches() ? m.group(1) : trackNumber;
 	}
 
-	protected abstract static class AbstractTagBuilder<T extends ITag> {
+	public abstract static class AbstractTagBuilder<T extends ITag> {
 
 		private String track;
 		private String artist;

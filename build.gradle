@@ -24,6 +24,23 @@ repositories {
 	mavenCentral()
 }
 
+// add integration tests soure dir
+sourceSets {
+	integrationTest {
+		java {
+			compileClasspath += main.output + test.output
+			runtimeClasspath += main.output + test.output
+			srcDir file('src/integration-test/java')
+		}
+		resources.srcDir file('src/integration-test/resources')
+	}
+}
+
+configurations {
+	integrationTestCompile.extendsFrom testCompile
+	integrationTestRuntime.extendsFrom testRuntime
+}
+
 dependencies {
 	compile(
 			[group: 'javax.servlet', name: 'javax.servlet-api', version: '3.0.+'],
@@ -41,7 +58,7 @@ dependencies {
 			[group: 'org.slf4j', name: 'log4j-over-slf4j', version: '1.7.+'],
 
 			// flyway
-			[group: 'org.flywaydb', name: 'flyway-core', version: '3.1+'],
+			[group: 'org.flywaydb', name: 'flyway-core', version: '3.2+'],
 
 			// h2
 			[group: 'com.h2database', name: 'h2', version: '1.3.+'],
@@ -119,16 +136,16 @@ setEnvironment()
 loadConfig()
 
 def printInfo() {
-    println "version: $version"
-    println "projectDir: $projectDir"
+	println "version: $version"
+	println "projectDir: $projectDir"
 }
 
 def setEnvironment() {
 	if (!hasProperty('env')) {
 		ext.env = 'dev'
 	} else {
-        ext.env = property('env')
-    }
+		ext.env = property('env')
+	}
 
 	println "Environment: $env"
 }
@@ -159,6 +176,24 @@ jar {
 
 test { // test framework package
 	exclude 'com/perrier/music/test/**'
+}
+
+task integrationTest(type: Test) {
+	testClassesDir = sourceSets.integrationTest.output.classesDir
+	classpath = sourceSets.integrationTest.runtimeClasspath
+	outputs.upToDateWhen { false } // this forces task to always run tests
+}
+
+// run integ tests as part of build
+check.dependsOn integrationTest
+// ensure unit tests run before integ tests
+integrationTest.mustRunAfter test
+
+// ensure integ test reports go to separate dir from unit test reports
+tasks.withType(Test) {
+	reports.html.destination = file("${reporting.baseDir}/${name}")
+//	testResultsDir = file("${buildDir}/${testResultsDirName}/${name}")
+//	reports.junitXml.destination = file("${testResultsDir}/${name}")
 }
 
 run {
@@ -196,20 +231,20 @@ applicationDefaultJvmArgs = ['-Dapple.awt.UIElement=true']
 tasks.startScripts {
 	doLast {
 		// Add redirection for stderr to log files in startup script:
-		def scriptShellFile = file "${outputDir}/${applicationName}"
+		def scriptShellFile = file("${outputDir}/${applicationName}")
 		scriptShellFile.text = scriptShellFile.text.replace("${mainClassName} \"\$@\"", "${mainClassName} \"\$@\" 2> \$APP_HOME/log/error.log")
 
 		// TODO: windows script
-		// def scriptBatchFile = file "${outputDir}/${applicationName}.bat"
+		// def scriptBatchFile = file("${outputDir}/${applicationName}.bat")
 		//scriptBatchFile.text = scriptBatchFile.text.replace('CLASSPATH=%APP_HOME%\\lib', 'CLASSPATH=%APP_HOME%\\config\\;%APP_HOME%\\lib')
 	}
 }
 
 applicationDistribution.into('') {
 	//create an empty 'logs' directory in distribution root
-	def logDirBase = new File('/tmp/app-dummy-dir')
+	def logDirBase = file('/tmp/app-dummy-dir')
 	logDirBase.mkdirs()
-	def logDir = new File(logDirBase.absolutePath + '/log')
+	def logDir = file(logDirBase.absolutePath + '/log')
 	logDir.mkdirs()
 
 	from { logDirBase }

@@ -35,6 +35,8 @@ import com.perrier.music.search.SearchProvider;
 import com.perrier.music.server.IServer;
 import com.perrier.music.server.JettyHttpServer;
 import com.perrier.music.server.auth.AuthorizationFilterFactory;
+import com.perrier.music.tag.ITagParser;
+import com.perrier.music.tag.TagParser;
 
 public class MusicModule extends AbstractModule {
 
@@ -49,6 +51,7 @@ public class MusicModule extends AbstractModule {
 		bind(ICoverArtService.class).to(CoverArtService.class).in(Singleton.class);
 		bind(LoginAuthenticator.class).in(Singleton.class);
 		bind(AuthorizationFilterFactory.class).in(Singleton.class);
+		bind(ITagParser.class).to(TagParser.class).in(Singleton.class);
 
 		install(new FactoryModuleBuilder().build(ILibraryIndexerTaskFactory.class));
 

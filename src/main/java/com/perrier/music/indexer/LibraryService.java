@@ -4,15 +4,15 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.eventbus.AllowConcurrentEvents;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.common.util.concurrent.AbstractIdleService;
 import com.google.inject.Inject;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.perrier.music.coverart.CoverArtException;
 import com.perrier.music.coverart.ICoverArtService;
 import com.perrier.music.db.IDatabase;
@@ -30,12 +30,16 @@ import com.perrier.music.entity.genre.GenreFindByNameQuery;
 import com.perrier.music.entity.genre.GenreProvider;
 import com.perrier.music.entity.library.Library;
 import com.perrier.music.entity.playlist.PlaylistTrackDeleteQuery;
-import com.perrier.music.entity.track.*;
+import com.perrier.music.entity.track.Track;
+import com.perrier.music.entity.track.TrackCreateQuery;
+import com.perrier.music.entity.track.TrackDeleteQuery;
+import com.perrier.music.entity.track.TrackFindByNameAndArtistIdAndAlbumIdQuery;
+import com.perrier.music.entity.track.TrackUpdateQuery;
 import com.perrier.music.indexer.event.ChangedTrackEvent;
 import com.perrier.music.indexer.event.MissingTrackEvent;
 import com.perrier.music.indexer.event.UnknownTrackEvent;
 import com.perrier.music.tag.ITag;
-import com.perrier.music.tag.TagFactory;
+import com.perrier.music.tag.ITagParser;
 
 /**
  * Responsible for adding, removing, and changing tracks and related entities in the database
@@ -50,16 +54,18 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 	private final GenreProvider genreProvider;
 	private final AlbumProvider albumProvider;
 	private final ArtistProvider artistProvider;
+	private final ITagParser tagParser;
 
 	@Inject
 	public LibraryService(IDatabase db, EventBus bus, ICoverArtService coverArtService, GenreProvider genreProvider,
-	                      AlbumProvider albumProvider, ArtistProvider artistProvider) {
+			AlbumProvider albumProvider, ArtistProvider artistProvider, ITagParser tagParser) {
 		this.db = db;
 		this.bus = bus;
 		this.coverArtService = coverArtService;
 		this.genreProvider = genreProvider;
 		this.albumProvider = albumProvider;
 		this.artistProvider = artistProvider;
+		this.tagParser = tagParser;
 	}
 
 	@Override
@@ -88,7 +94,7 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 		// The tag meta-data may have changed
 		try {
 			File file = event.getFile();
-			ITag tag = TagFactory.parseTag(file);
+			ITag tag = this.tagParser.parseTag(file);
 			log.debug("Tag: {}", tag);
 
 			final Artist artist = this.addArtist(tag.getArtist());
@@ -108,6 +114,7 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 
 	}
 
+	@Override
 	@Subscribe
 	@AllowConcurrentEvents
 	public void handle(MissingTrackEvent event) {
@@ -160,6 +167,7 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 		}
 	}
 
+	@Override
 	@Subscribe
 	@AllowConcurrentEvents
 	public void handle(UnknownTrackEvent event) {
@@ -167,7 +175,7 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 
 		try {
 			File file = event.getFile();
-			ITag tag = TagFactory.parseTag(file);
+			ITag tag = this.tagParser.parseTag(file);
 
 			log.debug("Tag: {}", tag);
 

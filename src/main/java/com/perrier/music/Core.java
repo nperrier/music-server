@@ -18,6 +18,7 @@ import org.slf4j.bridge.SLF4JBridgeHandler;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Maps;
 import com.google.common.util.concurrent.Service;
 import com.google.inject.AbstractModule;
@@ -43,6 +44,8 @@ import groovy.util.ConfigSlurper;
 public class Core {
 
 	private static final Logger log = LoggerFactory.getLogger(Core.class);
+
+	private volatile boolean initialized;
 
 	private Injector injector;
 	private IDatabase db;
@@ -115,7 +118,8 @@ public class Core {
 		StatusPrinter.printInCaseOfErrorsOrWarnings(loggerContext);
 	}
 
-	private void init(String configFile) throws Exception {
+	@VisibleForTesting
+	void init(String configFile) throws Exception {
 		this.configAppProperties(configFile);
 		this.addMimeTypes();
 		this.createAppDirectories();
@@ -123,6 +127,8 @@ public class Core {
 		this.createDatabase();
 		this.createInjector();
 		this.startServices();
+
+		this.initialized = true;
 	}
 
 	/**
@@ -254,6 +260,14 @@ public class Core {
 		ConfigObject conf = new ConfigSlurper().parse(configFile.toURI().toURL());
 
 		return conf.flatten();
+	}
+
+	public Injector getInjector() {
+		if (!this.initialized) {
+			throw new RuntimeException("Not initialized!");
+		}
+
+		return this.injector;
 	}
 
 }
