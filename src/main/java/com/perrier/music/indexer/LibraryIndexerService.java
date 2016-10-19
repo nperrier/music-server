@@ -13,7 +13,7 @@ import com.google.common.util.concurrent.AbstractIdleService;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
-public class LibraryIndexerService extends AbstractIdleService implements ILibraryIndexerService {
+public class LibraryIndexerService extends AbstractIdleService {
 
 	private static final Logger log = LoggerFactory.getLogger(LibraryIndexerService.class);
 
@@ -26,7 +26,6 @@ public class LibraryIndexerService extends AbstractIdleService implements ILibra
 				.build());
 	}
 
-	@Override
 	public Future<Boolean> submit(LibraryIndexerTask task) {
 		try {
 			Future<Boolean> f = this.executor.submit(task);

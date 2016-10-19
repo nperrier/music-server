@@ -44,7 +44,7 @@ import com.perrier.music.tag.ITagParser;
 /**
  * Responsible for adding, removing, and changing tracks and related entities in the database
  */
-public class LibraryService extends AbstractIdleService implements ILibraryService {
+public class LibraryService extends AbstractIdleService {
 
 	private static final Logger log = LoggerFactory.getLogger(LibraryService.class);
 
@@ -114,7 +114,6 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 
 	}
 
-	@Override
 	@Subscribe
 	@AllowConcurrentEvents
 	public void handle(MissingTrackEvent event) {
@@ -167,7 +166,6 @@ public class LibraryService extends AbstractIdleService implements ILibraryServi
 		}
 	}
 
-	@Override
 	@Subscribe
 	@AllowConcurrentEvents
 	public void handle(UnknownTrackEvent event) {

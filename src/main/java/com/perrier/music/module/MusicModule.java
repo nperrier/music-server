@@ -14,7 +14,6 @@ import com.perrier.music.coverart.CoverArtService;
 import com.perrier.music.coverart.ICoverArtService;
 import com.perrier.music.db.HibernateConfiguration;
 import com.perrier.music.db.HibernateDatabase;
-import com.perrier.music.db.IDBConfiguration;
 import com.perrier.music.db.IDatabase;
 import com.perrier.music.entity.album.AlbumProvider;
 import com.perrier.music.entity.artist.ArtistProvider;
@@ -26,13 +25,10 @@ import com.perrier.music.entity.track.ITrackArtistUpdaterFactory;
 import com.perrier.music.entity.track.ITrackGenreUpdaterFactory;
 import com.perrier.music.entity.track.ITrackUpdaterFactory;
 import com.perrier.music.entity.track.TrackProvider;
-import com.perrier.music.indexer.ILibraryIndexerService;
 import com.perrier.music.indexer.ILibraryIndexerTaskFactory;
-import com.perrier.music.indexer.ILibraryService;
 import com.perrier.music.indexer.LibraryIndexerService;
 import com.perrier.music.indexer.LibraryService;
 import com.perrier.music.search.SearchProvider;
-import com.perrier.music.server.IServer;
 import com.perrier.music.server.JettyHttpServer;
 import com.perrier.music.server.auth.AuthorizationFilterFactory;
 import com.perrier.music.tag.ITagParser;
@@ -44,10 +40,10 @@ public class MusicModule extends AbstractModule {
 	public void configure() {
 
 		bind(IDatabase.class).to(HibernateDatabase.class).asEagerSingleton();
-		bind(IServer.class).to(JettyHttpServer.class).asEagerSingleton();
-		bind(IDBConfiguration.class).to(HibernateConfiguration.class);
-		bind(ILibraryIndexerService.class).to(LibraryIndexerService.class).in(Singleton.class);
-		bind(ILibraryService.class).to(LibraryService.class).in(Singleton.class);
+		bind(JettyHttpServer.class).asEagerSingleton();
+		bind(HibernateConfiguration.class);
+		bind(LibraryIndexerService.class).in(Singleton.class);
+		bind(LibraryService.class).in(Singleton.class);
 		bind(ICoverArtService.class).to(CoverArtService.class).in(Singleton.class);
 		bind(LoginAuthenticator.class).in(Singleton.class);
 		bind(AuthorizationFilterFactory.class).in(Singleton.class);

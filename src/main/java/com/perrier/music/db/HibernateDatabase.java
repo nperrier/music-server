@@ -18,11 +18,11 @@ public class HibernateDatabase extends AbstractIdleService implements IDatabase 
 
 	private static final Logger log = LoggerFactory.getLogger(HibernateDatabase.class);
 
-	private final IDBConfiguration config;
+	private final HibernateConfiguration config;
 	private Persistence persistence;
 
 	@Inject
-	public HibernateDatabase(IDBConfiguration config) {
+	public HibernateDatabase(HibernateConfiguration config) {
 		this.config = config;
 	}
 

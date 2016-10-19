@@ -23,7 +23,7 @@ import com.perrier.music.entity.playlist.Playlist;
 import com.perrier.music.entity.playlist.PlaylistTrack;
 import com.perrier.music.entity.track.Track;
 
-public class HibernateConfiguration implements IDBConfiguration {
+public class HibernateConfiguration {
 
 	private final IConfiguration config;
 
@@ -34,7 +34,6 @@ public class HibernateConfiguration implements IDBConfiguration {
 		this.config = config;
 	}
 
-	@Override
 	public SessionFactory create() throws DBException {
 
 		Configuration hibernateConfig = new Configuration();

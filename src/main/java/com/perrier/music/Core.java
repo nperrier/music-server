@@ -28,11 +28,11 @@ import com.google.inject.Module;
 import com.perrier.music.config.ApplicationConfig;
 import com.perrier.music.config.IConfiguration;
 import com.perrier.music.db.IDatabase;
-import com.perrier.music.indexer.ILibraryIndexerService;
-import com.perrier.music.indexer.ILibraryService;
+import com.perrier.music.indexer.LibraryIndexerService;
+import com.perrier.music.indexer.LibraryService;
 import com.perrier.music.module.MusicModule;
 import com.perrier.music.module.MusicServletModule;
-import com.perrier.music.server.IServer;
+import com.perrier.music.server.JettyHttpServer;
 
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.util.ContextInitializer;
@@ -49,9 +49,9 @@ public class Core {
 
 	private Injector injector;
 	private IDatabase db;
-	private IServer server;
-	private ILibraryService libraryService;
-	private ILibraryIndexerService libraryIndexerService;
+	private JettyHttpServer server;
+	private LibraryService libraryService;
+	private LibraryIndexerService libraryIndexerService;
 	private IConfiguration config;
 
 	public static void main(String[] args) throws Exception {
@@ -224,13 +224,13 @@ public class Core {
 		this.db = this.injector.getInstance(IDatabase.class);
 		this.db.startAsync().awaitRunning();
 
-		this.libraryService = this.injector.getInstance(ILibraryService.class);
+		this.libraryService = this.injector.getInstance(LibraryService.class);
 		this.libraryService.startAsync().awaitRunning();
 
-		this.libraryIndexerService = this.injector.getInstance(ILibraryIndexerService.class);
+		this.libraryIndexerService = this.injector.getInstance(LibraryIndexerService.class);
 		this.libraryIndexerService.startAsync().awaitRunning();
 
-		this.server = this.injector.getInstance(IServer.class);
+		this.server = this.injector.getInstance(JettyHttpServer.class);
 		this.server.startAsync().awaitRunning();
 
 		// ServiceManager manager = new ServiceManager(services);

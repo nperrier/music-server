@@ -15,8 +15,8 @@ import com.google.inject.Inject;
 import com.perrier.music.db.DBException;
 import com.perrier.music.entity.library.Library;
 import com.perrier.music.entity.library.LibraryProvider;
-import com.perrier.music.indexer.ILibraryIndexerService;
 import com.perrier.music.indexer.ILibraryIndexerTaskFactory;
+import com.perrier.music.indexer.LibraryIndexerService;
 import com.perrier.music.server.EntityExistsException;
 import com.perrier.music.server.EntityNotFoundException;
 
@@ -28,7 +28,7 @@ public class LibraryResource {
 	private LibraryProvider libraryProvider;
 
 	@Inject
-	private ILibraryIndexerService indexerService;
+	private LibraryIndexerService indexerService;
 
 	@Inject
 	private ILibraryIndexerTaskFactory taskFactory;

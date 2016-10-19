@@ -20,7 +20,7 @@ import com.perrier.music.ApplicationProperties;
 import com.perrier.music.config.IConfiguration;
 import com.perrier.music.config.Property;
 
-public class JettyHttpServer extends AbstractIdleService implements IServer {
+public class JettyHttpServer extends AbstractIdleService {
 
 	private static final Logger log = LoggerFactory.getLogger(JettyHttpServer.class);
 

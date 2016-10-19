@@ -1,7 +1,5 @@
 package com.perrier.music.indexer;
 
-import static org.junit.Assert.fail;
-
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -12,12 +10,14 @@ import org.junit.Test;
 import com.perrier.music.entity.library.Library;
 import com.perrier.music.test.MusicUnitTest;
 
+import static org.junit.Assert.fail;
+
 /**
  * Sanity test - ensuring that tasks can be interrupted and cease processing in the middle of operations
  */
 public class LibraryIndexerServiceTest extends MusicUnitTest {
 
-	ILibraryIndexerService libraryIndexerService;
+	LibraryIndexerService libraryIndexerService;
 
 	@Before
 	public void before() {
