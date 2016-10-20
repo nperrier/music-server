@@ -1,11 +1,11 @@
 /* album edit styles */
 
 /* ng-dirty and ng-invalid appear at the same time - errors should be visible */
-#albumTrackForm input.ng-invalid {
+#editAlbumForm input.ng-invalid {
   background-color: red !important;
 }
 
-#albumTrackForm input.ng-dirty {
+#editAlbumForm input.ng-dirty {
   background-color: yellow;
 }
 
