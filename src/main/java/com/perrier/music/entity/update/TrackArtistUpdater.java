@@ -1,44 +1,48 @@
-package com.perrier.music.entity.track;
-
-import static org.apache.commons.lang3.StringUtils.isBlank;
+package com.perrier.music.entity.update;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.assistedinject.Assisted;
-import com.google.inject.assistedinject.AssistedInject;
+import com.google.inject.Inject;
 import com.perrier.music.db.DBException;
+import com.perrier.music.db.IDatabase;
 import com.perrier.music.entity.artist.Artist;
 import com.perrier.music.entity.artist.ArtistCreateQuery;
 import com.perrier.music.entity.artist.ArtistFindByNameQuery;
 import com.perrier.music.entity.artist.ArtistUpdateQuery;
-import com.perrier.music.entity.track.AbstractTrackUpdater.UpdateResult.Change;
+import com.perrier.music.entity.track.Track;
+import com.perrier.music.entity.update.UpdateResult.Change;
 
-public class TrackArtistUpdater extends AbstractTrackUpdater<Artist> {
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.normalizeSpace;
+
+public class TrackArtistUpdater {
 
 	private static final Logger log = LoggerFactory.getLogger(TrackArtistUpdater.class);
 
-	@AssistedInject
-	public TrackArtistUpdater(@Assisted Track track) {
-		super(track);
+	private IDatabase db;
+
+	@Inject
+	public void setDatabase(IDatabase db) {
+		this.db = db;
 	}
 
-	public UpdateResult<Artist> handleUpdate(String trackArtistName) throws DBException {
+	public UpdateResult<Artist> handleUpdate(Track track, String trackArtistName) throws DBException {
 
-		String artistName = normalizeInput(trackArtistName);
+		String artistName = normalizeSpace(trackArtistName);
 		Artist trackArtist = track.getArtist();
-		Change change = determineChange(artistName, trackArtist);
+		Change change = determineChange(track, artistName, trackArtist);
 		UpdateResult updateResult = doChange(artistName, trackArtist, change);
 
 		return updateResult;
 	}
 
-	private Change determineChange(String artistName, Artist trackArtist) {
+	private Change determineChange(Track track, String artistName, Artist trackArtist) {
 		Change change = Change.NONE;
 
 		if (trackArtist == null) {
 			if (!isBlank(artistName)) {
-				log.debug("Added new artist to track, artistName={}, trackArtist={}", artistName, track);
+				log.debug("Added new artist to track, artistName={}, track={}", artistName, track);
 				change = Change.CREATED;
 			}
 		} else if (isBlank(artistName)) {

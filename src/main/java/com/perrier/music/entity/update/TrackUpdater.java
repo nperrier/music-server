@@ -1,8 +1,8 @@
-package com.perrier.music.entity.track;
+package com.perrier.music.entity.update;
 
 import com.google.inject.Inject;
-import com.google.inject.assistedinject.Assisted;
-import com.google.inject.assistedinject.AssistedInject;
+import com.perrier.music.entity.track.Track;
+import com.perrier.music.entity.track.TrackUpdateQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,19 +15,16 @@ import com.perrier.music.entity.artist.Artist;
 import com.perrier.music.entity.artist.ArtistProvider;
 import com.perrier.music.entity.genre.Genre;
 import com.perrier.music.entity.genre.GenreProvider;
-import com.perrier.music.entity.track.AbstractTrackUpdater.UpdateResult;
 
 public class TrackUpdater {
 
 	private static final Logger log = LoggerFactory.getLogger(TrackUpdater.class);
-
-	private final Track track;
-
+	
 	private IDatabase db;
 
-	private ITrackArtistUpdaterFactory trackArtistUpdaterFactory;
-	private ITrackAlbumUpdaterFactory trackAlbumUpdaterFactory;
-	private ITrackGenreUpdaterFactory trackGenreUpdaterFactory;
+	private TrackArtistUpdater trackArtistUpdater;
+	private TrackAlbumUpdater trackAlbumUpdater;
+	private TrackGenreUpdater trackGenreUpdater;
 
 	private ArtistProvider artistProvider;
 	private AlbumProvider albumProvider;
@@ -39,18 +36,18 @@ public class TrackUpdater {
 	}
 
 	@Inject
-	public void setTrackArtistUpdaterFactory(ITrackArtistUpdaterFactory trackArtistUpdaterFactory) {
-		this.trackArtistUpdaterFactory = trackArtistUpdaterFactory;
+	public void setTrackArtistUpdater(TrackArtistUpdater trackArtistUpdater) {
+		this.trackArtistUpdater = trackArtistUpdater;
 	}
 
 	@Inject
-	public void setTrackAlbumUpdaterFactory(ITrackAlbumUpdaterFactory trackAlbumUpdaterFactory) {
-		this.trackAlbumUpdaterFactory = trackAlbumUpdaterFactory;
+	public void setTrackAlbumUpdater(TrackAlbumUpdater trackAlbumUpdater) {
+		this.trackAlbumUpdater = trackAlbumUpdater;
 	}
 
 	@Inject
-	public void setTrackAlbumUpdaterFactory(ITrackGenreUpdaterFactory trackGenreUpdaterFactory) {
-		this.trackGenreUpdaterFactory = trackGenreUpdaterFactory;
+	public void setTrackGenreUpdater(TrackGenreUpdater trackGenreUpdater) {
+		this.trackGenreUpdater = trackGenreUpdater;
 	}
 
 	@Inject
@@ -68,24 +65,12 @@ public class TrackUpdater {
 		this.genreProvider = genreProvider;
 	}
 
-	@AssistedInject
-	public TrackUpdater(@Assisted Track track) {
-		this.track = track;
-	}
+	public Track handleUpdates(Track track, TrackUpdateDto trackUpdateDto) throws DBException {
 
-	public Track handleUpdates(TrackUpdateDto trackUpdateDto) throws DBException {
-
-		TrackArtistUpdater trackArtistUpdater = trackArtistUpdaterFactory.create(track);
-		UpdateResult<Artist> artist = trackArtistUpdater.handleUpdate(trackUpdateDto.getArtist());
-
-		TrackArtistUpdater trackAlbumArtistUpdater = trackArtistUpdaterFactory.create(track);
-		UpdateResult<Artist> albumArtist = trackAlbumArtistUpdater.handleUpdate(trackUpdateDto.getAlbumArtist());
-
-		TrackAlbumUpdater trackAlbumUpdater = trackAlbumUpdaterFactory.create(track, albumArtist, artist);
-		UpdateResult<Album> album = trackAlbumUpdater.handleUpdate(trackUpdateDto.getAlbum());
-
-		TrackGenreUpdater trackGenreUpdater = trackGenreUpdaterFactory.create(track);
-		UpdateResult<Genre> genre = trackGenreUpdater.handleUpdate(trackUpdateDto.getGenre());
+		UpdateResult<Artist> artist = trackArtistUpdater.handleUpdate(track, trackUpdateDto.getArtist());
+		UpdateResult<Artist> albumArtist = trackArtistUpdater.handleUpdate(track, trackUpdateDto.getAlbumArtist());
+		UpdateResult<Album> album = trackAlbumUpdater.handleUpdate(track, albumArtist, artist, trackUpdateDto.getAlbum());
+		UpdateResult<Genre> genre = trackGenreUpdater.handleUpdate(track, trackUpdateDto.getGenre());
 
 		boolean nameChanged = false;
 		if (!track.getName().equals(trackUpdateDto.getName())) {

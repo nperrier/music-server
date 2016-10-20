@@ -20,11 +20,11 @@ import com.perrier.music.entity.artist.ArtistProvider;
 import com.perrier.music.entity.genre.GenreProvider;
 import com.perrier.music.entity.library.LibraryProvider;
 import com.perrier.music.entity.playlist.PlaylistProvider;
-import com.perrier.music.entity.track.ITrackAlbumUpdaterFactory;
-import com.perrier.music.entity.track.ITrackArtistUpdaterFactory;
-import com.perrier.music.entity.track.ITrackGenreUpdaterFactory;
-import com.perrier.music.entity.track.ITrackUpdaterFactory;
 import com.perrier.music.entity.track.TrackProvider;
+import com.perrier.music.entity.update.TrackAlbumUpdater;
+import com.perrier.music.entity.update.TrackArtistUpdater;
+import com.perrier.music.entity.update.TrackGenreUpdater;
+import com.perrier.music.entity.update.TrackUpdater;
 import com.perrier.music.indexer.ILibraryIndexerTaskFactory;
 import com.perrier.music.indexer.LibraryIndexerService;
 import com.perrier.music.indexer.LibraryService;
@@ -51,11 +51,6 @@ public class MusicModule extends AbstractModule {
 
 		install(new FactoryModuleBuilder().build(ILibraryIndexerTaskFactory.class));
 
-		install(new FactoryModuleBuilder().build(ITrackUpdaterFactory.class));
-		install(new FactoryModuleBuilder().build(ITrackArtistUpdaterFactory.class));
-		install(new FactoryModuleBuilder().build(ITrackAlbumUpdaterFactory.class));
-		install(new FactoryModuleBuilder().build(ITrackGenreUpdaterFactory.class));
-
 		bind(EventBus.class).in(Singleton.class);
 
 		bind(ArtistProvider.class).in(Singleton.class);
@@ -66,6 +61,10 @@ public class MusicModule extends AbstractModule {
 		bind(PlaylistProvider.class).in(Singleton.class);
 		bind(SearchProvider.class).in(Singleton.class);
 
+		bind(TrackUpdater.class).in(Singleton.class);
+		bind(TrackArtistUpdater.class).in(Singleton.class);
+		bind(TrackAlbumUpdater.class).in(Singleton.class);
+		bind(TrackGenreUpdater.class).in(Singleton.class);
 	}
 
 	@Provides

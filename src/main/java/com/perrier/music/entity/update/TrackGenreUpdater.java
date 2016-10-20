@@ -1,38 +1,42 @@
-package com.perrier.music.entity.track;
-
-import static org.apache.commons.lang3.StringUtils.isBlank;
+package com.perrier.music.entity.update;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.assistedinject.Assisted;
-import com.google.inject.assistedinject.AssistedInject;
+import com.google.inject.Inject;
 import com.perrier.music.db.DBException;
+import com.perrier.music.db.IDatabase;
 import com.perrier.music.entity.genre.Genre;
 import com.perrier.music.entity.genre.GenreCreateQuery;
 import com.perrier.music.entity.genre.GenreFindByNameQuery;
 import com.perrier.music.entity.genre.GenreUpdateQuery;
-import com.perrier.music.entity.track.AbstractTrackUpdater.UpdateResult.Change;
+import com.perrier.music.entity.track.Track;
+import com.perrier.music.entity.update.UpdateResult.Change;
 
-public class TrackGenreUpdater extends AbstractTrackUpdater<Genre> {
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.normalizeSpace;
+
+public class TrackGenreUpdater {
 
 	private static final Logger log = LoggerFactory.getLogger(TrackGenreUpdater.class);
 
-	@AssistedInject
-	public TrackGenreUpdater(@Assisted Track track) {
-		super(track);
+	private IDatabase db;
+
+	@Inject
+	public void setDatabase(IDatabase db) {
+		this.db = db;
 	}
 
-	public UpdateResult<Genre> handleUpdate(String trackGenreName) throws DBException {
-		String genreName = normalizeInput(trackGenreName);
+	public UpdateResult<Genre> handleUpdate(Track track, String trackGenreName) throws DBException {
+		String genreName = normalizeSpace(trackGenreName);
 		Genre trackGenre = track.getGenre();
-		Change change = determineChange(genreName, trackGenre);
+		Change change = determineChange(track, genreName, trackGenre);
 		UpdateResult updateResult = doChange(genreName, trackGenre, change);
 
 		return updateResult;
 	}
 
-	private Change determineChange(String genreName, Genre trackGenre) {
+	private Change determineChange(Track track, String genreName, Genre trackGenre) {
 		Change change = Change.NONE;
 
 		if (trackGenre == null) {
@@ -84,6 +88,6 @@ public class TrackGenreUpdater extends AbstractTrackUpdater<Genre> {
 			throw new RuntimeException("Unknown change type: " + change);
 		}
 
-		return new UpdateResult<Genre>(originalGenre, genreUpdate, change);
+		return new UpdateResult<>(originalGenre, genreUpdate, change);
 	}
 }

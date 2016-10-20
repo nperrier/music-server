@@ -6,16 +6,17 @@ import com.google.inject.Inject;
 import com.perrier.music.db.DBException;
 import com.perrier.music.db.IDatabase;
 import com.perrier.music.dto.track.TrackUpdateDto;
+import com.perrier.music.entity.update.TrackUpdater;
 
 public class TrackProvider {
 
 	private final IDatabase db;
-	private final ITrackUpdaterFactory trackUpdaterFactory;
+	private final TrackUpdater trackUpdater;
 
 	@Inject
-	public TrackProvider(IDatabase db, ITrackUpdaterFactory trackUpdaterFactory) {
+	public TrackProvider(IDatabase db, TrackUpdater trackUpdater) {
 		this.db = db;
-		this.trackUpdaterFactory = trackUpdaterFactory;
+		this.trackUpdater = trackUpdater;
 	}
 
 	public Track findById(long id) throws DBException {
@@ -54,8 +55,8 @@ public class TrackProvider {
 	}
 
 	public Track update(Track track, TrackUpdateDto trackUpdateDto) throws DBException {
-		TrackUpdater updater = trackUpdaterFactory.create(track);
-		return updater.handleUpdates(trackUpdateDto);
+		Track updatedTrack = this.trackUpdater.handleUpdates(track, trackUpdateDto);
+		return updatedTrack;
 	}
 
 	public List<Track> findRandom() throws DBException {

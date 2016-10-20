@@ -1,9 +1,12 @@
-package com.perrier.music.entity.track;
+package com.perrier.music.entity.update;
 
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.*;
 
+import com.perrier.music.entity.track.Track;
+import com.perrier.music.entity.update.TrackAlbumUpdater;
+import com.perrier.music.entity.update.UpdateResult;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -17,7 +20,6 @@ import com.perrier.music.entity.album.AlbumUpdateQuery;
 import com.perrier.music.entity.artist.Artist;
 import com.perrier.music.entity.artist.ArtistCreateQuery;
 import com.perrier.music.entity.artist.ArtistUpdateQuery;
-import com.perrier.music.entity.track.AbstractTrackUpdater.UpdateResult;
 import com.perrier.music.test.MusicUnitTest;
 
 public class TrackAlbumUpdaterTest extends MusicUnitTest {
@@ -56,7 +58,7 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 
 		when(track.getAlbum()).thenReturn(null); // original track had no album
 
-		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate("");
+		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate(track, albumArtistUpdate, artistUpdate, "");
 
 		verify(db, never()).create(isA(AlbumCreateQuery.class));
 		verify(db, never()).update(isA(AlbumUpdateQuery.class));
@@ -72,7 +74,7 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 		when(artistUpdate.isCreatedOrDeleted()).thenReturn(false);
 		when(albumArtistUpdate.isDeleted()).thenReturn(false);
 
-		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate("the college dropout");
+		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate(track, albumArtistUpdate, artistUpdate, "the college dropout");
 
 		verify(db, never()).create(isA(AlbumCreateQuery.class));
 		verify(db, never()).update(isA(AlbumUpdateQuery.class));
@@ -86,7 +88,7 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 
 		when(track.getAlbum()).thenReturn(album); // original track had album
 
-		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate("\t   the  college   dropout  \n");
+		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate(track, albumArtistUpdate, artistUpdate, "\t   the  college   dropout  \n");
 
 		verify(db, never()).create(isA(AlbumCreateQuery.class));
 		verify(db, never()).update(isA(AlbumUpdateQuery.class));
@@ -105,7 +107,7 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 		when(track.getAlbum()).thenReturn(album); // original track had album
 		when(db.update(isA(AlbumUpdateQuery.class))).thenReturn(updatedAlbum);
 
-		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate("tHe CoLLeGe DroPoUt");
+		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate(track, albumArtistUpdate, artistUpdate, "tHe CoLLeGe DroPoUt");
 
 		verify(db, never()).create(isA(AlbumCreateQuery.class));
 		verify(db).update(isA(AlbumUpdateQuery.class));
@@ -124,7 +126,7 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 		when(track.getAlbum()).thenReturn(null); // original track had no album
 		when(db.create(isA(AlbumCreateQuery.class))).thenReturn(album); // create new album
 
-		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate("the college dropout");
+		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate(track, albumArtistUpdate, artistUpdate, "the college dropout");
 
 		verify(db).create(isA(AlbumCreateQuery.class));
 
@@ -143,7 +145,7 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 		when(db.find(isA(AlbumFindByNameAndArtistIdQuery.class))).thenReturn(null); // album doesn't exist
 		when(db.create(isA(AlbumCreateQuery.class))).thenReturn(newAlbum); // create new album
 
-		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate("late registration");
+		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate(track, albumArtistUpdate, artistUpdate, "late registration");
 
 		assertTrue(result.isCreatedOrDeleted());
 		assertSame(newAlbum, result.getUpdate());
@@ -159,7 +161,7 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 		when(track.getAlbum()).thenReturn(album); // original track had album
 		when(db.find(isA(AlbumFindByNameAndArtistIdQuery.class))).thenReturn(newAlbum); // album exists
 
-		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate("late registration");
+		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate(track, albumArtistUpdate, artistUpdate, "late registration");
 
 		verify(db, never()).create(isA(ArtistCreateQuery.class));
 		verify(db, never()).update(isA(ArtistUpdateQuery.class));
@@ -173,7 +175,7 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 
 		when(track.getAlbum()).thenReturn(album); // original track had album
 
-		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate(null);
+		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate(track, albumArtistUpdate, artistUpdate, null);
 
 		verify(db, never()).create(isA(AlbumCreateQuery.class));
 		verify(db, never()).update(isA(AlbumUpdateQuery.class));
@@ -196,7 +198,7 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 		when(artistUpdate.isCreatedOrDeleted()).thenReturn(true);
 		when(db.find(isA(AlbumFindByNameAndArtistIdQuery.class))).thenReturn(existingAlbum);
 
-		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate("kanye west");
+		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate(track, albumArtistUpdate, artistUpdate, "kanye west");
 
 		verify(db, never()).update(isA(AlbumUpdateQuery.class));
 		verify(db, never()).create(isA(AlbumCreateQuery.class));
@@ -228,7 +230,7 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 
 		when(db.create(isA(AlbumCreateQuery.class))).thenReturn(newAlbum);
 
-		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate("kanye west");
+		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate(track, albumArtistUpdate, artistUpdate, "kanye west");
 
 		verify(db, never()).update(isA(AlbumUpdateQuery.class));
 
@@ -252,7 +254,7 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 		when(artistUpdate.isCreatedOrDeleted()).thenReturn(true);
 		when(db.create(isA(AlbumCreateQuery.class))).thenReturn(newAlbum);
 
-		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate("the college dropout");
+		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate(track, albumArtistUpdate, artistUpdate, "the college dropout");
 
 		verify(db, never()).update(isA(AlbumUpdateQuery.class));
 
@@ -282,7 +284,7 @@ public class TrackAlbumUpdaterTest extends MusicUnitTest {
 		when(artistUpdate.getUpdate()).thenReturn(trackArtist);
 		when(db.find(isA(AlbumFindByNameAndArtistIdQuery.class))).thenReturn(existingAlbum);
 
-		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate("late registration");
+		UpdateResult<Album> result = trackAlbumUpdater.handleUpdate(track, albumArtistUpdate, artistUpdate, "late registration");
 
 		verify(db, never()).create(isA(AlbumCreateQuery.class));
 		verify(db, never()).update(isA(AlbumUpdateQuery.class));

@@ -1,4 +1,4 @@
-package com.perrier.music.entity.track;
+package com.perrier.music.entity.update;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -10,6 +10,9 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.perrier.music.entity.track.Track;
+import com.perrier.music.entity.update.TrackArtistUpdater;
+import com.perrier.music.entity.update.UpdateResult;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -20,7 +23,6 @@ import com.perrier.music.entity.artist.Artist;
 import com.perrier.music.entity.artist.ArtistCreateQuery;
 import com.perrier.music.entity.artist.ArtistFindByNameQuery;
 import com.perrier.music.entity.artist.ArtistUpdateQuery;
-import com.perrier.music.entity.track.AbstractTrackUpdater.UpdateResult;
 import com.perrier.music.test.MusicUnitTest;
 
 public class TrackArtistUpdaterTest extends MusicUnitTest {
@@ -53,7 +55,7 @@ public class TrackArtistUpdaterTest extends MusicUnitTest {
 
 		when(track.getArtist()).thenReturn(null); // original track had no artist
 
-		UpdateResult<Artist> result = trackArtistUpdater.handleUpdate("");
+		UpdateResult<Artist> result = trackArtistUpdater.handleUpdate(track, "");
 
 		verify(db, never()).create(isA(ArtistCreateQuery.class));
 		verify(db, never()).update(isA(ArtistUpdateQuery.class));
@@ -67,7 +69,7 @@ public class TrackArtistUpdaterTest extends MusicUnitTest {
 
 		when(track.getArtist()).thenReturn(artist); // original track had artist
 
-		UpdateResult<Artist> result = trackArtistUpdater.handleUpdate("kanye west");
+		UpdateResult<Artist> result = trackArtistUpdater.handleUpdate(track, "kanye west");
 
 		verify(db, never()).create(isA(ArtistCreateQuery.class));
 		verify(db, never()).update(isA(ArtistUpdateQuery.class));
@@ -84,7 +86,7 @@ public class TrackArtistUpdaterTest extends MusicUnitTest {
 
 		when(track.getArtist()).thenReturn(artist); // original track had artist
 
-		UpdateResult<Artist> result = trackArtistUpdater.handleUpdate("\t   kanye   west  \n");
+		UpdateResult<Artist> result = trackArtistUpdater.handleUpdate(track, "\t   kanye   west  \n");
 
 		verify(db, never()).create(isA(ArtistCreateQuery.class));
 		verify(db, never()).update(isA(ArtistUpdateQuery.class));
@@ -106,7 +108,7 @@ public class TrackArtistUpdaterTest extends MusicUnitTest {
 		when(track.getArtist()).thenReturn(artist); // original track had artist
 		when(db.update(isA(ArtistUpdateQuery.class))).thenReturn(updatedArtist);
 
-		UpdateResult<Artist> result = trackArtistUpdater.handleUpdate("KaNyE wEsT");
+		UpdateResult<Artist> result = trackArtistUpdater.handleUpdate(track, "KaNyE wEsT");
 
 		verify(db, never()).create(isA(ArtistCreateQuery.class));
 		verify(db).update(isA(ArtistUpdateQuery.class));
@@ -126,7 +128,7 @@ public class TrackArtistUpdaterTest extends MusicUnitTest {
 		when(db.find(isA(ArtistFindByNameQuery.class))).thenReturn(null); // artist doesn't exist
 		when(db.create(isA(ArtistCreateQuery.class))).thenReturn(artist); // create new artist
 
-		UpdateResult<Artist> result = trackArtistUpdater.handleUpdate("kanye west");
+		UpdateResult<Artist> result = trackArtistUpdater.handleUpdate(track, "kanye west");
 
 		verify(db).create(isA(ArtistCreateQuery.class));
 
@@ -148,7 +150,7 @@ public class TrackArtistUpdaterTest extends MusicUnitTest {
 		when(db.find(isA(ArtistFindByNameQuery.class))).thenReturn(null); // artist doesn't exist
 		when(db.create(isA(ArtistCreateQuery.class))).thenReturn(newArtist); // create new artist
 
-		UpdateResult<Artist> result = trackArtistUpdater.handleUpdate("rick james");
+		UpdateResult<Artist> result = trackArtistUpdater.handleUpdate(track, "rick james");
 
 		verify(db).create(isA(ArtistCreateQuery.class));
 
@@ -169,7 +171,7 @@ public class TrackArtistUpdaterTest extends MusicUnitTest {
 		when(track.getArtist()).thenReturn(artist); // original track had artist
 		when(db.find(isA(ArtistFindByNameQuery.class))).thenReturn(newArtist); // artist exists
 
-		UpdateResult<Artist> result = trackArtistUpdater.handleUpdate("rick james");
+		UpdateResult<Artist> result = trackArtistUpdater.handleUpdate(track, "rick james");
 
 		verify(db, never()).create(isA(ArtistCreateQuery.class));
 		verify(db, never()).update(isA(ArtistUpdateQuery.class));
@@ -186,7 +188,7 @@ public class TrackArtistUpdaterTest extends MusicUnitTest {
 
 		when(track.getArtist()).thenReturn(artist); // original track had artist
 
-		UpdateResult<Artist> result = trackArtistUpdater.handleUpdate(null);
+		UpdateResult<Artist> result = trackArtistUpdater.handleUpdate(track, null);
 
 		verify(db, never()).create(isA(ArtistCreateQuery.class));
 		verify(db, never()).update(isA(ArtistUpdateQuery.class));
