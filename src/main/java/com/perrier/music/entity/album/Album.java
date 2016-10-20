@@ -137,7 +137,6 @@ public class Album extends AbstractAuditableEntity {
 				"id=" + id +
 				", name='" + name + '\'' +
 				", artist=" + artist +
-				", tracks=" + tracks +
 				", year='" + year + '\'' +
 				", coverArt='" + coverArt + '\'' +
 				'}';
