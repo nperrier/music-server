@@ -10,14 +10,18 @@ import com.google.inject.Inject;
 import com.perrier.music.db.DBException;
 import com.perrier.music.db.FindQuery;
 import com.perrier.music.db.IDatabase;
+import com.perrier.music.dto.album.AlbumUpdateDto;
+import com.perrier.music.entity.update.AlbumUpdater;
 
 public class AlbumProvider {
 
 	private final IDatabase db;
+	private final AlbumUpdater albumUpdater;
 
 	@Inject
-	public AlbumProvider(IDatabase db) {
+	public AlbumProvider(IDatabase db, AlbumUpdater albumUpdater) {
 		this.db = db;
+		this.albumUpdater = albumUpdater;
 	}
 
 	public Album findById(final long id) throws DBException {
@@ -99,4 +103,8 @@ public class AlbumProvider {
 		}
 	}
 
+	public Album update(Album album, AlbumUpdateDto albumUpdateDto) throws DBException {
+		Album updatedAlbum = this.albumUpdater.handleUpdates(album, albumUpdateDto);
+		return updatedAlbum;
+	}
 }

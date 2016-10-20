@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -14,8 +16,10 @@ import javax.ws.rs.core.Response;
 
 import com.google.inject.Inject;
 import com.perrier.music.db.DBException;
+import com.perrier.music.db.IDatabase;
 import com.perrier.music.dto.album.AlbumDto;
 import com.perrier.music.dto.album.AlbumDtoMapper;
+import com.perrier.music.dto.album.AlbumUpdateDto;
 import com.perrier.music.dto.track.TrackDto;
 import com.perrier.music.dto.track.TrackDtoMapper;
 import com.perrier.music.entity.album.Album;
@@ -24,11 +28,15 @@ import com.perrier.music.entity.album.AlbumZipper;
 import com.perrier.music.entity.track.Track;
 import com.perrier.music.entity.track.TrackProvider;
 import com.perrier.music.rest.stream.FileStreamer;
+import com.perrier.music.server.EntityExistsException;
 import com.perrier.music.server.EntityNotFoundException;
 
 @Path("api/album")
 @Produces(MediaType.APPLICATION_JSON)
 public class AlbumResource {
+
+	@Inject
+	private IDatabase db;
 
 	@Inject
 	private AlbumProvider albumProvider;
@@ -88,6 +96,27 @@ public class AlbumResource {
 				.type("application/zip")
 				.header("Content-Disposition", "attachment; filename=\"" + filename + "\"")
 				.build();
+	}
+
+	@PUT
+	@Path("{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response updateAlbum(@PathParam("id") Long id, AlbumUpdateDto albumUpdateDto) throws DBException {
+//		try {
+//			this.db.openSession();
+
+			Album album = this.albumProvider.findById(id);
+			if (album == null) {
+				throw new EntityExistsException("Track does not exist");
+			}
+
+			Album updatedAlbum = this.albumProvider.update(album, albumUpdateDto);
+
+			return Response.status(Response.Status.CREATED).entity(updatedAlbum).build();
+//		} finally {
+		//			this.db.closeSession();
+		//		}
 	}
 
 }

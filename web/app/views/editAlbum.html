@@ -1,0 +1,37 @@
+<!-- editAlbum.html -->
+<form id="editAlbumForm" name="editAlbumForm" novalidate>
+  <div class="modal-header">
+    <h3 class="modal-title">Edit Album Info</h3>
+  </div>
+
+  <div class="modal-body">
+    <table class="album-edit-table">
+      <tbody>
+        <tr>
+          <td>
+            <label for="name">Name</label>
+            <input ng-model="album.name" name="name" type="text" size="50" class="form-control album-edit-input" empty-to-null/>
+          </td>
+          <td rowspan="2">
+            <img ng-src="{{album.coverArtUrl}}" class="album-edit-image" />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="artist">Artist</label>
+            <input ng-model="album.artist" name="artist" type="text" size="50" class="form-control album-edit-input" empty-to-null/>
+          </td>
+          <td />
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="modal-footer">
+    <span class="input-group-btn">
+      <button class="btn btn-default" ng-disabled="editAlbumForm.$invalid || isUnchanged(album)" ng-click="save(album)">Save</button>
+      <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+      <button class="btn btn-default" ng-disabled="isUnchanged(album)" ng-click="reset()">Reset</button>
+    </span>
+  </div>
+</form>

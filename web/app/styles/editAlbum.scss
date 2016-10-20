@@ -1,0 +1,23 @@
+/* album edit styles */
+
+/* ng-dirty and ng-invalid appear at the same time - errors should be visible */
+#albumTrackForm input.ng-invalid {
+  background-color: red !important;
+}
+
+#albumTrackForm input.ng-dirty {
+  background-color: yellow;
+}
+
+.album-edit-input {
+  margin-bottom: 10px;
+}
+
+.album-edit-image {
+  width: 115px;
+}
+
+.album-edit-table td {
+  padding-left: 25px;
+  vertical-align: top;
+}

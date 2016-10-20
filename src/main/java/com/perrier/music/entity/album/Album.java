@@ -1,14 +1,26 @@
 package com.perrier.music.entity.album;
 
 import java.util.List;
-import javax.persistence.*;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.perrier.music.entity.AbstractAuditableEntity;
 import com.perrier.music.entity.artist.Artist;
 import com.perrier.music.entity.track.Track;
 
 @Entity
-@Table(name = "album", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "artist_id"})})
+@Table(name = "album", uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "artist_id" }) })
 // @FetchProfile(name = "album-with-tracks", fetchOverrides = {
 // @FetchProfile.FetchOverride(entity = Album.class, association = "tracks", mode = FetchMode.JOIN)
 // })
@@ -79,7 +91,7 @@ public class Album extends AbstractAuditableEntity {
 	}
 
 	// TODO I don't want all the album's Tracks loaded every time I access an Album,
-	// but it seems that Jersey/Jackson don't work properly with LAZY fetching
+	// but it seems that Jersey/Jackson won't work properly with LAZY fetching
 	// @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@OneToMany(cascade = CascadeType.ALL)
 	@JoinColumn(name = "album_id")
@@ -121,8 +133,13 @@ public class Album extends AbstractAuditableEntity {
 
 	@Override
 	public String toString() {
-		return "Album [id=" + this.id + ", name=" + this.name + ", year=" + this.year + ", coverArt=" + this.coverArt
-				+ ", creationDate=" + this.creationDate + ", modificationDate=" + this.modificationDate + "]";
+		return "Album{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				", artist=" + artist +
+				", tracks=" + tracks +
+				", year='" + year + '\'' +
+				", coverArt='" + coverArt + '\'' +
+				'}';
 	}
-
 }

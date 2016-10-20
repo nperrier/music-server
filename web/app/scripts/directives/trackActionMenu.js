@@ -94,7 +94,6 @@ angular.module('musicApp').directive('trackActionMenu', [
 
               $scope.isUnchanged = function(track) {
                 var isEqual = angular.equals(track, $scope.originalTrack);
-                //$log.debug("equal?: " + isEqual);
                 if (isEqual) {
                   this.editTrackForm.$setPristine();
                 }

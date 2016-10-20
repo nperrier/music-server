@@ -24,6 +24,10 @@ angular.module('musicApp').factory('Album', [
         method: 'GET',
         params: { albumId: '@albumId' },
         isArray: true
+      },
+      update: {
+        method: 'PUT',
+        params: { album: '@album' }
       }
     });
   }

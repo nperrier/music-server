@@ -21,6 +21,7 @@ import com.perrier.music.entity.genre.GenreProvider;
 import com.perrier.music.entity.library.LibraryProvider;
 import com.perrier.music.entity.playlist.PlaylistProvider;
 import com.perrier.music.entity.track.TrackProvider;
+import com.perrier.music.entity.update.AlbumUpdater;
 import com.perrier.music.entity.update.TrackAlbumUpdater;
 import com.perrier.music.entity.update.TrackArtistUpdater;
 import com.perrier.music.entity.update.TrackGenreUpdater;
@@ -65,6 +66,7 @@ public class MusicModule extends AbstractModule {
 		bind(TrackArtistUpdater.class).in(Singleton.class);
 		bind(TrackAlbumUpdater.class).in(Singleton.class);
 		bind(TrackGenreUpdater.class).in(Singleton.class);
+		bind(AlbumUpdater.class).in(Singleton.class);
 	}
 
 	@Provides
