@@ -48,7 +48,6 @@ A simple web app to stream music built using modern Java libraries and AngularJS
 * Find a way to serve audio files in an authenticated way.  Currently they include the auth token in the query param of the src url
 * Add a way to play a specific track on the queue page
 * Multi-edit tracks
-* Edit Playlists (rename)
 * Add track action menu to playlist track table
 * Create installer and upgrade scripts
 
