@@ -23,6 +23,10 @@ angular.module('musicApp').factory('Playlist', [
         method: 'POST',
         params: { name: '@name' }
       },
+      update: {
+        method: 'PUT',
+        params: { playlist: '@playlist' }
+      },
       delete: {
         method: 'DELETE',
         params: { playlistId: '@playlistId' }

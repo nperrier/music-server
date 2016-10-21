@@ -9,15 +9,19 @@
 angular.module('musicApp').directive('albumActionMenu', [
   '$log',
   '$modal',
+  '_',
   'Album',
   'Playlist',
   'PlayerQueue',
+  'User',
   function(
     $log,
     $modal,
+    _,
     Album,
     Playlist,
-    PlayerQueue
+    PlayerQueue,
+    User
   ) {
 
     return {

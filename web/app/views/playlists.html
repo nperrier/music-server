@@ -19,7 +19,7 @@
           <tbody>
             <tr ng-repeat="p in playlists | orderBy:sortField:reverse">
               <td>
-                <a ui-sref="playlist-detail({ id: p.id })" class="thumb">
+                <a ui-sref="playlist-detail({ id: p.id })">
                   {{p.name}}
                 </a>
                 <playlist-action-menu playlist="p"></playlist-action-menu>

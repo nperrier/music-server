@@ -13,8 +13,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.codehaus.groovy.runtime.DefaultGroovyMethods;
-
 import com.google.inject.Inject;
 import com.perrier.music.db.DBException;
 import com.perrier.music.dto.track.TrackDto;
@@ -23,7 +21,6 @@ import com.perrier.music.dto.track.TrackUpdateDto;
 import com.perrier.music.entity.track.Track;
 import com.perrier.music.entity.track.TrackProvider;
 import com.perrier.music.rest.stream.FileStreamer;
-import com.perrier.music.server.EntityExistsException;
 import com.perrier.music.server.EntityNotFoundException;
 
 @Path("api/track")
@@ -41,12 +38,7 @@ public class TrackResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public TrackDto get(@PathParam("id") Long id) throws DBException {
 
-		Track track = this.trackProvider.findById(id);
-
-		if (track == null) {
-			throw new EntityNotFoundException();
-		}
-
+		Track track = getTrack(id);
 		TrackDto trackDto = TrackDtoMapper.build(track);
 
 		return trackDto;
@@ -65,11 +57,7 @@ public class TrackResource {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateTrack(@PathParam("id") Long id, TrackUpdateDto trackUpdateDto) throws DBException {
 
-		Track track = this.trackProvider.findById(id);
-		if (!DefaultGroovyMethods.asBoolean(track)) {
-			throw new EntityExistsException("Track does not exist");
-		}
-
+		Track track = getTrack(id);
 		Track updatedTrack = this.trackProvider.update(track, trackUpdateDto);
 
 		return Response.status(Response.Status.CREATED).entity(updatedTrack).build();
@@ -80,11 +68,7 @@ public class TrackResource {
 	@Produces({ "audio/mpeg", "application/json" })
 	public Response download(@PathParam("id") Long id) throws DBException {
 
-		Track track = this.trackProvider.findById(id);
-
-		if (track == null) {
-			throw new EntityNotFoundException("track not found");
-		}
+		Track track = getTrack(id);
 
 		File trackFile = new File(track.getPath());
 		String filename = trackFile.getName();
@@ -94,6 +78,14 @@ public class TrackResource {
 				.type("audio/mpeg") //
 				.header("Content-Disposition", "attachment; filename=\"" + filename + "\"") //
 				.build();
+	}
+
+	private Track getTrack(Long id) throws DBException {
+		Track track = this.trackProvider.findById(id);
+		if (track == null) {
+			throw new EntityNotFoundException("Track not found");
+		}
+		return track;
 	}
 
 	//	@GET

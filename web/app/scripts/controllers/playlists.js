@@ -14,15 +14,13 @@ angular.module('musicApp').controller('PlaylistsCtrl', [
   '$timeout',
   'LoadingSpinner',
   'Playlist',
-  'PlayerQueue',
   function(
     $scope,
     $log,
     $modal,
     $timeout,
     LoadingSpinner,
-    Playlist,
-    PlayerQueue
+    Playlist
   ) {
 
     $scope.sortField = 'name';

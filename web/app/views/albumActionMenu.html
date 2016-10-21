@@ -5,22 +5,22 @@
   </button>
   <ul class="dropdown-menu dropdown-menu-right">
     <li>
-      <a href ng-click="editAlbum(album)" class="thumb">
+      <a href ng-click="editAlbum(album)">
         Edit
       </a>
     </li>
     <li>
-      <a href ng-click="addAlbumToQueue(album)" class="thumb">
+      <a href ng-click="addAlbumToQueue(album)">
         Add to Queue
       </a>
     </li>
     <li ng-if="playlists.length">
-      <a href ng-click="selectPlaylist(album)" class="thumb">
+      <a href ng-click="selectPlaylist(album)">
         Add to Playlist
       </a>
     </li>
     <li>
-      <a download ng-href="{{album.downloadUrl}}" class="thumb">
+      <a download ng-href="{{album.downloadUrl}}">
         Download
       </a>
     </li>

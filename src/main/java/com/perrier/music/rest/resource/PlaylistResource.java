@@ -55,6 +55,18 @@ public class PlaylistResource {
 		return Response.status(Response.Status.CREATED).entity(playlistDto).build();
 	}
 
+	@PUT
+	@Path("{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response get(@PathParam("id") Long id, PlaylistDto playlistUpdateDto) throws DBException {
+		Playlist playlist = getPlaylist(id, false);
+
+		Playlist updatedPlaylist = this.playlistProvider.update(playlist, playlistUpdateDto);
+
+		return Response.status(Response.Status.CREATED).entity(updatedPlaylist).build();
+	}
+
 	@DELETE
 	@Path("{id}")
 	public Response deletePlaylist(@PathParam("id") Long id) throws DBException {
@@ -103,9 +115,7 @@ public class PlaylistResource {
 	@POST
 	@Path("{id}/album/{albumId}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addAlbum(
-			@PathParam("id") Long id,
-			@PathParam("albumId") Long albumId,
+	public Response addAlbum(@PathParam("id") Long id, @PathParam("albumId") Long albumId,
 			@QueryParam("position") Integer position) throws DBException {
 		Playlist playlist = getPlaylist(id, true);
 		this.playlistProvider.addAlbumToPlaylist(playlist, albumId, position);

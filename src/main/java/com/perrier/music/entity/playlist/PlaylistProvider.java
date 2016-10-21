@@ -6,9 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.google.inject.Inject;
-
 import com.perrier.music.db.DBException;
 import com.perrier.music.db.IDatabase;
+import com.perrier.music.dto.playlist.PlaylistDto;
 import com.perrier.music.dto.playlist.PlaylistTrackDto;
 import com.perrier.music.entity.album.Album;
 import com.perrier.music.entity.album.AlbumFindByIdQuery;
@@ -82,7 +82,8 @@ public class PlaylistProvider {
 		}
 	}
 
-	private List<PlaylistTrack> appendTracksToPlaylist(Playlist playlist, List<Track> tracks, Integer position) throws DBException {
+	private List<PlaylistTrack> appendTracksToPlaylist(Playlist playlist, List<Track> tracks, Integer position)
+			throws DBException {
 		if (tracks.isEmpty()) {
 			return Collections.emptyList();
 		}
@@ -135,5 +136,12 @@ public class PlaylistProvider {
 
 		// hibernate will update position column:
 		this.db.update(new PlaylistUpdateQuery(playlist));
+	}
+
+	public Playlist update(Playlist playlist, PlaylistDto playlistUpdateDto) {
+		playlist.setName(playlistUpdateDto.getName());
+		this.db.update(new PlaylistUpdateQuery(playlist));
+
+		return playlist;
 	}
 }

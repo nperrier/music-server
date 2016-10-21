@@ -26,6 +26,48 @@ angular.module('musicApp').directive('playlistActionMenu', [
       },
       link: function(scope) {
 
+        scope.updatePlaylist = function(playlist) {
+          $log.debug('Updating playlist, id: ' + playlist.id);
+          Playlist.update({ playlistId: playlist.id }, playlist, function (playlist) {
+            // update the playlist
+            scope.playlist = playlist;
+          });
+        };
+
+        scope.editPlaylist = function() {
+
+          var modalInstance = $modal.open({
+            templateUrl: 'views/playlistEditModal.html',
+            backdrop: false,
+            resolve: {
+             playlist: function () {
+                return scope.playlist;
+              }
+            },
+            controller: function ($scope, $modalInstance, playlist) {
+              // copy playlist
+              $scope.playlist = angular.copy(playlist);
+
+              $scope.save = function (playlist) {
+                $modalInstance.close(playlist);
+              };
+
+              $scope.cancel = function () {
+                $modalInstance.dismiss('cancelled');
+              };
+            }
+          });
+
+          modalInstance.result.then(
+            function (playlist) {
+              scope.updatePlaylist(playlist);
+            },
+            function (reason) {
+              $log.debug('Modal dismissed: ' + reason);
+            }
+          );
+        };
+
         scope.addPlaylistToQueue = function(playlist) {
           $log.debug('Add playlist to queue, id: ' + playlist.id);
 
