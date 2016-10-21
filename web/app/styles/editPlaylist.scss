@@ -1,0 +1,10 @@
+/* editPlaylist.scss */
+
+/* ng-dirty and ng-invalid appear at the same time - errors should be visible */
+#editPlaylistForm input.ng-invalid {
+  background-color: red !important;
+}
+
+#editPlaylistForm input.ng-dirty {
+  background-color: yellow;
+}

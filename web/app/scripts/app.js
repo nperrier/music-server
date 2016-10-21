@@ -211,18 +211,16 @@ musicApp.config(function($httpProvider) {
 			},
 			responseError: function(rejection) {
 				if (rejection.config.url === 'api/authentication') {
-					return rejection;
+					return $q.reject(rejection);
 				}
 
 				if (rejection.status !== 401) {
-					return rejection;
+					return $q.reject(rejection);;
 				}
 
-				var deferred = $q.defer();
 				$state.go('authentication');
-				deferred.reject(rejection);
 
-				return deferred.promise;
+				return $q.reject(rejection);
 			}
 		};
 	});

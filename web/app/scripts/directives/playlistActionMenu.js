@@ -26,18 +26,10 @@ angular.module('musicApp').directive('playlistActionMenu', [
       },
       link: function(scope) {
 
-        scope.updatePlaylist = function(playlist) {
-          $log.debug('Updating playlist, id: ' + playlist.id);
-          Playlist.update({ playlistId: playlist.id }, playlist, function (playlist) {
-            // update the playlist
-            scope.playlist = playlist;
-          });
-        };
-
         scope.editPlaylist = function() {
 
           var modalInstance = $modal.open({
-            templateUrl: 'views/playlistEditModal.html',
+            templateUrl: 'views/editPlaylistModal.html',
             backdrop: false,
             resolve: {
              playlist: function () {
@@ -49,18 +41,29 @@ angular.module('musicApp').directive('playlistActionMenu', [
               $scope.playlist = angular.copy(playlist);
 
               $scope.save = function (playlist) {
-                $modalInstance.close(playlist);
+                $log.debug('Updating playlist, id: ' + playlist.id);
+                var update = Playlist.update({ playlistId: playlist.id }, playlist);
+                update.$promise.then(
+                  function(playlist) {
+                    $modalInstance.close(playlist);
+                  },
+                  function (error) {
+                    $log.debug('Error updating playlist, id: ' + playlist.id);
+                    $scope.error = true;
+                  }
+                );
               };
 
-              $scope.cancel = function () {
-                $modalInstance.dismiss('cancelled');
+              $scope.cancel = function (reason) {
+                reason = reason || 'cancelled';
+                $modalInstance.dismiss(reason);
               };
             }
           });
 
           modalInstance.result.then(
             function (playlist) {
-              scope.updatePlaylist(playlist);
+              scope.playlist = playlist;
             },
             function (reason) {
               $log.debug('Modal dismissed: ' + reason);

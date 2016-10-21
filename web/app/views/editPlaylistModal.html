@@ -1,15 +1,17 @@
 <!-- playlistEditModal.html -->
-<form ng-submit="save(playlist)">
+<form id="editPlaylistForm" name="editPlaylistForm" novalidate>
   <div class="modal-header">
     <h3 class="modal-title">Edit Playlist</h3>
   </div>
 
   <div class="modal-body">
+    <div uib-alert class="alert alert-danger" ng-if="error">Error updating playlist</div>
+
     <input ng-model="playlist.name" required id="name" name="name" type="text" size="50" class="form-control">
   </div>
 
   <div class="modal-footer">
-    <button class="btn btn-default">Save</button>
+    <button class="btn btn-default" ng-click="save(playlist)">Save</button>
     <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
   </div>
 </form>
