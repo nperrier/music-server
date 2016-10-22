@@ -34,18 +34,27 @@ angular.module('musicApp').controller('AuthenticationCtrl', [
     }, 10);
 
     $scope.login = function(username, password) {
-      Authentication.login({ username: username, password: password }, function (response) {
-        $log.debug('username: ' + username + ', token: ' + response.token);
-        if (response.token) {
-          $scope.authFailed = false;
-          User.login(username, response.token);
-          $state.go('dashboard');
-          $rootScope.$emit('authenticated', true);
-        }
-        else if (response.status < 200 || response.status >= 300) {
-          $scope.authFailed = true;
-        }
-      });
+
+      $scope.authFailed = false;
+
+      // Prevent flickering to give user some feedback if authentication fails
+      // more than once
+      $timeout(function() {
+        Authentication.login({ username: username, password: password },
+          function (response) {
+            $log.debug('username: ' + username + ', token: ' + response.token);
+            if (response.token) {
+              $scope.authFailed = false;
+              User.login(username, response.token);
+              $state.go('dashboard');
+              $rootScope.$emit('authenticated', true);
+            }
+          },
+          function (error) {
+            $scope.authFailed = true;
+          }
+        );
+      }, 200);
     };
   }
 ]);
