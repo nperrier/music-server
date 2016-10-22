@@ -2,7 +2,7 @@
 <div class="jumbotron authentication" ng-class="{'fade-start': !doneLoading, 'fade-in': doneLoading}">
 
   <div class="col-xs-12">
-    <div uib-alert class="alert alert-danger" ng-hide="!authFailed">Invalid credentials. Please try again</div>
+    <div uib-alert class="alert alert-danger" ng-hide="!authFailed">{{failMsg}}</div>
   </div>
 
   <form id="authenticationForm" class="form-horizontal" name="authenticationForm" novalidate>

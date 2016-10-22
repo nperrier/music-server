@@ -25,8 +25,13 @@ angular.module('musicApp').controller('AuthenticationCtrl', [
     User
   ) {
 
-    $scope.authFailed = false;
     $scope.doneLoading = false;
+    $scope.authFailed = false;
+
+    var alertMessages = {
+      badCreds: 'Invalid Crendentials. Please try again.',
+      error: 'An unknown error occurred.'
+    };
 
     // Fade the page in:
     $timeout(function() {
@@ -48,10 +53,18 @@ angular.module('musicApp').controller('AuthenticationCtrl', [
               User.login(username, response.token);
               $state.go('dashboard');
               $rootScope.$emit('authenticated', true);
+            } else {
+              $scope.authFailed = true;
+              $scope.failMsg = alertMessages.error;
             }
           },
           function (error) {
             $scope.authFailed = true;
+            if (error.status >= 400 && error.status < 500) {
+              $scope.failMsg = alertMessages.badCreds;
+            } else {
+              $scope.failMsg = alertMessages.error;
+            }
           }
         );
       }, 200);
