@@ -11,7 +11,7 @@
   </div>
 
   <div class="modal-footer">
-    <button class="btn btn-default" ng-click="save(playlist)">Save</button>
+    <button class="btn btn-default" ng-disabled="editPlaylistForm.$invalid" ng-click="save(playlist)">Save</button>
     <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
   </div>
 </form>
