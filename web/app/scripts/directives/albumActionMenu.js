@@ -33,14 +33,6 @@ angular.module('musicApp').directive('albumActionMenu', [
       },
       link: function(scope) {
 
-        var buildDownloadURL = function(albumId) {
-          var url = '/api/album/download/' + albumId;
-          url += '?token=' + User.getToken();
-          return url;
-        };
-
-        scope.album.downloadURL = buildDownloadURL(scope.album.id);
-
         scope.updateAlbum = function(albumId, albumInfo) {
           $log.debug('updateAlbum, albumId: ' + albumId);
           Album.update({ albumId: albumId }, albumInfo, function () {
