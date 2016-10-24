@@ -30,7 +30,7 @@ var musicApp = angular.module('musicApp', [
 
 // TODO: Get version from server instead of hardcoding in UI
 musicApp.constant('ServerInfo', {
-  version: '0.5.1'
+  version: '0.6.0'
 });
 
 musicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
