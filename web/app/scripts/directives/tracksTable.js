@@ -1,7 +1,12 @@
 'use strict';
 
 angular.module('musicApp').directive('tracksTable', [
-  function() {
+  '$log',
+  'PlayerQueue',
+  function(
+    $log,
+    PlayerQueue
+  ) {
 
     return {
       restrict: 'E',
@@ -11,8 +16,14 @@ angular.module('musicApp').directive('tracksTable', [
       },
       templateUrl: '/views/tracksTable.html',
       link: function(scope, element, attrs) {
+
         scope.sortField = 'name';
         scope.reverse = false;
+
+        scope.playTrack = function(track) {
+          $log.debug('Add track to player queue, id: ' + track.id);
+          PlayerQueue.playTrackNow(track);
+        };
       }
     };
   }

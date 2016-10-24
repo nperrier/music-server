@@ -52,22 +52,5 @@ angular.module('musicApp').controller('GenreTracksCtrl', [
       $scope.playlists = result.playlists;
       spinner.checkDoneLoading();
     });
-
-    $scope.updateTrack = function(trackId, trackInfo) {
-      $log.debug('updateTrack, trackId: ' + trackId);
-      Track.update({ trackId: trackId }, trackInfo, function () {
-        // do something after updating
-      });
-    };
-
-    $scope.addTrackToPlaylist = function(track, playlist) {
-      Playlist.addTracks({ playlistId: playlist.id }, [ track.id ]);
-      $log.debug('Added track.id: ' + track.id + ' to playlist.id: ' + playlist.id);
-    };
-
-    $scope.addTrackToQueue = function(track) {
-      PlayerQueue.addTrack(track);
-      $log.debug('Added track to player queue, track.id: ' + track.id);
-    };
   }
 ]);
