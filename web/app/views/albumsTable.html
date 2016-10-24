@@ -11,7 +11,14 @@
   <tbody vs-repeat vs-scroll-parent=".main-content" vs-excess="40">
     <tr ng-repeat="album in albums | orderBy:sortField:reverse">
       <td>
-        <img class="coverart-thumb" ng-src="{{album.coverArtUrl}}" fade-in />
+
+        <div class="coverart-wrapper">
+          <img class="coverart-thumb" ng-src="{{album.coverArtUrl}}" fade-in />
+          <div class="overlay overlay-thumb">
+            <a href class="play-image play-image-thumb glyphicon glyphicon-play" ng-click="playAlbum(album)"></a>
+          </div>
+        </div>
+
         <a ui-sref="album-detail({ id: album.id })" class="track-text track-title">
           {{album.name}}
         </a>

@@ -35,6 +35,16 @@ angular.module('musicApp').service('PlayerQueue', [
       return true;
     };
 
+    self.playTrackNow = function(track) {
+      self.clear();
+      self.addTrack(track);
+    };
+
+    self.playTracksNow = function(tracks) {
+      self.clear();
+      self.addTracks(tracks);
+    };
+
     self.insertTrack = function(track, position) {
       if (position > self.queue.length || position < 0) {
         $log.error('Attempting to add track to invalid position: ' + position + ', total: ' + self.queue.length);

@@ -7,7 +7,7 @@
  * # AlbumDetailCtrl
  * Controller of the musicApp
  */
-angular.module('musicApp').controller('AlbumDetailCtrl', [
+ angular.module('musicApp').controller('AlbumDetailCtrl', [
   '$scope',
   '$stateParams',
   '$log',
@@ -17,6 +17,7 @@ angular.module('musicApp').controller('AlbumDetailCtrl', [
   'Album',
   'Track',
   'Playlist',
+  'PlayerQueue',
   'User',
   function(
     $scope,
@@ -28,6 +29,7 @@ angular.module('musicApp').controller('AlbumDetailCtrl', [
     Album,
     Track,
     Playlist,
+    PlayerQueue,
     User
   ) {
 
@@ -72,5 +74,10 @@ angular.module('musicApp').controller('AlbumDetailCtrl', [
       $scope.tracks = result.tracks;
       spinner.checkDoneLoading();
     });
+
+    $scope.playAlbum = function(album) {
+      $log.debug('Add album to player queue, id: ' + album.id);
+      PlayerQueue.playTracksNow($scope.tracks);
+    };
   }
 ]);
