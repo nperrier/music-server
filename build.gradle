@@ -126,6 +126,7 @@ dependencies {
 	)
 }
 
+applicationName = 'music-server'
 description = 'A personal music server'
 sourceCompatibility = 1.8
 //targetCompatability = 1.8
@@ -204,8 +205,6 @@ run {
 		args project['run.args'].split().toList()
 	}
 }
-
-
 
 task devClean(type: Delete) << {
 	description 'Deletes the dev directory used for testing the server'
