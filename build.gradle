@@ -198,7 +198,14 @@ tasks.withType(Test) {
 
 run {
 	debug = config.debug ?: false
+
+	// pass in '-Prun.args='-config conf/dev/config.properties'
+	if (project.hasProperty('run.args')) {
+		args project['run.args'].split().toList()
+	}
 }
+
+
 
 task devClean(type: Delete) << {
 	description 'Deletes the dev directory used for testing the server'
@@ -239,6 +246,9 @@ tasks.startScripts {
 		//scriptBatchFile.text = scriptBatchFile.text.replace('CLASSPATH=%APP_HOME%\\lib', 'CLASSPATH=%APP_HOME%\\config\\;%APP_HOME%\\lib')
 	}
 }
+
+// Heroku entry task
+task stage(dependsOn: ['clean', 'installApp'])
 
 applicationDistribution.into('') {
 	//create an empty 'logs' directory in distribution root
