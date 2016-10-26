@@ -245,6 +245,9 @@ public class Core {
 	}
 
 	private void stopService(Service service) {
+		if (service == null) {
+			return;
+		}
 		try {
 			log.info("Stopping service {}", service.getClass().getSimpleName());
 			service.stopAsync().awaitTerminated(5, TimeUnit.SECONDS);
