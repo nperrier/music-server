@@ -1,7 +1,7 @@
 /* Create track table */
 
 create table track (
-  id bigint not null auto_increment,
+  id serial not null,
   name varchar(255) not null,
   number int,
   year char(4),
@@ -27,5 +27,3 @@ create table track (
   foreign key(genre_id) references genre (id),
   unique(name, artist_id, album_id)
 );
-
-call ft_create_index('PUBLIC', 'TRACK', 'NAME');

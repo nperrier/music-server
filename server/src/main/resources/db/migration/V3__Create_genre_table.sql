@@ -1,7 +1,7 @@
 /* Create genre table */
 
 create table genre (
-  id bigint not null auto_increment,
+  id serial not null,
   name varchar(255) not null,
   creation_date timestamp not null,
   modification_date timestamp not null,

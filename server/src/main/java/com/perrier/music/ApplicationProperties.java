@@ -17,14 +17,13 @@ public class ApplicationProperties {
 	public static final Property<String> APP_ROOT = new Property<>("appdir.root");
 	public static final Property<String> COVERS_DIR = new Property<>("appdir.covers");
 	public static final Property<String> RESOURCES_DIR = new Property<>("appdir.resources");
-	public static final Property<String> DB_DIR = new Property<>("appdir.db");
 	public static final Property<String> LOG_DIR = new Property<>("appdir.log");
 	public static final Property<String> LOG_CONFIGFILE = new Property<>("log.configfile");
 	public static final Property<Integer> PORT = new Property<>("server.port");
 
-	public static final Property<String> URL = new Property<>("h2.url");
-	public static final Property<String> USERNAME = new Property<>("h2.username");
-	public static final Property<String> PASSWORD = new Property<>("h2.password");
+	public static final Property<String> URL = new Property<>("db.url");
+	public static final Property<String> USERNAME = new Property<>("db.username");
+	public static final Property<String> PASSWORD = new Property<>("db.password");
 
 	public static final OptionalProperty<List> MIME_TYPES = new OptionalProperty<>("server.mimetypes",
 			Collections.emptyList());

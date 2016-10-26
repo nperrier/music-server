@@ -2,13 +2,12 @@ package com.perrier.music.db;
 
 import java.util.Set;
 
-import org.h2.Driver;
 import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
-import org.hibernate.dialect.H2Dialect;
 import org.hibernate.service.ServiceRegistry;
-import org.hibernate.service.ServiceRegistryBuilder;
+import org.postgresql.Driver;
 
 import com.google.common.collect.Sets;
 import com.google.inject.Inject;
@@ -26,7 +25,7 @@ public class HibernateConfiguration {
 
 	private final IConfiguration config;
 
-	public static final OptionalProperty<Boolean> SHOW_SQL = new OptionalProperty<Boolean>("h2.showSql", false);
+	public static final OptionalProperty<Boolean> SHOW_SQL = new OptionalProperty<>("db.showSql", false);
 
 	@Inject
 	public HibernateConfiguration(IConfiguration config) {
@@ -39,7 +38,7 @@ public class HibernateConfiguration {
 
 		// TODO Search for these dynamically
 		// See: HibernateConfigurationFactory.initializeAnnotations()
-		Set<? extends Class<?>> entities = Sets.<Class<?>>newHashSet( //
+		Set<Class<?>> entities = Sets.newHashSet( //
 				Artist.class, //
 				Genre.class, //
 				Album.class, //
@@ -54,10 +53,9 @@ public class HibernateConfiguration {
 		this.setProperties(hibernateConfig);
 
 		// new org.hibernate.tool.hbm2ddl.SchemaExport(hibernateConfig).create(true, false);
-
-		ServiceRegistry serviceRegistry = new ServiceRegistryBuilder() //
+		ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder() //
 				.applySettings(hibernateConfig.getProperties()) //
-				.buildServiceRegistry();
+				.build();
 
 		return hibernateConfig.buildSessionFactory(serviceRegistry);
 	}
@@ -65,7 +63,7 @@ public class HibernateConfiguration {
 	private void setProperties(Configuration hibernateConfig) throws DBException {
 
 		hibernateConfig.setProperty(Environment.DRIVER, Driver.class.getName());
-		hibernateConfig.setProperty(Environment.DIALECT, H2Dialect.class.getName());
+		hibernateConfig.setProperty(Environment.DIALECT, org.hibernate.dialect.PostgreSQL95Dialect.class.getName());
 		hibernateConfig.setProperty(Environment.URL, this.config.getRequiredString(ApplicationProperties.URL));
 		hibernateConfig.setProperty(Environment.USER, this.config.getRequiredString(ApplicationProperties.USERNAME));
 		hibernateConfig.setProperty(Environment.PASS, this.config.getRequiredString(ApplicationProperties.PASSWORD));

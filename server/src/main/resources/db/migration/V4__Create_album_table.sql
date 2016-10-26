@@ -1,7 +1,7 @@
 /* Create album table */
 
 create table album (
-  id bigint not null auto_increment,
+  id serial not null,
   name varchar(255) not null,
   year char(4),
   artist_id bigint,
@@ -16,6 +16,4 @@ create table album (
   foreign key(genre_id) references genre (id),
   unique(name, artist_id)
 );
-
-call ft_create_index('PUBLIC', 'ALBUM', 'NAME');
 

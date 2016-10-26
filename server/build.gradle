@@ -4,7 +4,7 @@ buildscript {
 		mavenCentral()
 	}
 	dependencies {
-		classpath "com.h2database:h2:1.3.176"
+		classpath "org.postgresql:postgresql:9.4.1211"
 		classpath "com.googlecode.flyway:flyway-gradle-plugin:2.2.+"
 	}
 }
@@ -62,20 +62,20 @@ dependencies {
 			// flyway
 			[group: 'org.flywaydb', name: 'flyway-core', version: '3.2+'],
 
-			// h2
-			[group: 'com.h2database', name: 'h2', version: '1.3.+'],
+			// postgresql 
+            [group: 'org.postgresql', name: 'postgresql', version: '9.4.1211'],
 
 			// hibernate
-			[group: 'org.hibernate', name: 'hibernate-core', version: '4.2.15.Final'],
+			[group: 'org.hibernate', name: 'hibernate-core', version: '5.2.3.Final'],
 
 			// hibernate connection pool
-			[group: 'org.hibernate', name: 'hibernate-c3p0', version: '4.2.15.Final'],
+			[group: 'org.hibernate', name: 'hibernate-c3p0', version: '5.2.3.Final'],
 			// hibernate second-level cache
-			// [group: 'org.hibernate', name: 'hibernate-ehcache', version: '4.2.15.Final'],
+			// [group: 'org.hibernate', name: 'hibernate-ehcache', version: '5.2.3.Final'],
 			// [group: 'net.sf.ehcache', name: 'ehcache-core', version: '2.6.+'],
 
 			// just needed for DDL generation
-			[group: 'org.hibernate', name: 'hibernate-tools', version: '4.0.0-CR1'],
+			//[group: 'org.hibernate', name: 'hibernate-tools', version: '4.0.0-CR1'],
 			// optional dependency needed for Hibernate
 			[group: 'javassist', name: 'javassist', version: '3.12.1.GA'],
 
@@ -160,11 +160,11 @@ def loadConfig() {
 }
 
 flyway {
-	driver = config.h2.driver
-	url = config.h2.url
-	user = config.h2.username
-	password = config.h2.password
-	schemas = config.h2.schemas
+	driver = config.db.driver
+	url = config.db.url
+	user = config.db.username
+	password = config.db.password
+	schemas = config.db.schemas
 }
 
 jar {

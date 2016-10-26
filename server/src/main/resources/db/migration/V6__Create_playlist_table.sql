@@ -1,7 +1,7 @@
 /* Create playlist table */
 
 create table playlist (
-  id bigint not null auto_increment (2, 1), /* start at 2, incr by 1's */
+  id serial not null, /* (2, 1), start at 2, increment by 1's */
   name varchar(255) not null,
   creation_date timestamp not null,
   modification_date timestamp not null,

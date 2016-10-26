@@ -1,30 +1,26 @@
 package com.perrier.music.db;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 import org.hibernate.CacheMode;
 import org.hibernate.FlushMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.jdbc.Work;
+import org.hibernate.resource.transaction.spi.TransactionStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Provides transactions and sessions to desperate, clamoring clients. Sessions are automatically rolled into the parent
  * transaction if it exists FOR THE THREAD. All factory work is hidden from the client.
- * 
+ * <p>
  * A client class should call these methods in one of two ways. If you are not interested in a transaction, then merely
  * call getSession and closeSession (always close in a finally block). Methods will automatically use the session from
  * their caller method if it exists. Reference counting guarantees the session will not close until the parent does so,
  * which makes it incredibly important to close in a finally block.
- * 
+ * <p>
  * The second method, involving a transaction, uses beginTransaction, commit/rollback, and endTransaction (in a finally
  * block). Child methods will automatically be enrolled into the parent's transaction.
- * 
+ * <p>
  * Both transactions and session calls can be nested indiscriminately.
  */
 public class Persistence {
@@ -35,7 +31,7 @@ public class Persistence {
 
 	/**
 	 * Call once at system start. Must be called before any sessions can be provided.
-	 * 
+	 *
 	 * @param sessionManager
 	 */
 	public Persistence(SessionManager sessionManager) {
@@ -53,7 +49,7 @@ public class Persistence {
 
 	/**
 	 * Lazily get the session for your thread of control. One will be created if necessary.
-	 * 
+	 *
 	 * @return Session
 	 * @throws HibernateException
 	 */
@@ -65,7 +61,7 @@ public class Persistence {
 
 	/**
 	 * Close the session IF the caller is the one that opened it.
-	 * 
+	 * <p>
 	 * Catches any exceptions and does not throw them. This is to preserve flow in the caller's finally block.
 	 */
 	public void closeSession() {
@@ -91,7 +87,7 @@ public class Persistence {
 
 	/**
 	 * Close the session regardless of the current reference count.
-	 * 
+	 * <p>
 	 * This should *ONLY* be used at system exit points. Overriding the close of an open session is considered an error
 	 * state.
 	 */
@@ -108,7 +104,7 @@ public class Persistence {
 
 	/**
 	 * Flush the session, sending any sql to the database if the session isDirty().
-	 * 
+	 *
 	 * @throws HibernateException
 	 */
 	public void flushSession() throws HibernateException {
@@ -127,7 +123,7 @@ public class Persistence {
 
 	/**
 	 * Begin a transaction
-	 * 
+	 *
 	 * @return Session
 	 * @throws HibernateException
 	 */
@@ -143,7 +139,7 @@ public class Persistence {
 
 	/**
 	 * Helper to consistently handle how transactions are opened. Both methods of beginning a tx use this.
-	 * 
+	 *
 	 * @param threadSession
 	 */
 	private static void openTransaction(ThreadSession threadSession) {
@@ -156,7 +152,7 @@ public class Persistence {
 
 	/**
 	 * End the transaction IF the caller is the one that opened it.
-	 * 
+	 *
 	 * @return true if and only if the transaction is the parent transaction
 	 */
 	public boolean endTransaction() {
@@ -197,10 +193,10 @@ public class Persistence {
 
 	/**
 	 * End the transaction regardless of the reference count.
-	 * 
+	 * <p>
 	 * This should *ONLY* be used at system exit points. Overriding the end of an open transaction is considered an error
 	 * state.
-	 * 
+	 *
 	 * @return
 	 */
 	public boolean endTransactionFinal() {
@@ -228,7 +224,7 @@ public class Persistence {
 	/**
 	 * Once a transaction is opened the reference count starts at 1 and each successive beginTransaction increases the
 	 * count. Being the owner of the transaction means you started it and the reference count is at 1 or less.
-	 * 
+	 *
 	 * @param ts
 	 * @return
 	 */
@@ -244,7 +240,7 @@ public class Persistence {
 	/**
 	 * Once the owner of the transaction decrements the reference count, the count will fall to 0. A count of 0 or less
 	 * means the owner has decremented the count and the transaction is permanently finished.
-	 * 
+	 *
 	 * @param ts
 	 * @return
 	 */
@@ -259,7 +255,7 @@ public class Persistence {
 
 	/**
 	 * Commit the transaction IF the caller is the one that opened it.
-	 * 
+	 *
 	 * @return true if and only if the transaction is the parent transaction
 	 * @throws HibernateException
 	 */
@@ -283,7 +279,6 @@ public class Persistence {
 			sess.flush();
 			transaction.commit();
 			parent = true;
-			sync(sess);
 			ts.setCommitted(true);
 		} else {
 			flushSession();
@@ -295,7 +290,7 @@ public class Persistence {
 	/**
 	 * Rollback the transaction IF the caller is the one that opened it. Well-behaved methods are expected to throw their
 	 * exceptions to the parent, so the parent can decide what to do about the transaction it is responsible for.
-	 * 
+	 *
 	 * @return true if and only if the transaction is the parent transaction
 	 */
 	public boolean rollback() {
@@ -317,7 +312,6 @@ public class Persistence {
 			if (Persistence.isCallerTransactionOwner(ts)) {
 				transaction.rollback();
 				parent = true;
-				sync(ts.getSession());
 				ts.setRolledBack(true);
 			}
 		} catch (Exception e) {
@@ -327,21 +321,6 @@ public class Persistence {
 		}
 
 		return parent;
-	}
-
-	/**
-	 * Issue a 'CHECKPOINT SYNC' to h2 databases.
-	 */
-	private static void sync(Session session) {
-		session.doWork(new Work() {
-
-			@Override
-			public void execute(Connection connection) throws SQLException {
-				Statement st = connection.createStatement();
-				st.execute("checkpoint sync;");
-				st.close();
-			}
-		});
 	}
 
 	/**
@@ -419,7 +398,7 @@ public class Persistence {
 		final ThreadSession ts = sessionManager.getExistingThreadSession();
 		if (ts != null) {
 			final Transaction t = ts.getTransaction();
-			if (t != null && !t.wasCommitted()) {
+			if (t != null && !t.getStatus().equals(TransactionStatus.COMMITTED)) {
 				return true;
 			}
 		}
@@ -457,7 +436,7 @@ public class Persistence {
 	/**
 	 * Use this to restart your session when processing a large number of items. You can use this in conjunction with
 	 * 'manual' to process large groups of items efficiently. The session will be reopened when the count is reached.
-	 * 
+	 *
 	 * @param numItemsPerBatch
 	 * @return true if the session was restarted
 	 */
@@ -488,7 +467,7 @@ public class Persistence {
 	/**
 	 * Use this to commit and restart your tx when processing a large number of items. You can use this in conjunction
 	 * with 'manual' to process large groups of items efficiently. The tx will be restarted when the count is reached.
-	 * 
+	 *
 	 * @param numItemsPerBatch
 	 * @return true if the tx was committed
 	 */
