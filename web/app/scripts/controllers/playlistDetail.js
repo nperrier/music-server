@@ -35,9 +35,6 @@ angular.module('musicApp').controller('PlaylistDetailCtrl', [
     $q.all({
       playlist: Playlist.get({ playlistId: $stateParams.id }).$promise,
       tracks: Playlist.getTracks({ playlistId: $stateParams.id }).$promise.then(function(tracks) {
-        tracks.forEach(function(t) {
-          t.downloadUrl += '?token=' + User.getToken();
-        });
         return $q.resolve(tracks);
       })
     }).then(function(result) {
