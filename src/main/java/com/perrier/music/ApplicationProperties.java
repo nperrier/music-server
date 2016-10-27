@@ -20,6 +20,7 @@ public class ApplicationProperties {
 	public static final Property<String> DB_DIR = new Property<>("appdir.db");
 	public static final Property<String> LOG_DIR = new Property<>("appdir.log");
 	public static final Property<String> LOG_CONFIGFILE = new Property<>("log.configfile");
+	public static final Property<Integer> PORT = new Property<>("server.port");
 
 	public static final Property<String> URL = new Property<>("h2.url");
 	public static final Property<String> USERNAME = new Property<>("h2.username");

@@ -27,7 +27,6 @@ public class JettyHttpServer extends AbstractIdleService {
 	private final IConfiguration config;
 	private Server server;
 
-	public static final Property<Integer> PORT = new Property<Integer>("server.port");
 	public static final Property<String> RESOURCE_BASE = new Property<String>("server.resource.base");
 
 	@Inject
@@ -37,7 +36,7 @@ public class JettyHttpServer extends AbstractIdleService {
 	}
 
 	public void init() throws ServerException {
-		int port = this.config.getRequiredInteger(PORT);
+		int port = this.config.getRequiredInteger(ApplicationProperties.PORT);
 
 		this.server = new Server(port);
 

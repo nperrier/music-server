@@ -66,6 +66,7 @@ public class Core {
 			// Default config
 			configFile = "conf/config.groovy";
 		}
+		Integer port = cmds.port;
 
 		final Core core = new Core();
 
@@ -77,13 +78,16 @@ public class Core {
 			}
 		});
 
-		core.init(configFile);
+		core.init(configFile, port);
 	}
 
 	private static class CommandLineArgs {
 
 		@Parameter(names = "-config", description = "Config file for app")
 		private String configFile;
+
+		@Parameter(names = "-port", description = "Port the app will listen for requests on")
+		private Integer port;
 	}
 
 	private void configureLogging() {
@@ -119,8 +123,8 @@ public class Core {
 	}
 
 	@VisibleForTesting
-	void init(String configFile) throws Exception {
-		this.configAppProperties(configFile);
+	void init(String configFile, Integer port) throws Exception {
+		this.configAppProperties(configFile, port);
 		this.addMimeTypes();
 		this.createAppDirectories();
 		this.configureLogging();
@@ -149,7 +153,7 @@ public class Core {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void configAppProperties(String configFile) throws Exception {
+	private void configAppProperties(String configFile, Integer port) throws Exception {
 		// config
 		Map<String, Object> appConfig = Maps.newHashMap();
 
@@ -161,6 +165,11 @@ public class Core {
 		appConfig.put(ApplicationProperties.COVERS_DIR.getKey(), coverArtDir.getAbsolutePath());
 
 		appConfig.putAll(loadConfigFromFile(configFile));
+
+		// override port from command line, if present:
+		if (port != null && port > 1024) {
+			appConfig.put(ApplicationProperties.PORT.getKey(), port);
+		}
 
 		this.config = new ApplicationConfig(appConfig);
 	}
