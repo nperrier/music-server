@@ -214,12 +214,12 @@ task devClean(type: Delete) << {
 	}
 }
 
-task distWeb(type: Exec) {
+task buildWeb(type: Exec) {
 	workingDir 'web'
 	commandLine 'grunt', 'build'
 }
 
-distWeb.onlyIf { !project.hasProperty('distWeb.skip') }
+buildWeb.onlyIf { !project.hasProperty('buildWeb.skip') }
 
 //distZip {
 //	into('/web') {
@@ -228,8 +228,9 @@ distWeb.onlyIf { !project.hasProperty('distWeb.skip') }
 //	}
 //}
 
-distZip.dependsOn distWeb
-distTar.dependsOn distWeb
+distZip.dependsOn buildWeb
+distTar.dependsOn buildWeb
+installApp.dependsOn buildWeb
 
 // Need this for mac so that java app doesn't show up in foreground
 applicationDefaultJvmArgs = ['-Dapple.awt.UIElement=true']
