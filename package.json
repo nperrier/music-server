@@ -1,4 +1,7 @@
 {
+  "engines": {
+    "node": ">=0.10.0"
+  },
   "cacheDirectories": [ "web/node_modules", "web/bower_components", "web/build" ],
   "scripts": {
     "postinstall": "cd web && npm install && grunt build"
