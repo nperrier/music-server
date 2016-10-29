@@ -1,6 +1,6 @@
 {
   "cacheDirectories": [ "web/node_modules", "web/bower_components", "web/build" ],
   "scripts": {
-    "postinstall": "cd web && grunt build"
+    "postinstall": "cd web && npm install && grunt build"
   }
 }
