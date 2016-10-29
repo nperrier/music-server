@@ -2,8 +2,14 @@
   "engines": {
     "node": ">=0.10.0"
   },
-  "cacheDirectories": [ "web/node_modules", "web/bower_components", "web/build" ],
+  "cacheDirectories": [
+    "web/node_modules",
+    "web/bower_components"
+  ],
   "scripts": {
     "postinstall": "cd web && npm install && grunt build"
+  },
+  "dependencies": {
+    "grunt-cli": "^1.2.0"
   }
 }
