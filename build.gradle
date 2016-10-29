@@ -231,6 +231,10 @@ buildWeb.onlyIf { !project.hasProperty('buildWeb.skip') }
 distZip.dependsOn buildWeb
 distTar.dependsOn buildWeb
 //installApp.dependsOn buildWeb
+installApp.from("web/dist/") {
+	into "web"
+}
+
 
 // Need this for mac so that java app doesn't show up in foreground
 applicationDefaultJvmArgs = ['-Dapple.awt.UIElement=true']
