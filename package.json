@@ -7,7 +7,7 @@
     "web/bower_components"
   ],
   "scripts": {
-    "postinstall": "cd web && npm install && grunt build"
+    "postinstall": "cd web && npm install && bower install && grunt build"
   },
   "dependencies": {
     "grunt-cli": "^1.2.0"
