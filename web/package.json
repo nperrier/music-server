@@ -4,10 +4,13 @@
   "version": "0.0.0",
   "private": true,
   "repository": {
-      "type": "git",
-      "url": "git://github.com/nperrier/music-server"
+    "type": "git",
+    "url": "git://github.com/nperrier/music-server"
   },
-  "dependencies": {},
+  "dependencies": {
+    "bower": "^1.7.9",
+    "grunt-cli": "^1.2.0"
+  },
   "devDependencies": {
     "grunt": "^0.4.1",
     "grunt-autoprefixer": "^0.7.3",
@@ -41,9 +44,7 @@
     "time-grunt": "^0.3.1"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">=5.11.1"
   },
-  "scripts": {
-    "test": "grunt test"
-  }
+  "scripts": {}
 }
