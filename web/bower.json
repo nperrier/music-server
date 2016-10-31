@@ -1,6 +1,7 @@
 {
   "name": "music",
   "version": "0.0.1",
+  "appPath": "app",
   "dependencies": {
     "moment": "2.9.0",
     "underscore": "1.8.3",
@@ -27,5 +28,19 @@
     "angular-mocks": "1.5.8",
     "angular-scenario": "1.5.8"
   },
-  "appPath": "app"
+  "overrides": {
+    "bootstrap": {
+      "main": [
+        "less/bootstrap.less",
+        "dist/css/bootstrap.css",
+        "dist/js/bootstrap.js"
+      ]
+    },
+    "font-awesome": {
+      "main": [
+        "less/font-awesome.less",
+        "css/font-awesome.css"
+      ]
+    }
+  }
 }
