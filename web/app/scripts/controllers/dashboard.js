@@ -9,8 +9,7 @@
  */
 angular.module('musicApp').controller('DashboardCtrl', [
   '$scope', function($scope) {
-
-      // TODO: Dashboard should do something more interesting...
-
+    // TODO: Dashboard should do something more interesting...
+    $scope.todo = 'TODO';
   }
 ]);

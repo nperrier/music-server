@@ -9,7 +9,7 @@ angular.module('musicApp').directive('artistsTable', [
         artists: '='
       },
       templateUrl: '/views/artistsTable.html',
-      link: function(scope, element, attrs) {
+      link: function(scope) {
         scope.sortField = 'name';
         scope.reverse = false;
       }

@@ -19,7 +19,7 @@ angular.module('musicApp').directive('albumsTable', [
         playlists: '='
       },
       templateUrl: '/views/albumsTable.html',
-      link: function(scope, element, attrs) {
+      link: function(scope) {
 
         scope.sortField = 'name';
         scope.reverse = false;

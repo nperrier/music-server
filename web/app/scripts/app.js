@@ -35,7 +35,7 @@ musicApp.constant('ServerInfo', {
 
 musicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
 
-	$urlRouterProvider.otherwise(function ($injector, $location) {
+	$urlRouterProvider.otherwise(function ($injector) {
 		var $state = $injector.get('$state');
 		$state.go('dashboard');
 	});
@@ -215,7 +215,7 @@ musicApp.config(function($httpProvider) {
 				}
 
 				if (rejection.status !== 401) {
-					return $q.reject(rejection);;
+					return $q.reject(rejection);
 				}
 
 				$state.go('authentication');
@@ -227,7 +227,7 @@ musicApp.config(function($httpProvider) {
 });
 
 musicApp.run(['$rootScope', '$state', 'User', function($rootScope, $state, User) {
-	$rootScope.$on('$stateChangeStart', function (event, toState, toParams) {
+	$rootScope.$on('$stateChangeStart', function (event, toState) {
 		var requiresLogin = true;
 		if (toState.name === 'authentication') {
 			return;
