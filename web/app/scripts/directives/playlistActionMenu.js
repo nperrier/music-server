@@ -122,6 +122,9 @@ angular.module('musicApp').directive('playlistActionMenu', [
         scope.deletePlaylist = function(playlist, index) {
           $log.debug('Deleting playlist, id: ' + playlist.id);
           Playlist.delete({ playlistId: playlist.id }, function () {
+            // TODO: bug - the behavior on delete differs depending on the page we're on
+            // playlists.js should just remove it from the list
+            // playlistDetail.js should goto playlists.js
             scope.playlists.splice(index, 1);
           });
         };
