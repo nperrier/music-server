@@ -10,13 +10,13 @@
 angular.module('musicApp').controller('LibraryCtrl', [
   '$scope',
   '$log',
-  '$modal',
+  '$uibModal',
   'Library',
   'LoadingSpinner',
   function(
     $scope,
     $log,
-    $modal,
+    $uibModal,
     Library,
     LoadingSpinner
   ) {
@@ -45,18 +45,18 @@ angular.module('musicApp').controller('LibraryCtrl', [
     };
 
     $scope.createLibraryDialog = function() {
-      var modalInstance = $modal.open({
+      var modalInstance = $uibModal.open({
         templateUrl: 'views/libraryCreateModal.html',
         backdrop: false,
         resolve: {},
-        controller: function ($scope, $modalInstance) {
+        controller: function ($scope, $uibModalInstance) {
           $scope.save = function (library) {
             // TODO: Need to add client-side validation
-            $modalInstance.close(library);
+            $uibModalInstance.close(library);
           };
 
           $scope.cancel = function () {
-            $modalInstance.dismiss('cancelled');
+            $uibModalInstance.dismiss('cancelled');
           };
         }
       });

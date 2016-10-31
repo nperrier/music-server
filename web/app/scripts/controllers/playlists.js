@@ -10,14 +10,14 @@
 angular.module('musicApp').controller('PlaylistsCtrl', [
   '$scope',
   '$log',
-  '$modal',
+  '$uibModal',
   '$timeout',
   'LoadingSpinner',
   'Playlist',
   function(
     $scope,
     $log,
-    $modal,
+    $uibModal,
     $timeout,
     LoadingSpinner,
     Playlist
@@ -40,18 +40,18 @@ angular.module('musicApp').controller('PlaylistsCtrl', [
     };
 
     $scope.createPlaylistDialog = function() {
-      var modalInstance = $modal.open({
+      var modalInstance = $uibModal.open({
         templateUrl: 'views/playlistCreateModal.html',
         backdrop: false,
         resolve: {},
-        controller: function ($scope, $modalInstance) {
+        controller: function ($scope, $uibModalInstance) {
           $scope.save = function (playlist) {
             // TODO: Need to add client-side validation
-            $modalInstance.close(playlist);
+            $uibModalInstance.close(playlist);
           };
 
           $scope.cancel = function () {
-            $modalInstance.dismiss('cancelled');
+            $uibModalInstance.dismiss('cancelled');
           };
         }
       });

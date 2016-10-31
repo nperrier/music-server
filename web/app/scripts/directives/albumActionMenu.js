@@ -8,20 +8,18 @@
  */
 angular.module('musicApp').directive('albumActionMenu', [
   '$log',
-  '$modal',
+  '$uibModal',
   '_',
   'Album',
   'Playlist',
   'PlayerQueue',
-  'User',
   function(
     $log,
-    $modal,
+    $uibModal,
     _,
     Album,
     Playlist,
-    PlayerQueue,
-    User
+    PlayerQueue
   ) {
 
     return {
@@ -51,7 +49,7 @@ angular.module('musicApp').directive('albumActionMenu', [
 
         scope.editAlbum = function() {
 
-          var modalInstance = $modal.open({
+          var modalInstance = $uibModal.open({
             templateUrl: 'views/editAlbum.html',
             backdrop: false,
             resolve: {
@@ -59,7 +57,7 @@ angular.module('musicApp').directive('albumActionMenu', [
                 return scope.album;
               }
             },
-            controller: function ($scope, $modalInstance, album) {
+            controller: function ($scope, $uibModalInstance, album) {
 
               var createAlbumModel = function (album) {
                 // TODO: need to consider null artist/album/etc..
@@ -77,11 +75,11 @@ angular.module('musicApp').directive('albumActionMenu', [
 
               $scope.save = function (album) {
                 // TODO: Need to add client-side validation
-                $modalInstance.close(album);
+                $uibModalInstance.close(album);
               };
 
               $scope.cancel = function () {
-                $modalInstance.dismiss('cancelled');
+                $uibModalInstance.dismiss('cancelled');
               };
 
               $scope.reset = function () {
@@ -111,7 +109,7 @@ angular.module('musicApp').directive('albumActionMenu', [
 
         scope.selectPlaylist = function(album) {
 
-          var modalInstance = $modal.open({
+          var modalInstance = $uibModal.open({
             templateUrl: 'views/playlistsModal.html',
             size: 'sm',
             backdrop: false,
@@ -120,7 +118,7 @@ angular.module('musicApp').directive('albumActionMenu', [
                 return scope.playlists;
               }
             },
-            controller: function($scope, $modalInstance, playlists) {
+            controller: function($scope, $uibModalInstance, playlists) {
               $scope.playlists = playlists;
 
               $scope.selected = {
@@ -128,11 +126,11 @@ angular.module('musicApp').directive('albumActionMenu', [
               };
 
               $scope.ok = function() {
-                $modalInstance.close($scope.selected.playlist);
+                $uibModalInstance.close($scope.selected.playlist);
               };
 
               $scope.cancel = function() {
-                $modalInstance.dismiss('cancelled');
+                $uibModalInstance.dismiss('cancelled');
               };
             }
           });
