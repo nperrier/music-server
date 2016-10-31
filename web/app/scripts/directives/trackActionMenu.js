@@ -8,14 +8,14 @@
  */
 angular.module('musicApp').directive('trackActionMenu', [
   '$log',
-  '$modal',
+  '$uibModal',
   'User',
   'Track',
   'Playlist',
   'PlayerQueue',
   function(
     $log,
-    $modal,
+    $uibModal,
     User,
     Track,
     Playlist,
@@ -50,7 +50,7 @@ angular.module('musicApp').directive('trackActionMenu', [
 
         scope.editTrack = function() {
 
-          var modalInstance = $modal.open({
+          var modalInstance = $uibModal.open({
             templateUrl: 'views/editTrack.html',
             backdrop: false,
             resolve: {
@@ -58,7 +58,7 @@ angular.module('musicApp').directive('trackActionMenu', [
                 return scope.track;
               }
             },
-            controller: function($scope, $modalInstance, track) {
+            controller: function($scope, $uibModalInstance, track) {
 
               // private
               var createTrackModel = function(track) {
@@ -80,11 +80,11 @@ angular.module('musicApp').directive('trackActionMenu', [
 
               $scope.save = function(track) {
                 // TODO: Need to add client-side validation
-                $modalInstance.close(track);
+                $uibModalInstance.close(track);
               };
 
               $scope.cancel = function() {
-                $modalInstance.dismiss('cancelled');
+                $uibModalInstance.dismiss('cancelled');
               };
 
               $scope.reset = function() {
@@ -114,7 +114,7 @@ angular.module('musicApp').directive('trackActionMenu', [
 
         scope.selectPlaylist = function(track) {
 
-          var modalInstance = $modal.open({
+          var modalInstance = $uibModal.open({
             templateUrl: 'views/playlistsModal.html',
             size: 'sm',
             backdrop: false,
@@ -123,7 +123,7 @@ angular.module('musicApp').directive('trackActionMenu', [
                 return scope.playlists;
               }
             },
-            controller: function($scope, $modalInstance, playlists) {
+            controller: function($scope, $uibModalInstance, playlists) {
               $scope.playlists = playlists;
 
               $scope.selected = {
@@ -131,11 +131,11 @@ angular.module('musicApp').directive('trackActionMenu', [
               };
 
               $scope.ok = function() {
-                $modalInstance.close($scope.selected.playlist);
+                $uibModalInstance.close($scope.selected.playlist);
               };
 
               $scope.cancel = function() {
-                $modalInstance.dismiss('cancelled');
+                $uibModalInstance.dismiss('cancelled');
               };
             }
           });

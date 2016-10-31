@@ -8,12 +8,12 @@
  */
 angular.module('musicApp').directive('playlistActionMenu', [
   '$log',
-  '$modal',
+  '$uibModal',
   'Playlist',
   'PlayerQueue',
   function(
     $log,
-    $modal,
+    $uibModal,
     Playlist,
     PlayerQueue
   ) {
@@ -28,7 +28,7 @@ angular.module('musicApp').directive('playlistActionMenu', [
 
         scope.editPlaylist = function() {
 
-          var modalInstance = $modal.open({
+          var modalInstance = $uibModal.open({
             templateUrl: 'views/editPlaylistModal.html',
             backdrop: false,
             resolve: {
@@ -36,7 +36,7 @@ angular.module('musicApp').directive('playlistActionMenu', [
                 return scope.playlist;
               }
             },
-            controller: function ($scope, $modalInstance, playlist) {
+            controller: function ($scope, $uibModalInstance, playlist) {
               // copy playlist
               $scope.playlist = angular.copy(playlist);
 
@@ -45,10 +45,10 @@ angular.module('musicApp').directive('playlistActionMenu', [
                 var update = Playlist.update({ playlistId: playlist.id }, playlist);
                 update.$promise.then(
                   function(playlist) {
-                    $modalInstance.close(playlist);
+                    $uibModalInstance.close(playlist);
                   },
                   function (error) {
-                    $log.debug('Error updating playlist, id: ' + playlist.id);
+                    $log.debug('Error updating playlist, id: ' + playlist.id + ', error: ' + error);
                     $scope.error = true;
                   }
                 );
@@ -56,7 +56,7 @@ angular.module('musicApp').directive('playlistActionMenu', [
 
               $scope.cancel = function (reason) {
                 reason = reason || 'cancelled';
-                $modalInstance.dismiss(reason);
+                $uibModalInstance.dismiss(reason);
               };
             }
           });
@@ -83,7 +83,7 @@ angular.module('musicApp').directive('playlistActionMenu', [
         };
 
         scope.delete = function () {
-          var modalInstance = $modal.open({
+          var modalInstance = $uibModal.open({
             templateUrl: 'views/playlistDeleteModal.html',
             size: 'sm',
             backdrop: false,
@@ -95,16 +95,16 @@ angular.module('musicApp').directive('playlistActionMenu', [
                 return scope.$index;
               }
             },
-            controller: function ($scope, $modalInstance, playlist, index) {
+            controller: function ($scope, $uibModalInstance, playlist, index) {
               $scope.playlist = playlist;
 
               $scope.ok = function (playlist) {
                 $log.debug('Remove playlist, id: ' + playlist.id);
-                $modalInstance.close(playlist, index);
+                $uibModalInstance.close(playlist, index);
               };
 
               $scope.cancel = function () {
-                $modalInstance.dismiss();
+                $uibModalInstance.dismiss();
               };
             }
           });
