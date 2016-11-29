@@ -26,6 +26,8 @@ angular.module('musicApp').filter('duration', [
         return (value < 10) ? '0' + value : value;
       }
 
+      // TODO: this does not round up to nearest second, so track length
+      // may be a < 1 second
       var d = moment.duration(duration, unit);
       var formattedDuration = '';
       // if > 1 hour, then display HH:MM:SS
