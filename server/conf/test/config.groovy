@@ -11,12 +11,11 @@ log {
 	configfile = 'conf/test/logback.groovy'
 }
 
-h2 {
-	driver = 'org.h2.Driver'
-	url = 'jdbc:h2:mem:' + appdir.db + '/music;DB_CLOSE_DELAY=-1'
-	username = 'SA'
+db {
+	url = 'jdbc:postgresql://localhost:5432/music-test'
+	username = 'sa'
 	password = ''
-	schemas = ['PUBLIC', 'FT']
+	//schemas = ['PUBLIC', 'FT']
 	showSql = false
 }
 
@@ -40,4 +39,9 @@ auth {
 	}
 	secretkey = 'changeme'
 	disabled = false
+}
+
+aws {
+	accesskeyid = ''
+	secretaccesskey = ''
 }

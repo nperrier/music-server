@@ -11,8 +11,7 @@ log {
 }
 
 db {
-	driver = 'org.postgresql.Driver'
-	url = 'jdbc:postgresql:music-dev'
+	url = 'jdbc:postgresql://localhost:5432/music-dev'
 	username = 'sa'
 	password = ''
 	//schemas = ['PUBLIC', 'FT']
@@ -41,3 +40,7 @@ auth {
 	disabled = false
 }
 
+aws {
+	accesskeyid = ''
+	secretaccesskey = ''
+}

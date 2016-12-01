@@ -11,12 +11,8 @@ log {
 	configfile = appdir.root + '/conf/logback.groovy'
 }
 
-h2 {
-	driver = 'org.h2.Driver'
-	url = 'jdbc:h2:file:' + appdir.root + '/' + appdir.db + '/music;DB_CLOSE_ON_EXIT=FALSE'
-	username = 'SA'
-	password = ''
-	schemas = ['PUBLIC', 'FT']
+// Heroku sets env var 'DATABASE_URL' which the app will use to derive the fields for the db connection
+db {
 	showSql = false
 }
 

@@ -2,6 +2,7 @@ package com.perrier.music;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import java.util.concurrent.TimeoutException;
 
 import javax.activation.MimetypesFileTypeMap;
 
+import org.apache.commons.lang3.StringUtils;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.MigrationInfo;
 import org.slf4j.Logger;
@@ -164,6 +166,18 @@ public class Core {
 
 		// set any properties from environment next:
 		appConfig.putAll(System.getenv());
+
+		// If db url is specified via env vars, we need to derive the user/pass combo and set
+		// the appropriate properties
+		String dbUrl = System.getenv("DATABASE_URL");
+		String jdbcUrl = System.getenv("JDBC_DATABASE_URL");
+		if (!StringUtils.isBlank(dbUrl) && !StringUtils.isBlank(jdbcUrl)) {
+			URI dbUri = new URI(dbUrl);
+			String userInfo = dbUri.getUserInfo();
+			appConfig.put(ApplicationProperties.USERNAME.getKey(), userInfo.split(":")[0]);
+			appConfig.put(ApplicationProperties.PASSWORD.getKey(), userInfo.split(":")[1]);
+			appConfig.put(ApplicationProperties.URL.getKey(), jdbcUrl);
+		}
 
 		// set from config file:
 		appConfig.putAll(loadConfigFromFile(configFile));
