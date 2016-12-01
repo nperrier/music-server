@@ -16,7 +16,6 @@ angular.module('musicApp').controller('PlaylistDetailCtrl', [
   'LoadingSpinner',
   '_',
   'Playlist',
-  'User',
   function(
     $scope,
     $log,
@@ -25,8 +24,7 @@ angular.module('musicApp').controller('PlaylistDetailCtrl', [
     $q,
     LoadingSpinner,
     _,
-    Playlist,
-    User
+    Playlist
   ) {
 
     var spinner = new LoadingSpinner($scope);
