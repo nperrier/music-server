@@ -1,13 +1,8 @@
 package com.perrier.music.db;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
-
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.jdbc.Work;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,28 +35,7 @@ public class HibernateDatabase extends AbstractIdleService implements IDatabase 
 
 	@Override
 	protected void shutDown() throws Exception {
-		this.shutdownDatabase(); // h2 first
-		this.persistence.stop(); // hibernate second
-	}
-
-	private void shutdownDatabase() {
-		// H2 requires a shutdown attempt
-		try {
-			Session session = this.openSession();
-			session.doWork(new Work() {
-
-				@Override
-				public void execute(Connection conn) throws SQLException {
-					Statement stmnt = conn.createStatement();
-					stmnt.execute("shutdown");
-					stmnt.close();
-				}
-			});
-		} catch (Exception e) {
-			log.info("Failed to shut down H2. Shutdown will continue", e);
-		}
-
-		log.info("Shutdown: H2 closed successfully");
+		this.persistence.stop();
 	}
 
 	public <T> T find(FindQuery<T> query) throws DBException {
