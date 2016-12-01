@@ -100,13 +100,6 @@ musicApp.config(['$stateProvider', '$urlRouterProvider', function($stateProvider
 		parent: 'main'
 	})
 
-	.state('library', {
-		url: '/library',
-		templateUrl: 'views/library.html',
-		controller: 'LibraryCtrl',
-		parent: 'main'
-	})
-
 	.state('artists', {
 		url : '/artists',
 		templateUrl: 'views/artists.html',
