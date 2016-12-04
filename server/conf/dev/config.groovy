@@ -42,6 +42,7 @@ auth {
 
 aws {
 	bucket = 'com-perrier-music-dev'
-//	accesskeyid = ''
-//	secretaccesskey = ''
+	// TODO: When server needs creds, be sure to add these to run conig for intellij, don't check in!
+	accesskeyid = ''
+	secretaccesskey = ''
 }

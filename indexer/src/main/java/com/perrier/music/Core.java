@@ -109,7 +109,7 @@ public class Core {
 			}
 		}
 
-		this.storageService = new S3StorageService(accessKeyId, secretAccessKey);
+		this.storageService = new S3StorageService(accessKeyId, secretAccessKey, cmds.awsBucket);
 		try {
 			this.storageService.startAsync().awaitRunning(30, TimeUnit.SECONDS);
 		} catch (TimeoutException e) {
@@ -192,6 +192,9 @@ public class Core {
 
 		@Parameter(names = "-secretAccessKey", description = "AWS secret access key")
 		String secretAccessKey;
+
+		@Parameter(names = "-awsBucket", description = "AWS bucket")
+		String awsBucket;
 
 		@Parameter(names = "-path", required = true, description = "Directory where music lives")
 		String path;
