@@ -27,8 +27,11 @@ public class HibernateDatabase extends AbstractIdleService implements IDatabase 
 		// A SessionFactory is set up once for an application
 		try {
 			SessionFactory sessionFactory = config.create();
+			log.debug("Created SessionFactory");
 			SessionManager sessionManager = new SessionManager(sessionFactory);
+			log.debug("Created SessionManager");
 			this.persistence = new Persistence(sessionManager);
+			log.debug("Created Persistence");
 		} catch (Exception e) {
 			throw new DBException("Error creating config", e);
 		}
