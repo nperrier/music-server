@@ -38,13 +38,16 @@ public class TrackUploaderService {
 			URL audioUrl = storageService.putAudio(audioDataHash, audioData);
 
 			// upload cover art to S3
-			// First, compress the image to a web-friendly, PNG format
-			// TODO: scale image to standard size?
-			// TODO: Upload multiple sizes?
-			ByteArrayOutputStream out = new ByteArrayOutputStream(8 * 1024); // 8kb initial size
-			ImageIO.write(coverImage, "PNG", out);
-			byte[] bytes = out.toByteArray();
-			URL coverUrl = storageService.putCover(coverImageHash, bytes);
+			URL coverUrl = null;
+			if (coverImage != null) {
+				// First, compress the image to a web-friendly, PNG format
+				// TODO: scale image to standard size?
+				// TODO: Upload multiple sizes?
+				ByteArrayOutputStream out = new ByteArrayOutputStream(8 * 1024); // 8kb initial size
+				ImageIO.write(coverImage, "PNG", out);
+				byte[] bytes = out.toByteArray();
+				coverUrl = storageService.putCover(coverImageHash, bytes);
+			}
 
 			// send to server
 			// TODO: determine whether cover is already uploaded - check the hash
@@ -62,7 +65,7 @@ public class TrackUploaderService {
 			trackMetaData.setAudioUrl(audioUrl.toExternalForm());
 			trackMetaData.setCoverHash(coverImageHash);
 			trackMetaData.setCoverStorageKey(S3StorageService.getCoverKey(coverImageHash));
-			trackMetaData.setCoverUrl(coverUrl.toExternalForm());
+			trackMetaData.setCoverUrl((coverUrl == null ? null : coverUrl.toExternalForm()));
 			trackMetaData.setFileModificationDate(fileModDate);
 
 			// send track meta data to app server:
