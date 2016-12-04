@@ -1,4 +1,5 @@
 apply plugin: 'java'
+apply plugin: 'application'
 
 repositories {
 	mavenCentral()
@@ -53,3 +54,23 @@ dependencies {
 			[group: 'org.mockito', name: 'mockito-all', version: '1.9.+']
 	)
 }
+
+mainClassName = 'com.perrier.music.Core'
+
+printInfo()
+
+def printInfo() {
+	println "version: $version"
+	println "projectDir: $projectDir"
+}
+
+jar {
+	manifest {
+		attributes(
+				'Implementation-Title': 'Music Server Indexer',
+				'Implementation-Version': version,
+				'Main-Class': mainClassName
+		)
+	}
+}
+

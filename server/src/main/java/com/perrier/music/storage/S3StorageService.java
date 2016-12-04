@@ -47,7 +47,7 @@ public class S3StorageService extends AbstractIdleService {
 		this.s3Client = (AmazonS3Client) AmazonS3ClientBuilder.standard() //
 				.withCredentials(
 						new AWSStaticCredentialsProvider(new BasicAWSCredentials(this.accessKeyId, this.secretAccessKey))) //
-				.withRegion(Regions.US_WEST_2) // TODO: read region from ~/.aws/config
+				.withRegion(Regions.US_EAST_1) // TODO: read region from ~/.aws/config
 				.build();
 	}
 
