@@ -11,6 +11,7 @@ log {
 }
 
 db {
+	driver = 'org.postgresql.Driver'
 	url = 'jdbc:postgresql://localhost:5432/music-dev'
 	username = 'sa'
 	password = ''

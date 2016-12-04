@@ -4,10 +4,11 @@ buildscript {
 		mavenCentral()
 	}
 	dependencies {
-		classpath "org.postgresql:postgresql:9.4.1211"
+		classpath "org.postgresql:postgresql:9.4.+"
 		classpath "com.googlecode.flyway:flyway-gradle-plugin:2.2.+"
 	}
 }
+
 
 apply plugin: 'flyway'
 apply plugin: 'java'
@@ -24,7 +25,7 @@ repositories {
 	mavenCentral()
 }
 
-// add integration tests soure dir
+// add integration tests source dir
 //sourceSets {
 //	'integration-test' {
 //		java {
