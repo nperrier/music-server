@@ -171,8 +171,7 @@ public class Core {
 		// set any properties from environment next:
 		appConfig.putAll(System.getenv());
 
-		// If db url is specified via env vars, we need to derive the user/pass combo and set
-		// the appropriate properties
+		// If db url is specified via env vars, we need to derive the user/pass combo and set the appropriate properties
 		String dbUrl = System.getenv("DATABASE_URL");
 		String jdbcUrl = System.getenv("JDBC_DATABASE_URL");
 		if (!StringUtils.isBlank(dbUrl) && !StringUtils.isBlank(jdbcUrl)) {

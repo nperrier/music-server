@@ -188,11 +188,11 @@ public class Mp3DirectoryScanner {
 
 				} else {
 					// NO CHANGE: continue
-					log.trace("File modification date changed, but meta data has not");
+					log.info("File modification date changed, but meta data has not, skipping");
 				}
 			} else {
 				// NO CHANGE: continue
-				log.trace("File modification date has not changed, skipping");
+				log.info("File modification date has not changed, skipping");
 			}
 
 			idxTrack.setIndexed(true);
