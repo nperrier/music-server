@@ -80,7 +80,8 @@ public class MusicModule extends AbstractModule {
 	private S3StorageService getStorage() {
 		String accessKeyId = this.config.getRequiredString(ApplicationProperties.AWS_ACCESS_KEY_ID);
 		String secretAccessKey = this.config.getRequiredString(ApplicationProperties.AWS_SECRET_ACCESS_KEY);
-		S3StorageService storageService = new S3StorageService(accessKeyId, secretAccessKey);
+		String bucket = this.config.getRequiredString(ApplicationProperties.AWS_BUCKET);
+		S3StorageService storageService = new S3StorageService(accessKeyId, secretAccessKey, bucket);
 		return storageService;
 	}
 }

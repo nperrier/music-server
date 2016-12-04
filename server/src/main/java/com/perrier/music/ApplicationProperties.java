@@ -30,5 +30,6 @@ public class ApplicationProperties {
 
 	public static final Property<String> AWS_ACCESS_KEY_ID = new Property<>("aws.accesskeyid");
 	public static final Property<String> AWS_SECRET_ACCESS_KEY = new Property<>("aws.secretaccesskey");
+	public static final Property<String> AWS_BUCKET = new Property<>("aws.bucket");
 
 }

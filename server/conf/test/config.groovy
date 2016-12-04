@@ -1,7 +1,6 @@
 appdir {
 	root = 'test'
 	covers = 'test/covers'
-	db = 'test/db'
 	log = 'test/log'
 	webapp = 'web/app'
 	resources = 'src/main/resources' // this is only needed for the nocover.svg file
@@ -42,6 +41,8 @@ auth {
 }
 
 aws {
+	// TODO: need to create fake S3 test class
+	bucket = ''
 	accesskeyid = ''
 	secretaccesskey = ''
 }

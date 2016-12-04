@@ -1,7 +1,6 @@
 appdir {
 	root = '.'
 	covers = 'covers'
-	db = 'db'
 	log = 'log'
 	webapp = 'web'
 	resources = 'resources' // this is only needed for the nocover.svg file
@@ -13,6 +12,9 @@ log {
 
 // Heroku sets env var 'DATABASE_URL' which the app will use to derive the fields for the db connection
 db {
+//	url = ''
+//	username = ''
+//	password = ''
 	showSql = false
 }
 
@@ -30,10 +32,16 @@ coverart {
 }
 
 auth {
-	admin {
-		username = 'admin'
-		password = 'changeme'
-	}
-	secretkey = 'changeme'
+//	admin {
+//		username = 'admin'
+//		password = 'changeme'
+//	}
+//	secretkey = 'changeme'
 	disabled = false
+}
+
+aws {
+	bucket = 'com-perrier-music'
+//	accesskeyid = ''
+//	secretaccesskey = ''
 }

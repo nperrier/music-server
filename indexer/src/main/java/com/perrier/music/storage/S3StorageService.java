@@ -22,17 +22,19 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class S3StorageService extends AbstractIdleService {
 
-	private static final String BUCKET = "com-perrier-music";
 	private static final String AUDIO_KEY_PREFIX = "audio";
 	private static final String COVER_KEY_PREFIX = "cover";
 
 	private final String accessKeyId;
 	private final String secretAccessKey;
+	private final String bucket;
+
 	private AmazonS3Client s3Client;
 
-	public S3StorageService(String accessKeyId, String secretAccessKey) {
+	public S3StorageService(String accessKeyId, String secretAccessKey, String bucket) {
 		this.accessKeyId = accessKeyId;
 		this.secretAccessKey = secretAccessKey;
+		this.bucket = bucket;
 	}
 
 	@Override
@@ -61,8 +63,8 @@ public class S3StorageService extends AbstractIdleService {
 		metaData.setContentLength(audioData.length);
 		metaData.setContentType("audio/mpeg");
 
-		s3Client.putObject(BUCKET, key, input, metaData);
-		URL url = s3Client.getUrl(BUCKET, key);
+		s3Client.putObject(this.bucket, key, input, metaData);
+		URL url = s3Client.getUrl(this.bucket, key);
 
 		return url;
 	}
@@ -78,8 +80,8 @@ public class S3StorageService extends AbstractIdleService {
 		metaData.setContentLength(imageData.length);
 		metaData.setContentType("image/png");
 
-		s3Client.putObject(BUCKET, key, input, metaData);
-		URL url = s3Client.getUrl(BUCKET, key);
+		s3Client.putObject(this.bucket, key, input, metaData);
+		URL url = s3Client.getUrl(this.bucket, key);
 
 		return url;
 	}
@@ -93,7 +95,7 @@ public class S3StorageService extends AbstractIdleService {
 	}
 
 	public static void main(String[] args) throws Exception {
-		S3StorageService s3 = new S3StorageService(args[0], args[1]);
+		S3StorageService s3 = new S3StorageService(args[0], args[1], args[2]);
 
 		s3.startUp();
 		List<Bucket> buckets = s3.s3Client.listBuckets();
@@ -113,8 +115,8 @@ public class S3StorageService extends AbstractIdleService {
 		String key = objectSummaries.get(1).getKey();
 		System.out.println("KEY: " + key);
 
-		System.out.println(s3.s3Client.getResourceUrl(BUCKET, key));
-		System.out.println(s3.s3Client.getUrl(BUCKET, key));
+		System.out.println(s3.s3Client.getResourceUrl(s3.bucket, key));
+		System.out.println(s3.s3Client.getUrl(s3.bucket, key));
 
 		s3.shutDown();
 	}
