@@ -55,30 +55,35 @@ public class Core {
 	private S3StorageService storageClient;
 
 	public static void main(String[] args) throws Exception {
-		Thread t = Thread.currentThread();
-		t.setName(Core.class.getSimpleName());
+		try {
+			Thread t = Thread.currentThread();
+			t.setName(Core.class.getSimpleName());
 
-		// Read command line props
-		CommandLineArgs cmds = new CommandLineArgs();
-		new JCommander(cmds, args);
-		String configFile = cmds.configFile;
-		if (configFile == null) {
-			// Default config
-			configFile = "conf/config.groovy";
-		}
-		Integer port = cmds.port;
-
-		final Core core = new Core();
-
-		Runtime.getRuntime().addShutdownHook(new Thread(Core.class.getSimpleName() + " SHUTDOWN") {
-
-			@Override
-			public void run() {
-				core.stop();
+			// Read command line props
+			CommandLineArgs cmds = new CommandLineArgs();
+			new JCommander(cmds, args);
+			String configFile = cmds.configFile;
+			if (configFile == null) {
+				// Default config
+				configFile = "conf/config.groovy";
 			}
-		});
+			Integer port = cmds.port;
 
-		core.init(configFile, port);
+			final Core core = new Core();
+
+			Runtime.getRuntime().addShutdownHook(new Thread(Core.class.getSimpleName() + " SHUTDOWN") {
+
+				@Override
+				public void run() {
+					core.stop();
+				}
+			});
+
+			core.init(configFile, port);
+		} catch (Throwable t) {
+			System.err.println("Error while starting application: " + t.getMessage());
+			t.printStackTrace();
+		}
 	}
 
 	private static class CommandLineArgs {
