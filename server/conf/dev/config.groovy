@@ -41,7 +41,7 @@ auth {
 }
 
 aws {
-	bucket 'com-perrier-music-dev'
+	bucket = 'com-perrier-music-dev'
 //	accesskeyid = ''
 //	secretaccesskey = ''
 }
