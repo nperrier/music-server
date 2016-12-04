@@ -81,8 +81,7 @@ public class Core {
 
 			core.init(configFile, port);
 		} catch (Throwable t) {
-			System.err.println("Error while starting application: " + t.getMessage());
-			t.printStackTrace();
+			log.error("Error while starting application", t);
 		}
 	}
 
@@ -230,6 +229,7 @@ public class Core {
 	}
 
 	private void createInjector() throws Exception {
+		log.debug("Creating Injector");
 
 		// modules
 		final Module configModule = new AbstractModule() {
