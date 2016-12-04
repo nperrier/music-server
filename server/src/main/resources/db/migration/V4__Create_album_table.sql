@@ -8,7 +8,7 @@ create table album (
   genre_id bigint,
   cover_hash varchar(255),
   cover_storage_key varchar(255),
-  cover_url varchar(255) not null,
+  cover_url varchar(255),
   creation_date timestamp not null,
   modification_date timestamp not null,
   primary key(id),
