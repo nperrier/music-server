@@ -1,12 +1,10 @@
+import static ch.qos.logback.classic.Level.DEBUG
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder
 import ch.qos.logback.classic.jul.LevelChangePropagator
 import ch.qos.logback.core.ConsoleAppender
 import ch.qos.logback.core.rolling.FixedWindowRollingPolicy
 import ch.qos.logback.core.rolling.RollingFileAppender
 import ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy
-
-import static ch.qos.logback.classic.Level.DEBUG
-import static ch.qos.logback.classic.Level.INFO
 
 // Reset Java logging
 context = new LevelChangePropagator()
@@ -46,4 +44,4 @@ logger("org.eclipse.jetty", ERROR)
 logger("org.jaudiotagger", ERROR)
 logger("com.mchange.v2", ERROR)
 
-root(INFO, ["CONSOLE", "FILE"])
+root(DEBUG, ["CONSOLE", "FILE"])
