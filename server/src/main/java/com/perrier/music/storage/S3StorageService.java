@@ -5,6 +5,9 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
@@ -22,6 +25,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 public class S3StorageService extends AbstractIdleService {
 
+	private static final Logger log = LoggerFactory.getLogger(S3StorageService.class);
+
 	private static final String BUCKET = "com-perrier-music";
 	private static final String AUDIO_KEY_PREFIX = "audio";
 	private static final String COVER_KEY_PREFIX = "cover";
@@ -37,6 +42,7 @@ public class S3StorageService extends AbstractIdleService {
 
 	@Override
 	protected void startUp() throws Exception {
+		log.info("Starting AWS S3 Storage Service");
 
 		this.s3Client = (AmazonS3Client) AmazonS3ClientBuilder.standard() //
 				.withCredentials(

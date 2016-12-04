@@ -23,6 +23,7 @@ public class HibernateDatabase extends AbstractIdleService implements IDatabase 
 
 	@Override
 	protected void startUp() throws Exception {
+		log.info("Starting database");
 		// A SessionFactory is set up once for an application
 		try {
 			SessionFactory sessionFactory = config.create();
