@@ -12,6 +12,9 @@ import java.util.Base64;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.inject.Inject;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
@@ -32,6 +35,8 @@ import com.perrier.music.server.auth.UnauthorizedException;
  * Handles login authentication and token creation/validation
  */
 public class LoginAuthenticator {
+
+	private static final Logger log = LoggerFactory.getLogger(LoginAuthenticator.class);
 
 	private static final Property<String> USERNAME = new Property<>("auth.admin.username");
 	private static final Property<String> PASSWORD = new Property<>("auth.admin.password");
@@ -101,6 +106,7 @@ public class LoginAuthenticator {
 	 */
 	public ReadOnlyJWTClaimsSet validateToken(String token) throws UnauthorizedException {
 		if (token == null) {
+			log.debug("No token found to validate");
 			throw new UnauthorizedException();
 		}
 
@@ -110,7 +116,7 @@ public class LoginAuthenticator {
 		try {
 			signedJWT = SignedJWT.parse(token);
 		} catch (ParseException e) {
-			// TODO: Log
+			log.error("Unable to parse token", e);
 			throw new UnauthorizedException();
 		}
 
@@ -120,12 +126,12 @@ public class LoginAuthenticator {
 		try {
 			valid = signedJWT.verify(verifier);
 		} catch (JOSEException e) {
-			// TODO: Log
+			log.error("Unable to verify token", e);
 			throw new UnauthorizedException(e);
 		}
 
 		if (!valid) {
-			// TODO: Log
+			log.warn("Token is invalid");
 			throw new UnauthorizedException();
 		}
 
@@ -134,7 +140,7 @@ public class LoginAuthenticator {
 		try {
 			jwtClaimsSet = signedJWT.getJWTClaimsSet();
 		} catch (ParseException e) {
-			// TODO: Log
+			log.error("Unable to parse token claims set", e);
 			throw new UnauthorizedException(e);
 		}
 
@@ -142,14 +148,14 @@ public class LoginAuthenticator {
 		// check if subject exists
 		final String username = config.getRequiredString(USERNAME);
 		if (!username.equalsIgnoreCase(subject)) {
-			// TODO Log
+			log.debug("Invalid claims set for username: {}", username);
 			throw new UnauthorizedException();
 		}
 
 		final long expiration = jwtClaimsSet.getExpirationTimeClaim();
 		// check if expiration is past current date
 		if (System.currentTimeMillis() >= expiration) {
-			// TODO Log
+			log.debug("Invalid claims set for username={}: token is expired={}", username, expiration);
 			throw new UnauthorizedException();
 		}
 
