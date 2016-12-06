@@ -109,7 +109,7 @@ public class Core {
 			}
 		}
 
-		this.storageService = new S3StorageService(accessKeyId, secretAccessKey, cmds.awsBucket);
+		this.storageService = new S3StorageService(accessKeyId, secretAccessKey, cmds.awsBucket, cmds.awsRegion);
 		try {
 			this.storageService.startAsync().awaitRunning(30, TimeUnit.SECONDS);
 		} catch (TimeoutException e) {
@@ -195,6 +195,9 @@ public class Core {
 
 		@Parameter(names = "-awsBucket", description = "AWS bucket")
 		String awsBucket;
+
+		@Parameter(names = "-awsRegion", description = "AWS region")
+		String awsRegion;
 
 		@Parameter(names = "-path", required = true, description = "Directory where music lives")
 		String path;

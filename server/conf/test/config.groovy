@@ -43,6 +43,7 @@ auth {
 aws {
 	// TODO: need to create fake S3 test class
 	bucket = ''
+	region = ''
 	accesskeyid = ''
 	secretaccesskey = ''
 }

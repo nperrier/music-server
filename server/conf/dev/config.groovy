@@ -43,6 +43,7 @@ auth {
 
 aws {
 	bucket = 'com-perrier-music-dev'
+	region = 'us-east-2' // Ohio region
 	// TODO: When server needs creds, be sure to add these to run conig for intellij, don't check in!
 //	accesskeyid = ''
 //	secretaccesskey = ''

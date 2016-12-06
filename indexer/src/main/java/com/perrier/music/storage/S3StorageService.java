@@ -28,13 +28,15 @@ public class S3StorageService extends AbstractIdleService {
 	private final String accessKeyId;
 	private final String secretAccessKey;
 	private final String bucket;
+	private final String region;
 
 	private AmazonS3Client s3Client;
 
-	public S3StorageService(String accessKeyId, String secretAccessKey, String bucket) {
+	public S3StorageService(String accessKeyId, String secretAccessKey, String bucket, String region) {
 		this.accessKeyId = accessKeyId;
 		this.secretAccessKey = secretAccessKey;
 		this.bucket = bucket;
+		this.region = region;
 	}
 
 	@Override
@@ -43,7 +45,7 @@ public class S3StorageService extends AbstractIdleService {
 		this.s3Client = (AmazonS3Client) AmazonS3ClientBuilder.standard() //
 				.withCredentials(
 						new AWSStaticCredentialsProvider(new BasicAWSCredentials(this.accessKeyId, this.secretAccessKey))) //
-				.withRegion(Regions.US_EAST_1) // TODO: read region from ~/.aws/config
+				.withRegion(Regions.fromName(this.region))
 				.build();
 	}
 
@@ -95,7 +97,7 @@ public class S3StorageService extends AbstractIdleService {
 	}
 
 	public static void main(String[] args) throws Exception {
-		S3StorageService s3 = new S3StorageService(args[0], args[1], args[2]);
+		S3StorageService s3 = new S3StorageService(args[0], args[1], args[2], args[3]);
 
 		s3.startUp();
 		List<Bucket> buckets = s3.s3Client.listBuckets();

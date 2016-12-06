@@ -42,6 +42,7 @@ auth {
 
 aws {
 	bucket = 'com-perrier-music'
+	region = 'us-east-1' // North Virginia
 //	accesskeyid = ''
 //	secretaccesskey = ''
 }

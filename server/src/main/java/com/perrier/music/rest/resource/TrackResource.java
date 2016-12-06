@@ -1,6 +1,6 @@
 package com.perrier.music.rest.resource;
 
-import java.io.File;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
 
@@ -23,8 +23,9 @@ import com.perrier.music.entity.track.Track;
 import com.perrier.music.entity.track.TrackProvider;
 import com.perrier.music.indexer.LibraryService;
 import com.perrier.music.rest.TrackDtoMapper;
-import com.perrier.music.rest.stream.FileStreamer;
+import com.perrier.music.rest.stream.HttpStreamer;
 import com.perrier.music.server.EntityNotFoundException;
+import com.perrier.music.storage.S3StorageService;
 
 @Path("api/track")
 @Produces(MediaType.APPLICATION_JSON)
@@ -35,6 +36,9 @@ public class TrackResource {
 
 	@Inject
 	private LibraryService libraryService;
+
+	@Inject
+	private S3StorageService storageService;
 
 	@GET
 	@Path("{id}")
@@ -70,19 +74,34 @@ public class TrackResource {
 	@Path("download/{id}")
 	@Produces({ "audio/mpeg", "application/json" })
 	public Response download(@PathParam("id") Long id) throws DBException {
-
 		Track track = getTrack(id);
 
-		// TODO: convert to s3
-		//		File trackFile = new File(track.getPath());
-		File trackFile = null;
-		String filename = trackFile.getName();
-		FileStreamer stream = new FileStreamer(trackFile);
+		InputStream audioStream = storageService.getAudioStream(track.getAudioStorageKey());
+		HttpStreamer stream = new HttpStreamer(audioStream);
+		String filename = createFileName(track);
 
 		return Response.ok(stream) //
 				.type("audio/mpeg") //
 				.header("Content-Disposition", "attachment; filename=\"" + filename + "\"") //
 				.build();
+	}
+
+	private static String createFileName(Track track) {
+		StringBuilder b = new StringBuilder();
+
+		if (track.getNumber() != null) {
+			b.append(track.getNumber()).append("-");
+		}
+
+		b.append(track.getName());
+
+		if (track.getArtist() != null) {
+			b.append("-").append(track.getArtist().getName());
+		}
+
+		b.append(".mp3");
+
+		return b.toString();
 	}
 
 	@POST

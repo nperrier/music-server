@@ -17,6 +17,8 @@ import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.ListObjectsRequest;
 import com.amazonaws.services.s3.model.ObjectListing;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.services.s3.model.S3ObjectSummary;
 import com.google.common.util.concurrent.AbstractIdleService;
 
@@ -33,13 +35,15 @@ public class S3StorageService extends AbstractIdleService {
 	private final String accessKeyId;
 	private final String secretAccessKey;
 	private final String bucket;
+	private final String region;
 
 	private AmazonS3Client s3Client;
 
-	public S3StorageService(String accessKeyId, String secretAccessKey, String bucket) {
+	public S3StorageService(String accessKeyId, String secretAccessKey, String bucket, String region) {
 		this.accessKeyId = accessKeyId;
 		this.secretAccessKey = secretAccessKey;
 		this.bucket = bucket;
+		this.region = region;
 	}
 
 	@Override
@@ -49,7 +53,7 @@ public class S3StorageService extends AbstractIdleService {
 		this.s3Client = (AmazonS3Client) AmazonS3ClientBuilder.standard() //
 				.withCredentials(
 						new AWSStaticCredentialsProvider(new BasicAWSCredentials(this.accessKeyId, this.secretAccessKey))) //
-				.withRegion(Regions.US_EAST_1) // TODO: read region from ~/.aws/config
+				.withRegion(Regions.fromName(this.region))
 				.build();
 	}
 
@@ -58,27 +62,13 @@ public class S3StorageService extends AbstractIdleService {
 		this.s3Client.shutdown();
 	}
 
-	public URL putAudio(String audioHash, byte[] audioData) {
-		checkNotNull(audioHash);
-		checkNotNull(audioData);
-		checkArgument(audioData.length > 0);
-
-		String key = getAudioKey(audioHash);
-		InputStream input = new ByteArrayInputStream(audioData);
-		ObjectMetadata metaData = new ObjectMetadata();
-		metaData.setContentLength(audioData.length);
-		metaData.setContentType("audio/mpeg");
-
-		s3Client.putObject(this.bucket, key, input, metaData);
-		URL url = s3Client.getUrl(this.bucket, key);
-
-		return url;
-	}
-
-	public void getAudio(String key) {
+	public InputStream getAudioStream(String key) {
 		checkNotNull(key);
 
-		// TODO get file
+		S3Object s3Object = s3Client.getObject(this.bucket, key);
+		S3ObjectInputStream inputStream = s3Object.getObjectContent();
+
+		return inputStream;
 	}
 
 	public URL putCover(String coverHash, byte[] imageData) {
@@ -98,16 +88,12 @@ public class S3StorageService extends AbstractIdleService {
 		return url;
 	}
 
-	public static String getAudioKey(String audioHash) {
-		return AUDIO_KEY_PREFIX + "/" + audioHash + ".mp3";
-	}
-
 	public static String getCoverKey(String coverHash) {
 		return COVER_KEY_PREFIX + "/" + coverHash + ".png";
 	}
 
 	public static void main(String[] args) throws Exception {
-		S3StorageService s3 = new S3StorageService(args[0], args[1], args[2]);
+		S3StorageService s3 = new S3StorageService(args[0], args[1], args[2], args[3]);
 
 		s3.startUp();
 		List<Bucket> buckets = s3.s3Client.listBuckets();
