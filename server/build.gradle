@@ -4,7 +4,7 @@ buildscript {
 		mavenCentral()
 	}
 	dependencies {
-		classpath "org.postgresql:postgresql:9.4.+"
+		classpath "org.postgresql:postgresql:9.4.1211"
 		classpath "com.googlecode.flyway:flyway-gradle-plugin:2.2.+"
 	}
 }
@@ -64,6 +64,7 @@ dependencies {
 			[group: 'org.flywaydb', name: 'flyway-core', version: '3.2+'],
 
 			// postgresql 
+            // NOTE: Matches currently supported Heroku Postgresql version
 			[group: 'org.postgresql', name: 'postgresql', version: '9.4.1211'],
 
 			// hibernate
