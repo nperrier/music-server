@@ -17,6 +17,7 @@ import com.perrier.music.db.HibernateConfiguration;
 import com.perrier.music.db.HibernateDatabase;
 import com.perrier.music.db.IDatabase;
 import com.perrier.music.entity.album.AlbumProvider;
+import com.perrier.music.entity.album.AlbumZipper;
 import com.perrier.music.entity.artist.ArtistProvider;
 import com.perrier.music.entity.genre.GenreProvider;
 import com.perrier.music.entity.playlist.PlaylistProvider;
@@ -50,6 +51,7 @@ public class MusicModule extends AbstractModule {
 		bind(LoginAuthenticator.class).in(Singleton.class);
 		bind(AuthorizationFilterFactory.class).in(Singleton.class);
 		bind(LibraryService.class).in(Singleton.class);
+		bind(AlbumZipper.class).in(Singleton.class);
 
 		bind(EventBus.class).in(Singleton.class);
 
@@ -65,6 +67,7 @@ public class MusicModule extends AbstractModule {
 		bind(TrackAlbumUpdater.class).in(Singleton.class);
 		bind(TrackGenreUpdater.class).in(Singleton.class);
 		bind(AlbumUpdater.class).in(Singleton.class);
+
 	}
 
 	@Provides

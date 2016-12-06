@@ -44,6 +44,9 @@ public class AlbumResource {
 	@Inject
 	private TrackProvider trackProvider;
 
+	@Inject
+	AlbumZipper albumZipper;
+
 	@GET
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -88,7 +91,7 @@ public class AlbumResource {
 			throw new EntityNotFoundException("Album not found");
 		}
 
-		File zipFile = AlbumZipper.zip(album);
+		File zipFile = this.albumZipper.zip(album);
 		FileStreamer stream = new FileStreamer(zipFile);
 		String filename = album.getArtist().getName() + "-" + album.getName() + ".zip";
 
