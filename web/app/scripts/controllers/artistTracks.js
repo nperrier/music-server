@@ -18,6 +18,7 @@ angular.module('musicApp').controller('ArtistTracksCtrl', [
   'Track',
   'Playlist',
   'User',
+  'PlayerQueue',
   function(
     $scope,
     $stateParams,
@@ -28,7 +29,8 @@ angular.module('musicApp').controller('ArtistTracksCtrl', [
     Artist,
     Track,
     Playlist,
-    User
+    User,
+    PlayerQueue
   ) {
 
     $scope.sortField = 'name';
@@ -52,6 +54,11 @@ angular.module('musicApp').controller('ArtistTracksCtrl', [
       $scope.tracks = result.tracks;
       spinner.checkDoneLoading();
     });
+
+    $scope.playTrack = function(track) {
+      $log.debug('Add track to player queue, id: ' + track.id);
+      PlayerQueue.playTrackNow(track);
+    };
   }
 ]);
 

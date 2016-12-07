@@ -74,14 +74,28 @@
   float: left;
   margin-right: 10px;
   background-repeat: no-repeat;
-  background-color: $bootstrap-blue;
+}
+
+.coverart-thumb > span {
+  padding: 1px;
+  font-size: 36px;
+  width: inherit;
+  height: inherit;
+  top: 1px;
 }
 
 .coverart-medium {
   width: $coverart-medium-width;
   height: $coverart-medium-height; /* svg crops the width if aspect ratio is different */
   background-repeat: no-repeat;
-  background-color: $bootstrap-blue;
+}
+
+.coverart-medium > span {
+  padding: 1px;
+  font-size: 280px;
+  width: inherit;
+  height: inherit;
+  top: 12px;
 }
 
 .overlay {

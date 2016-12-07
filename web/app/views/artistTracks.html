@@ -21,7 +21,15 @@
         <tbody vs-repeat vs-scroll-parent=".main-content" vs-excess="40">
           <tr class="track-list-item" ng-repeat="track in tracks | orderBy:sortField:reverse">
             <td>
-              <img class="coverart-thumb" ng-src="{{track.coverArtUrl}}" fade-in />
+              <div class="coverart-wrapper">
+                <img class="coverart-thumb" ng-src="{{track.coverArtUrl}}" ng-if="track.coverArtUrl" fade-in />
+                <div class="coverart-thumb" ng-if="!track.coverArtUrl">
+                  <span class="glyphicon glyphicon-cd"></span>
+                </div>
+                <div class="overlay overlay-thumb">
+                  <a href class="play-image play-image-thumb glyphicon glyphicon-play" ng-click="playTrack(track)"></a>
+                </div>
+              </div>
               <span class="track-title track-text">{{track.name}}</span>
               <track-action-menu track="track" playlists="playlists"></track-action-menu>
             </td>

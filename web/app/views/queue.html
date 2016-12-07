@@ -28,7 +28,10 @@
               <span ng-show="isPlaying($index)" class="glyphicon glyphicon-headphones queue-playing"></span>
             </td>
             <td class="col-track-title" sv-handle>
-              <img class="coverart-thumb" ng-src="{{t.coverArtUrl}}"/>
+              <img class="coverart-thumb" ng-src="{{t.coverArtUrl}}" ng-if="t.coverArtUrl" />
+              <div class="coverart-thumb" ng-if="!t.coverArtUrl">
+                <span class="glyphicon glyphicon-cd"></span>
+              </div>
               <span class="track-text track-title">
                 {{t.name}}
               </span>

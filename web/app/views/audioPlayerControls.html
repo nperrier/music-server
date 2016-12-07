@@ -4,8 +4,10 @@
   <div id="wrapper-left">
     <div id="player-wrapper-left">
       <div class="now-playing" ng-show="model.isTrackLoaded()">
-        <b>Now Playing:</b>
-        <img class="coverart-thumb" ng-src="{{model.track.coverArtUrl}}" />
+        <img class="coverart-thumb img-responsive" ng-src="{{model.track.coverArtUrl}}" ng-if="model.track.coverArtUrl"/>
+        <div class="coverart-thumb" ng-if="!model.track.coverArtUrl">
+          <span class="glyphicon glyphicon-cd"></span>
+        </div>
         <a ui-sref="artist-detail({ id: model.track.artist.id })">
           {{model.track.artist.name}}
         </a> - {{model.track.name}}

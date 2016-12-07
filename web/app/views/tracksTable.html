@@ -8,7 +8,7 @@
       <th class="col-track-artist" ng-click="sortField = 'artist.name'; reverse = !reverse">Artist</th>
       <th class="col-track-album" ng-click="sortField = 'album.name'; reverse = !reverse">Album</th>
       <th class="col-track-length" ng-click="sortField = 'length'; reverse = !reverse">
-       <span class="glyphicon glyphicon-time"></span>
+        <span class="glyphicon glyphicon-time"></span>
       </th>
     </tr>
   </thead>
@@ -16,7 +16,10 @@
     <tr class="track-list-item" ng-repeat="track in tracks | orderBy:sortField:reverse">
       <td>
         <div class="coverart-wrapper">
-          <img class="coverart-thumb" ng-src="{{track.coverArtUrl}}" fade-in />
+          <img class="coverart-thumb img-responsive" ng-src="{{track.coverArtUrl}}" ng-if="track.coverArtUrl" fade-in />
+          <div class="coverart-thumb" ng-if="!track.coverArtUrl">
+            <span class="glyphicon glyphicon-cd"></span>
+          </div>
           <div class="overlay overlay-thumb">
             <a href class="play-image play-image-thumb glyphicon glyphicon-play" ng-click="playTrack(track)"></a>
           </div>

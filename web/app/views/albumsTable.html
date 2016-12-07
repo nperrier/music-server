@@ -13,7 +13,10 @@
       <td>
 
         <div class="coverart-wrapper">
-          <img class="coverart-thumb" ng-src="{{album.coverArtUrl}}" fade-in />
+          <img class="coverart-thumb" ng-src="{{album.coverArtUrl}}" ng-if="album.coverArtUrl" fade-in />
+          <div class="coverart-thumb" ng-if="!album.coverArtUrl">
+            <span class="glyphicon glyphicon-cd"></span>
+          </div>
           <div class="overlay overlay-thumb">
             <a href class="play-image play-image-thumb glyphicon glyphicon-play" ng-click="playAlbum(album)"></a>
           </div>

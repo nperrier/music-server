@@ -4,7 +4,10 @@
 
     <div class="row album-info">
       <div class="col-md-4 coverart-wrapper">
-        <img class="coverart-medium img-responsive" ng-src="{{album.coverArtUrl}}" fade-in />
+        <img class="coverart-medium img-responsive" ng-src="{{album.coverArtUrl}}" ng-if="album.coverArtUrl" fade-in />
+        <div class="coverart-medium" ng-if="!album.coverArtUrl">
+          <span class="glyphicon glyphicon-cd"></span>
+        </div>
         <div class="overlay overlay-medium">
           <a href class="play-image play-image-medium glyphicon glyphicon-play" ng-click="playAlbum(album)"></a>
         </div>
