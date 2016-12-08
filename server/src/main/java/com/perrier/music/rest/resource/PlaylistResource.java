@@ -59,12 +59,13 @@ public class PlaylistResource {
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response get(@PathParam("id") Long id, PlaylistDto playlistUpdateDto) throws DBException {
+	public Response update(@PathParam("id") Long id, PlaylistDto playlistUpdateDto) throws DBException {
 		Playlist playlist = getPlaylist(id, false);
 
 		Playlist updatedPlaylist = this.playlistProvider.update(playlist, playlistUpdateDto);
+		PlaylistDto playlistDto = PlaylistDtoMapper.build(updatedPlaylist);
 
-		return Response.status(Response.Status.CREATED).entity(updatedPlaylist).build();
+		return Response.status(Response.Status.CREATED).entity(playlistDto).build();
 	}
 
 	@DELETE

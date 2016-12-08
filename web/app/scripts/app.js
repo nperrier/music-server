@@ -203,6 +203,10 @@ musicApp.config(function($httpProvider) {
 				return config;
 			},
 			responseError: function(rejection) {
+				if (rejection instanceof Error) {
+					return $q.reject(rejection);
+				}
+
 				if (rejection.config.url === 'api/authentication') {
 					return $q.reject(rejection);
 				}
