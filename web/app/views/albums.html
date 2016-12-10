@@ -3,7 +3,7 @@
   <div class="container">
 
     <div ng-if="albums.length" ng-cloak>
-      <albums-table albums="albums" playlists="playlists"></albums-table>
+      <albums-table albums="albums" playlists="playlists" on-change="reload()"></albums-table>
     </div>
 
     <div class="text-center" ng-if="albums.length == 0" ng-cloak>

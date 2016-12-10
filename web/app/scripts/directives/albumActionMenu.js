@@ -27,14 +27,18 @@ angular.module('musicApp').directive('albumActionMenu', [
       templateUrl: '/views/albumActionMenu.html',
       scope: {
         album: '=',
-        playlists: '='
+        playlists: '=',
+        onChange: '&'
       },
       link: function(scope) {
 
         scope.updateAlbum = function(albumId, albumInfo) {
           $log.debug('updateAlbum, albumId: ' + albumId);
-          Album.update({ albumId: albumId }, albumInfo, function () {
-            // do something after updating
+          Album.update({ albumId: albumId }, albumInfo, function (result) {
+            scope.onChange();
+          },
+          function (error) {
+            $log.error('Unable to update album, albumId: ' + albumId);
           });
         };
 
