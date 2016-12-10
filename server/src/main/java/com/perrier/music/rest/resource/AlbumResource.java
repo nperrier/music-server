@@ -106,20 +106,22 @@ public class AlbumResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateAlbum(@PathParam("id") Long id, AlbumUpdateDto albumUpdateDto) throws DBException {
-		//		try {
-		//			this.db.openSession();
+		try {
+			this.db.beginTransaction();
 
-		Album album = this.albumProvider.findById(id);
-		if (album == null) {
-			throw new EntityExistsException("Track does not exist");
+			Album album = this.albumProvider.findById(id);
+			if (album == null) {
+				throw new EntityExistsException("Track does not exist");
+			}
+
+			Album updatedAlbum = this.albumProvider.update(album, albumUpdateDto);
+			this.db.commit();
+
+			return Response.status(Response.Status.CREATED).entity(updatedAlbum).build();
+
+		} finally {
+				this.db.endTransaction();
 		}
-
-		Album updatedAlbum = this.albumProvider.update(album, albumUpdateDto);
-
-		return Response.status(Response.Status.CREATED).entity(updatedAlbum).build();
-		//		} finally {
-		//			this.db.closeSession();
-		//		}
 	}
 
 }
