@@ -33,18 +33,27 @@ angular.module('musicApp').controller('TracksCtrl', [
     var spinner = new LoadingSpinner($scope);
     spinner.start();
 
-    $q.all({
-      playlists: Playlist.query().$promise,
-      tracks: Track.query().$promise.then(function(tracks) {
-        tracks.forEach(function(t) {
-          t.downloadUrl += '?token=' + User.getToken();
-        });
-        return $q.resolve(tracks);
-      })
-    }).then(function(result) {
-      $scope.playlists = result.playlists;
-      $scope.tracks = result.tracks;
-      spinner.checkDoneLoading();
-    });
+    var loadTracks = function () {
+      $q.all({
+        playlists: Playlist.query().$promise,
+        tracks: Track.query().$promise.then(function(tracks) {
+          tracks.forEach(function(t) {
+            t.downloadUrl += '?token=' + User.getToken();
+          });
+          return $q.resolve(tracks);
+        })
+      }).then(function(result) {
+        $scope.playlists = result.playlists;
+        $scope.tracks = result.tracks;
+        spinner.checkDoneLoading();
+      });
+    };
+
+    loadTracks();
+
+    $scope.reload = function () {
+      loadTracks();
+    };
+
   }
 ]);

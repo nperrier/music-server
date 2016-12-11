@@ -66,13 +66,14 @@ public class TrackResource {
 
 		Track track = getTrack(id);
 		Track updatedTrack = this.trackProvider.update(track, trackUpdateDto);
+		TrackDto dto = TrackDtoMapper.build(updatedTrack);
 
-		return Response.status(Response.Status.CREATED).entity(updatedTrack).build();
+		return Response.status(Response.Status.CREATED).entity(dto).build();
 	}
 
 	@GET
 	@Path("download/{id}")
-	@Produces({ "audio/mpeg", "application/json" })
+	@Produces({ "audio/mpeg", MediaType.APPLICATION_JSON })
 	public Response download(@PathParam("id") Long id) throws DBException {
 		Track track = getTrack(id);
 
@@ -105,8 +106,8 @@ public class TrackResource {
 	}
 
 	@POST
-	@Consumes("application/json")
-	@Produces("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createTrack(TrackMetaData metaData) {
 
 		Track track = this.libraryService.addTrack(metaData);
@@ -116,8 +117,8 @@ public class TrackResource {
 	}
 
 	@PUT
-	@Consumes("application/json")
-	@Produces("application/json")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateTrack(TrackMetaData metaData) {
 
 		this.libraryService.updateTrack(metaData);

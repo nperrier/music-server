@@ -12,7 +12,8 @@ angular.module('musicApp').directive('tracksTable', [
       restrict: 'E',
       scope: {
         tracks: '=',
-        playlists: '='
+        playlists: '=',
+        onChange: '&'
       },
       templateUrl: '/views/tracksTable.html',
       link: function(scope) {

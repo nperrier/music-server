@@ -27,14 +27,19 @@ angular.module('musicApp').directive('trackActionMenu', [
       templateUrl: '/views/trackActionMenu.html',
       scope: {
         track: '=',
-        playlists: '='
+        playlists: '=',
+        onChange: '&'
       },
       link: function(scope) {
 
         scope.updateTrack = function(trackId, trackInfo) {
           $log.debug('updateTrack, trackId: ' + trackId);
           Track.update({ trackId: trackId }, trackInfo, function () {
-            // do something after updating
+            scope.onChange();
+          },
+          function (error) {
+            $log.error('Unable to update track, trackId: ' + trackId);
+            $log.error(error);
           });
         };
 

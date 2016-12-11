@@ -25,7 +25,7 @@
           </div>
         </div>
         <span class="track-title track-text">{{track.name}}</span>
-        <track-action-menu track="track" playlists="playlists"></track-action-menu>
+        <track-action-menu track="track" playlists="playlists" on-change="onChange()"></track-action-menu>
       </td>
       <td>
         <a ui-sref="artist-detail({ id: track.artist.id })" class="track-text">
