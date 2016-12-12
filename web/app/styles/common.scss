@@ -109,7 +109,7 @@
 
 .overlay-medium {
   top: 0px;
-  left: 15px;
+  left: 0px;
   width: $coverart-medium-width;
   height: $coverart-medium-height;
 }
@@ -119,6 +119,11 @@
   left: 0px;
   height: $cover-thumb-width;
   width: $cover-thumb-width;
+}
+
+.album-info .coverart-wrapper {
+  width: $coverart-medium-width;
+  height: $coverart-medium-height;
 }
 
 .coverart-wrapper {
