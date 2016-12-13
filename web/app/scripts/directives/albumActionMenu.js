@@ -34,10 +34,10 @@ angular.module('musicApp').directive('albumActionMenu', [
 
         scope.updateAlbum = function(albumId, albumInfo) {
           $log.debug('updateAlbum, albumId: ' + albumId);
-          Album.update({ albumId: albumId }, albumInfo, function (result) {
+          Album.update({ albumId: albumId }, albumInfo, function () {
             scope.onChange();
           },
-          function (error) {
+          function () {
             $log.error('Unable to update album, albumId: ' + albumId);
           });
         };

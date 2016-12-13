@@ -33,7 +33,7 @@ angular.module('musicApp').controller('TracksCtrl', [
     var spinner = new LoadingSpinner($scope);
     spinner.start();
 
-    var loadTracks = function () {
+    $scope.loadTracks = function () {
       $q.all({
         playlists: Playlist.query().$promise,
         tracks: Track.query().$promise.then(function(tracks) {
@@ -49,11 +49,7 @@ angular.module('musicApp').controller('TracksCtrl', [
       });
     };
 
-    loadTracks();
-
-    $scope.reload = function () {
-      loadTracks();
-    };
+    $scope.loadTracks();
 
   }
 ]);

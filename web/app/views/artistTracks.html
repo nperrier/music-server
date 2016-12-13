@@ -31,7 +31,7 @@
                 </div>
               </div>
               <span class="track-title track-text">{{track.name}}</span>
-              <track-action-menu track="track" playlists="playlists"></track-action-menu>
+              <track-action-menu track="track" playlists="playlists" on-change="loadTracks()"></track-action-menu>
             </td>
             <td>
               <a ui-sref="album-detail({ id: track.album.id })" class="track-text">

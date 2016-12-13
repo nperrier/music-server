@@ -33,7 +33,7 @@
 								<a ui-sref="album-detail({ id: album.id })" class="track-title track-text">
 									{{album.name}}
 								</a>
-								<album-action-menu album="album" playlists="playlists"></album-action-menu>
+								<album-action-menu album="album" playlists="playlists" on-change="loadTracks()"></album-action-menu>
 							</td>
 							<td>
 								{{album.year}}

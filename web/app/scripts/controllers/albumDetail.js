@@ -54,26 +54,32 @@
       }
     };
 
-    $q.all({
-      album: Album.get({ albumId: $stateParams.id }).$promise.then(function(album) {
-        album.downloadUrl += '?token=' + User.getToken();
+    $scope.loadAlbumDetails = function () {
+      $q.all({
+        album: Album.get({ albumId: $stateParams.id }).$promise.then(function(album) {
+          album.downloadUrl += '?token=' + User.getToken();
+          spinner.checkDoneLoading();
+          return $q.resolve(album);
+        }),
+        playlists: Playlist.query().$promise,
+        tracks: Album.getTracks({ albumId: $stateParams.id }).$promise.then(function(tracks) {
+          tracks.forEach(function(t) {
+            t.downloadUrl += '?token=' + User.getToken();
+          });
+          $scope.variousArtists = isVariousArtists(tracks);
+          return $q.resolve(tracks);
+        })
+      }).then(function(result) {
+        $scope.album = result.album;
+        $scope.playlists = result.playlists;
+        $scope.tracks = result.tracks;
         spinner.checkDoneLoading();
-        return $q.resolve(album);
-      }),
-      playlists: Playlist.query().$promise,
-      tracks: Album.getTracks({ albumId: $stateParams.id }).$promise.then(function(tracks) {
-        tracks.forEach(function(t) {
-          t.downloadUrl += '?token=' + User.getToken();
-        });
-        $scope.variousArtists = isVariousArtists(tracks);
-        return $q.resolve(tracks);
-      })
-    }).then(function(result) {
-      $scope.album = result.album;
-      $scope.playlists = result.playlists;
-      $scope.tracks = result.tracks;
-      spinner.checkDoneLoading();
-    });
+      });
+    };
+
+    // TODO: consider cases where album artist changes or no tracks are left
+    // need to redirect back to previous page or something
+    $scope.loadAlbumDetails();
 
     $scope.playAlbum = function(album) {
       $log.debug('Add album to player queue, id: ' + album.id);

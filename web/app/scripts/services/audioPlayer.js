@@ -10,11 +10,9 @@
 angular.module('musicApp').service('AudioPlayer', [
   '$log',
   '$rootScope',
-  'User',
   function (
     $log,
-    $rootScope,
-    User
+    $rootScope
   ) {
 
     var self = this;
@@ -142,7 +140,7 @@ angular.module('musicApp').service('AudioPlayer', [
     };
 
     self.buildStreamURL = function(track) {
-      return track.streamUrl // + '?token=' + User.getToken();
+      return track.streamUrl; // + '?token=' + User.getToken();
     };
 
     // listen for audio-element events, and broadcast stuff

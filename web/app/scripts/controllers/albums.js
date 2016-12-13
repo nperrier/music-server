@@ -30,7 +30,7 @@ angular.module('musicApp').controller('AlbumsCtrl', [
     var spinner = new LoadingSpinner($scope);
     spinner.start();
 
-    var loadAlbums = function() {
+    $scope.loadAlbums = function() {
       $q.all({
         albums: Album.query().$promise.then(function(albums) {
           albums.forEach(function(a) {
@@ -46,10 +46,7 @@ angular.module('musicApp').controller('AlbumsCtrl', [
       });
     };
 
-    loadAlbums();
+    $scope.loadAlbums();
 
-    $scope.reload = function () {
-      loadAlbums();
-    };
   }
 ]);

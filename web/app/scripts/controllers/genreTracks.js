@@ -39,18 +39,23 @@ angular.module('musicApp').controller('GenreTracksCtrl', [
     var spinner = new LoadingSpinner($scope);
     spinner.start();
 
-    $q.all({
-      tracks: Genre.getTracks({ genreId: $stateParams.id }).$promise.then(function(tracks) {
-        tracks.forEach(function(t) {
-          t.downloadUrl += '?token=' + User.getToken();
-        });
-        return $q.resolve(tracks);
-      }),
-      playlists: Playlist.query().$promise
-    }).then(function(result) {
-      $scope.tracks = result.tracks;
-      $scope.playlists = result.playlists;
-      spinner.checkDoneLoading();
-    });
+    $scope.loadTracks = function () {
+      $q.all({
+        tracks: Genre.getTracks({ genreId: $stateParams.id }).$promise.then(function(tracks) {
+          tracks.forEach(function(t) {
+            t.downloadUrl += '?token=' + User.getToken();
+          });
+          return $q.resolve(tracks);
+        }),
+        playlists: Playlist.query().$promise
+      }).then(function(result) {
+        $scope.tracks = result.tracks;
+        $scope.playlists = result.playlists;
+        spinner.checkDoneLoading();
+      });
+    };
+
+    $scope.loadTracks();
+
   }
 ]);

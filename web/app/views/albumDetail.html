@@ -24,7 +24,7 @@
             {{album.name}}
           </span>
           <div class="album-action-menu">
-            <album-action-menu album="album" playlists="playlists"></album-action-menu>
+            <album-action-menu album="album" playlists="playlists" on-change="loadAlbumDetails()"></album-action-menu>
           </div>
         </div>
 
@@ -55,7 +55,7 @@
               </td>
               <td>
                 <span class="track-title track-text">{{track.name}}</span>
-                <track-action-menu track="track" playlists="playlists" track="track"></track-action-menu>
+                <track-action-menu track="track" playlists="playlists" on-change="loadAlbumDetails()"></track-action-menu>
               </td>
               <td ng-if="variousArtists">
                 <a ui-sref="artist-detail({ id: track.artist.id})" class="track-text">
