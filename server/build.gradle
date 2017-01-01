@@ -12,7 +12,6 @@ buildscript {
 
 apply plugin: 'flyway'
 apply plugin: 'java'
-apply plugin: 'groovy'
 apply plugin: 'application'
 
 defaultTasks 'build'
@@ -64,7 +63,7 @@ dependencies {
 			[group: 'org.flywaydb', name: 'flyway-core', version: '3.2+'],
 
 			// postgresql 
-            // NOTE: Matches currently supported Heroku Postgresql version
+			// NOTE: Matches currently supported Heroku Postgresql version
 			[group: 'org.postgresql', name: 'postgresql', version: '9.4.1211'],
 
 			// hibernate
