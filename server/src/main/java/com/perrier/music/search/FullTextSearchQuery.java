@@ -30,11 +30,12 @@ class FullTextSearchQuery extends FindQuery<SearchResults> {
 	/**
 	 * Query to get the total count of search results that match the search query for a particular table
 	 */
-	private static final String FT_COUNT_SQL = "select count(*) from ft_search_data(?, 0, 0) where table = ?";
+	private static final String FT_COUNT_SQL = "select count(*) from :table where search_name @@ plainto_tsquery(?)";
+
 	/**
 	 * Query to get the ids that match the search query for a particular table
 	 */
-	private static final String FT_SQL = "select keys from ft_search_data(?, 0, 0) where table = ? limit ?";
+	private static final String FT_SQL = "select id from :table where search_name @@ plainto_tsquery(?) limit ?";
 	/**
 	 * The default search limit per table
 	 */
@@ -62,30 +63,34 @@ class FullTextSearchQuery extends FindQuery<SearchResults> {
 			searchTotals.putAll(totals);
 		});
 
-		searchQueries.forEach((table, ids) -> {
-			switch (table) {
-			case ALBUM:
-				List<Album> albums = db.find(new AlbumFindByIdsQuery(ids));
-				searchResults.setAlbums(albums);
-				Long albumsTotal = searchTotals.get(table);
-				searchResults.setAlbumsTotal(albumsTotal);
-				break;
-			case ARTIST:
-				List<Artist> artists = db.find(new ArtistFindByIdsQuery(ids));
-				Long artistsTotal = searchTotals.get(table);
-				searchResults.setArtistsTotal(artistsTotal);
-				searchResults.setArtists(artists);
-				break;
-			case TRACK:
-				List<Track> tracks = db.find(new TrackFindByIdsQuery(ids));
-				Long tracksTotal = searchTotals.get(table);
-				searchResults.setTracksTotal(tracksTotal);
-				searchResults.setTracks(tracks);
-				break;
-			default:
-				throw new RuntimeException("Unknown database table: " + table);
-			}
-		});
+		searchQueries.entrySet().stream()
+				.filter((entry) -> !entry.getValue().isEmpty()) // don't run query if no ids
+				.forEach((entry) -> {
+					SearchTable table = entry.getKey();
+					Set<Long> ids = entry.getValue();
+					switch (table) {
+					case ALBUM:
+						List<Album> albums = db.find(new AlbumFindByIdsQuery(ids));
+						searchResults.setAlbums(albums);
+						Long albumsTotal = searchTotals.get(table);
+						searchResults.setAlbumsTotal(albumsTotal);
+						break;
+					case ARTIST:
+						List<Artist> artists = db.find(new ArtistFindByIdsQuery(ids));
+						searchResults.setArtists(artists);
+						Long artistsTotal = searchTotals.get(table);
+						searchResults.setArtistsTotal(artistsTotal);
+						break;
+					case TRACK:
+						List<Track> tracks = db.find(new TrackFindByIdsQuery(ids));
+						searchResults.setTracks(tracks);
+						Long tracksTotal = searchTotals.get(table);
+						searchResults.setTracksTotal(tracksTotal);
+						break;
+					default:
+						throw new RuntimeException("Unknown database table: " + table);
+					}
+				});
 
 		return searchResults;
 	}
@@ -106,18 +111,15 @@ class FullTextSearchQuery extends FindQuery<SearchResults> {
 
 	private Set<Long> getSearchQueries(Connection connection, SearchTable table) throws SQLException {
 		Set<Long> ids = new HashSet<>();
-
-		try (PreparedStatement st = connection.prepareStatement(FT_SQL)) {
+		String searchSQL = FT_SQL.replace(":table", table.name());
+		try (PreparedStatement st = connection.prepareStatement(searchSQL)) {
 			st.setString(1, this.query);
-			st.setString(2, table.name());
-			st.setInt(3, FT_SQL_LIMIT);
+			st.setInt(2, FT_SQL_LIMIT);
 
 			try (ResultSet rs = st.executeQuery()) {
 				while (rs.next()) {
-					Object[] primaryKeys = (Object[]) rs.getArray(1).getArray();
-					for (Object o : primaryKeys) {
-						ids.add(Long.parseLong((String) o));
-					}
+					Long id = rs.getLong(1);
+					ids.add(id);
 				}
 				log.debug("table: {}, primaryKeys: {}", table, ids);
 			}
@@ -142,9 +144,9 @@ class FullTextSearchQuery extends FindQuery<SearchResults> {
 
 	private Long getSearchCountQueries(Connection connection, SearchTable table) throws SQLException {
 		Long count;
-		try (PreparedStatement st = connection.prepareStatement(FT_COUNT_SQL)) {
+		String searchCountSQL = FT_COUNT_SQL.replace(":table", table.name());
+		try (PreparedStatement st = connection.prepareStatement(searchCountSQL)) {
 			st.setString(1, this.query);
-			st.setString(2, table.name());
 
 			try (ResultSet rs = st.executeQuery()) {
 				rs.next();

@@ -25,7 +25,7 @@ class FullTextSearchByTableQuery extends FindQuery<SearchResults> {
 
 	private static final Logger log = LoggerFactory.getLogger(FullTextSearchByTableQuery.class);
 
-	private static final String FT_SQL = "select keys from ft_search_data(?, 0, 0) where table = ?";
+	private static final String FT_SQL = "select id from :table where search_name @@ plainto_tsquery(?)";
 
 	private final String query;
 	private final SearchTable table;
@@ -44,21 +44,23 @@ class FullTextSearchByTableQuery extends FindQuery<SearchResults> {
 			ids.addAll(getSearchIds(connection));
 		});
 
-		switch (this.table) {
-		case ALBUM:
-			List<Album> albums = db.find(new AlbumFindByIdsQuery(ids));
-			searchResults.setAlbums(albums);
-			break;
-		case ARTIST:
-			List<Artist> artists = db.find(new ArtistFindByIdsQuery(ids));
-			searchResults.setArtists(artists);
-			break;
-		case TRACK:
-			List<Track> tracks = db.find(new TrackFindByIdsQuery(ids));
-			searchResults.setTracks(tracks);
-			break;
-		default:
-			throw new RuntimeException("Unknown database table: " + table);
+		if (!ids.isEmpty()) {
+			switch (this.table) {
+			case ALBUM:
+				List<Album> albums = db.find(new AlbumFindByIdsQuery(ids));
+				searchResults.setAlbums(albums);
+				break;
+			case ARTIST:
+				List<Artist> artists = db.find(new ArtistFindByIdsQuery(ids));
+				searchResults.setArtists(artists);
+				break;
+			case TRACK:
+				List<Track> tracks = db.find(new TrackFindByIdsQuery(ids));
+				searchResults.setTracks(tracks);
+				break;
+			default:
+				throw new RuntimeException("Unknown database table: " + table);
+			}
 		}
 
 		return searchResults;
@@ -66,17 +68,14 @@ class FullTextSearchByTableQuery extends FindQuery<SearchResults> {
 
 	private Set<Long> getSearchIds(Connection connection) throws SQLException {
 		Set<Long> ids = new HashSet<>();
-
-		try (PreparedStatement st = connection.prepareStatement(FT_SQL)) {
+		String searchSQL = FT_SQL.replace(":table", table.name());
+		try (PreparedStatement st = connection.prepareStatement(searchSQL)) {
 			st.setString(1, this.query);
-			st.setString(2, this.table.name());
 
 			try (ResultSet rs = st.executeQuery()) {
 				while (rs.next()) {
-					Object[] primaryKeys = (Object[]) rs.getArray(1).getArray();
-					for (Object o : primaryKeys) {
-						ids.add(Long.parseLong((String) o));
-					}
+					long id = rs.getLong(1);
+					ids.add(id);
 				}
 				log.debug("table: {}, ids: {}", table, ids);
 			}
