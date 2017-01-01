@@ -153,6 +153,13 @@ angular.module('musicApp').directive('audioPlayerControls', [
           }
         });
 
+        var queuePositionChanged = $rootScope.$on('queue.position.changed', function(evt, track) {
+          $log.debug('Event: queue.position.changed, track: ' + track.id);
+          var currentTrack = PlayerQueue.getCurrentTrack();
+          AudioPlayer.playNow(currentTrack);
+          startTimeUpdater();
+        });
+
         // The time slider is being moved. Don't update the knob position
         $scope.$on('slider.dragging', function() {
           $log.debug('Event: slider.dragging');
@@ -192,6 +199,7 @@ angular.module('musicApp').directive('audioPlayerControls', [
           audioEnd();
           queueTrackAdded();
           queueTrackRemoved();
+          queuePositionChanged();
         });
       }
     };

@@ -55,6 +55,11 @@ angular.module('musicApp').controller('QueueCtrl', [
       PlayerQueue.moveTrack($indexFrom, $indexTo);
     };
 
+    $scope.playTrack = function(track, position) {
+      $log.debug('Play track id: ' + track.id + ' at position: ' + position);
+      PlayerQueue.playTrackAtPosition(position);
+    };
+
     // TODO: This should update the view
     // $rootScope.$on('track.added', function() {
     $scope.$on('track.added', function() {

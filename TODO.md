@@ -19,8 +19,6 @@
 * Add auth header to img source url's so they don't have to be unauthenticated
 * Find a way to serve audio files in an authenticated way.  Currently they include the auth token in the query param of the src url
   * Could use signed urls
-* Add a way to play a specific track on the queue page
-* Add menu to first col of queue list items to play/pause
 * Multi-edit tracks
 * Add track action menu to playlist track table
 * Create installer and upgrade scripts

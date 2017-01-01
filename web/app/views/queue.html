@@ -27,15 +27,24 @@
             <td class="col-queue-status">
               <span ng-show="isPlaying($index)" class="glyphicon glyphicon-headphones queue-playing"></span>
             </td>
+
             <td class="col-track-title" sv-handle>
-              <img class="coverart-thumb" ng-src="{{t.coverArtUrl}}" ng-if="t.coverArtUrl" />
-              <div class="coverart-thumb" ng-if="!t.coverArtUrl">
-                <span class="glyphicon glyphicon-cd"></span>
+
+              <div class="coverart-wrapper">
+                <img class="coverart-thumb img-responsive" ng-src="{{t.coverArtUrl}}" ng-if="t.coverArtUrl" fade-in />
+                <div class="coverart-thumb" ng-if="!t.coverArtUrl">
+                  <span class="glyphicon glyphicon-cd"></span>
+                </div>
+                <div class="overlay overlay-thumb">
+                  <a href class="play-image play-image-thumb glyphicon glyphicon-play" ng-click="playTrack(t, $index)"></a>
+                </div>
               </div>
+
               <span class="track-text track-title">
                 {{t.name}}
               </span>
             </td>
+
             <td class="col-track-artist" sv-handle>
               <a ui-sref="artist-detail({ id: t.artist.id })" class="track-text">
                 {{t.artist.name}}

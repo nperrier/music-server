@@ -35,11 +35,42 @@ angular.module('musicApp').service('PlayerQueue', [
       return true;
     };
 
+    self.playTrackAtPosition = function(position) {
+      if (position > self.queue.length || position < 0) {
+        $log.error('Attempting to play track from invalid position: ' + position + ', total: ' + self.queue.length);
+        return null;
+      }
+
+      if (self.current === position) {
+        $log.debug('Attempting to play currently playing track, ignoring');
+        return null;
+      }
+
+      self.current = position;
+      var track = self.queue[position];
+
+      $log.debug('Play track id: ' + track.id + ' at position: ' + position);
+      $rootScope.$emit('queue.position.changed', [ track ]);
+
+      return track;
+    };
+
+    self.getCurrentTrack = function() {
+      if (self.queue.length === 0) {
+        return null; // no tracks!
+      }
+
+      return self.queue[self.current];
+    };
+
+    // This function will wipe out the queue and start playing the passed in track
     self.playTrackNow = function(track) {
       self.clear();
       self.addTrack(track);
     };
 
+    // This function will wipe out the queue and start playing the passed in tracks
+    // Used when playing a whole album or playlist
     self.playTracksNow = function(tracks) {
       self.clear();
       self.addTracks(tracks);
