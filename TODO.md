@@ -21,7 +21,6 @@
   * Could use signed urls
 * Multi-edit tracks
 * Add track action menu to playlist track table
-* Create installer and upgrade scripts
 * Support multiple user accounts
 * Download albums from s3 can take awhile before it starts since it's requesting a lot of tracks at once
   - Create a message to indicated this in the UI. Also investigate ways to speed up creating zip (could download tracks from s3 in parallel)
