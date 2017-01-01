@@ -39,7 +39,7 @@ angular.module('musicApp').controller('MainCtrl',[
     $scope.searchText = '';
 
     $scope.search = function() {
-      $log.info('Search clicked: ' + $scope.searchText);
+      $log.debug('Search clicked: ' + $scope.searchText);
       var opts = {
         reload: true // need this flag in order to search again from the same state
       };
@@ -47,7 +47,7 @@ angular.module('musicApp').controller('MainCtrl',[
     };
 
     $scope.shuffle = function() {
-      $log.info('Shuffling tracks');
+      $log.debug('Shuffling tracks');
       Shuffle.query(function(tracks) {
         // on retrieval of tracks, clear queue and add tracks.
         // Player should start automatically
