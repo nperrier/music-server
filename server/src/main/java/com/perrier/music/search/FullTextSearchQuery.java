@@ -30,12 +30,12 @@ class FullTextSearchQuery extends FindQuery<SearchResults> {
 	/**
 	 * Query to get the total count of search results that match the search query for a particular table
 	 */
-	private static final String FT_COUNT_SQL = "select count(*) from :table where search_name @@ plainto_tsquery(?)";
+	private static final String FT_COUNT_SQL = "select count(*) from :table where search_name @@ to_tsquery(?)";
 
 	/**
 	 * Query to get the ids that match the search query for a particular table
 	 */
-	private static final String FT_SQL = "select id from :table where search_name @@ plainto_tsquery(?) limit ?";
+	private static final String FT_SQL = "select id from :table where search_name @@ to_tsquery(?) limit ?";
 	/**
 	 * The default search limit per table
 	 */

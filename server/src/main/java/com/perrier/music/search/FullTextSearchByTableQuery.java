@@ -25,7 +25,7 @@ class FullTextSearchByTableQuery extends FindQuery<SearchResults> {
 
 	private static final Logger log = LoggerFactory.getLogger(FullTextSearchByTableQuery.class);
 
-	private static final String FT_SQL = "select id from :table where search_name @@ plainto_tsquery(?)";
+	private static final String FT_SQL = "select id from :table where search_name @@ to_tsquery(?)";
 
 	private final String query;
 	private final SearchTable table;
