@@ -19,7 +19,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="album in albums | orderBy:sortField:reverse">
+						<tr ng-repeat="album in albums | orderBy:sortField:reverse track by album.id">
 							<td>
 				        <div class="coverart-wrapper">
 				          <img class="coverart-thumb" ng-src="{{album.coverArtUrl}}" ng-if="album.coverArtUrl" fade-in />

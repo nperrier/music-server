@@ -9,7 +9,7 @@
     </tr>
   </thead>
   <tbody vs-repeat vs-scroll-parent=".main-content" vs-excess="40">
-    <tr ng-repeat="album in albums | orderBy:sortField:reverse">
+    <tr ng-repeat="album in albums | orderBy:sortField:reverse track by album.id">
       <td>
 
         <div class="coverart-wrapper">
@@ -35,4 +35,3 @@
     </tr>
   </tbody>
 </table>
-

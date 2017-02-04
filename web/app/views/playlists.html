@@ -17,7 +17,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="p in playlists | orderBy:sortField:reverse">
+            <tr ng-repeat="p in playlists | orderBy:sortField:reverse track by p.id">
               <td>
                 <a ui-sref="playlist-detail({ id: p.id })">
                   {{p.name}}

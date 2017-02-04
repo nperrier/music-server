@@ -6,7 +6,7 @@
     </tr>
   </thead>
   <tbody vs-repeat vs-scroll-parent=".main-content" vs-excess="40">
-    <tr ng-repeat="a in artists | orderBy:sortField:reverse">
+    <tr ng-repeat="a in artists | orderBy:sortField:reverse track by a.id">
       <td>
         <a ui-sref="artist-detail({ id: a.id })" class="track-title">
           {{a.name}}

@@ -6,7 +6,7 @@
 
 <div class="modal-body">
   <ul>
-    <li ng-repeat="p in playlists">
+    <li ng-repeat="p in playlists track by p.id">
       <a href class="playlist-item" ng-click="selected.playlist = p; ok()">{{ p.name }}</a>
     </li>
   </ul>

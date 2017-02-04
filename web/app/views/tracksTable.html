@@ -13,7 +13,7 @@
     </tr>
   </thead>
   <tbody vs-repeat vs-scroll-parent=".main-content" vs-excess="40">
-    <tr class="track-list-item" ng-repeat="track in tracks | orderBy:sortField:reverse">
+    <tr class="track-list-item" ng-repeat="track in tracks | orderBy:sortField:reverse track by track.id">
       <td>
         <div class="coverart-wrapper">
           <img class="coverart-thumb img-responsive" ng-src="{{track.coverArtUrl}}" ng-if="track.coverArtUrl" fade-in />

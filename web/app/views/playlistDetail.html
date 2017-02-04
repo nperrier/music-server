@@ -28,7 +28,7 @@
           </tr>
         </thead>
         <tbody sv-root sv-part="tracks" sv-on-sort="onTrackMoveSort($item, $partFrom, $partTo, $indexFrom, $indexTo)">
-          <tr class="track-list-item" ng-repeat="pt in tracks" sv-element="{containment:'tbody'}">
+          <tr class="track-list-item" ng-repeat="pt in tracks track by pt.id" sv-element="{containment:'tbody'}">
             <td class="col-track-position track-position" sv-handle>
               {{pt.position + 1}}
             </td>

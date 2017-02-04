@@ -38,8 +38,7 @@ angular.module('musicApp').directive('trackActionMenu', [
             scope.onChange();
           },
           function (error) {
-            $log.error('Unable to update track, trackId: ' + trackId);
-            $log.error(error);
+            $log.error('Unable to update track', trackId, error);
           });
         };
 
