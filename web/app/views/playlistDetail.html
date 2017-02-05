@@ -33,8 +33,15 @@
               {{pt.position + 1}}
             </td>
             <td class="col-track-title" sv-handle>
-              <img class="coverart-thumb" ng-src="{{pt.track.coverArtUrl}}" fade-in />
-              <span class="track-title track-text">{{pt.track.name}}</span>
+              <div class="coverart-wrapper">
+                <img class="coverart-thumb img-responsive" ng-src="{{pt.track.coverArtUrl}}" ng-if="pt.track.coverArtUrl" />
+                <div class="coverart-thumb" ng-if="!pt.track.coverArtUrl">
+                  <span class="glyphicon glyphicon-cd"></span>
+                </div>
+              </div>
+              <span class="track-text track-title">
+                {{pt.track.name}}
+              </span>
             </td>
             <td class="col-track-artist" sv-handle>
               <a ui-sref="artist-detail({ id: pt.track.artist.id })" class="track-text">

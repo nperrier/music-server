@@ -1,0 +1,106 @@
+
+/*
+ * Angular styles for fading in cover art images
+ */
+.coverart-thumb.ng-hide-add,
+.coverart-thumb.ng-hide-remove {
+  transition: all linear 0.5s;
+  display: block !important;
+}
+
+.coverart-thumb.ng-hide-remove,
+.coverart-thumb.ng-hide-add.ng-hide-add-active {
+  opacity: 0;
+}
+
+.coverart-thumb.ng-hide-add,
+.coverart-thumb.ng-hide-remove.ng-hide-remove-active {
+  opacity: 1;
+}
+
+.coverart-thumb {
+  width: $cover-thumb-width;
+  height: $cover-thumb-height; /* NOTE: svg crops the width if aspect ratio is different */
+  float: left;
+  margin-right: 10px;
+  background-repeat: no-repeat;
+}
+
+.coverart-thumb > span {
+  padding: 1px;
+  font-size: 36px;
+  width: inherit;
+  height: inherit;
+  top: 1px;
+}
+
+.coverart-medium {
+  width: $coverart-medium-width;
+  height: $coverart-medium-height; /* svg crops the width if aspect ratio is different */
+  background-repeat: no-repeat;
+}
+
+.coverart-medium > span {
+  padding: 1px;
+  font-size: 280px;
+  width: inherit;
+  height: inherit;
+  top: 12px;
+}
+
+.overlay {
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  background: rgba(0, 0, 0, 0.7);
+  text-align: center;
+  vertical-align: middle;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+.overlay-medium {
+  width: $coverart-medium-width;
+  height: $coverart-medium-height;
+}
+
+.overlay-thumb {
+  width: $cover-thumb-width;
+  height: $cover-thumb-width;
+}
+
+.album-info .coverart-wrapper {
+  width: $coverart-medium-width;
+  height: $coverart-medium-height;
+}
+
+.coverart-wrapper {
+  position: relative;
+}
+
+.coverart-wrapper:hover .overlay  {
+  opacity: 1;
+}
+
+a.play-image,
+a.play-image:hover,
+a.play-image:visited,
+a.play-image:link,
+a.play-image:active {
+  text-decoration: none;
+  color: $bootstrap-blue;
+}
+
+.play-image-medium {
+  font-size: 200px;
+  height: 300px;
+  width: 300px;
+  line-height: inherit;
+}
+
+.play-image-thumb {
+  font-size: 30px;
+  width: 40px;
+  height: 40px;
+  top: 4px;
+}
