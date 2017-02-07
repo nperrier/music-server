@@ -13,13 +13,15 @@ angular.module('musicApp').directive('albumActionMenu', [
   'Album',
   'Playlist',
   'PlayerQueue',
+  'SelectPlaylist',
   function(
     $log,
     $uibModal,
     _,
     Album,
     Playlist,
-    PlayerQueue
+    PlayerQueue,
+    SelectPlaylist
   ) {
 
     return {
@@ -52,7 +54,6 @@ angular.module('musicApp').directive('albumActionMenu', [
         };
 
         scope.editAlbum = function() {
-
           var modalInstance = $uibModal.open({
             templateUrl: 'views/editAlbum.html',
             backdrop: false,
@@ -62,7 +63,6 @@ angular.module('musicApp').directive('albumActionMenu', [
               }
             },
             controller: function ($scope, $uibModalInstance, album) {
-
               var createAlbumModel = function (album) {
                 // TODO: need to consider null artist/album/etc..
                 return {
@@ -111,42 +111,16 @@ angular.module('musicApp').directive('albumActionMenu', [
           );
         };
 
-        scope.selectPlaylist = function(album) {
-
-          var modalInstance = $uibModal.open({
-            templateUrl: 'views/playlistsModal.html',
-            size: 'sm',
-            backdrop: false,
-            resolve: {
-              playlists: function () {
-                return scope.playlists;
-              }
-            },
-            controller: function($scope, $uibModalInstance, playlists) {
-              $scope.playlists = playlists;
-
-              $scope.selected = {
-                playlist: scope.playlists[0]
-              };
-
-              $scope.ok = function() {
-                $uibModalInstance.close($scope.selected.playlist);
-              };
-
-              $scope.cancel = function() {
-                $uibModalInstance.dismiss('cancelled');
-              };
-            }
-          });
-
-          modalInstance.result.then(
-            function (playlist) {
+        scope.selectPlaylist = function selectPlaylist(album) {
+          var promise = SelectPlaylist.openModal(scope.playlists);
+          promise.then(
+            function(playlist) {
               scope.selected = playlist;
-              $log.debug('Add album.id: ' + album.id + ' to playlist.id: ' + playlist.id);
+              $log.debug('Add album to playlist', album.id, playlist.id);
               Playlist.addAlbum({ playlistId: playlist.id, albumId: album.id });
             },
-            function (reason) {
-              $log.debug('Modal dismissed: ' + reason);
+            function(reason) {
+              $log.debug('Modal dismissed, reason:', reason);
             }
           );
         };
@@ -154,4 +128,3 @@ angular.module('musicApp').directive('albumActionMenu', [
     };
   }
 ]);
-

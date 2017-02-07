@@ -13,13 +13,17 @@ angular.module('musicApp').directive('trackActionMenu', [
   'Track',
   'Playlist',
   'PlayerQueue',
+  'EditTrack',
+  'SelectPlaylist',
   function(
     $log,
     $uibModal,
     User,
     Track,
     Playlist,
-    PlayerQueue
+    PlayerQueue,
+    EditTrack,
+    SelectPlaylist
   ) {
 
     return {
@@ -44,113 +48,35 @@ angular.module('musicApp').directive('trackActionMenu', [
 
         scope.addTrackToQueue = function(track) {
           PlayerQueue.addTrack(track);
-          $log.debug('Added track to player queue, track.id: ' + track.id);
+          $log.debug('Added track to player queue, track.id: ', track.id);
         };
 
         scope.addTrackToPlaylist = function(track, playlist) {
           Playlist.addTracks({ playlistId: playlist.id }, [ track.id ]);
-          $log.debug('Added track.id: ' + track.id + ' to playlist.id: ' + playlist.id);
+          $log.debug('Added track to playlist', track.id, playlist.id);
         };
 
-        scope.editTrack = function() {
-
-          var modalInstance = $uibModal.open({
-            templateUrl: 'views/editTrack.html',
-            backdrop: false,
-            resolve: {
-              track: function() {
-                return scope.track;
-              }
-            },
-            controller: function($scope, $uibModalInstance, track) {
-
-              // private
-              var createTrackModel = function(track) {
-                // TODO: need to consider null artist/album/etc..
-                return {
-                    name: track.name,
-                    artist: track.artist.name,
-                    album: track.album.name,
-                    genre: track.genre.name,
-                    year: track.year,
-                    number: track.number,
-                    coverArtUrl: track.coverArtUrl
-                  };
-              };
-
-              $scope.track = createTrackModel(track);
-              // save our original track in order to reset form and check for changes
-              $scope.originalTrack = angular.copy($scope.track);
-
-              $scope.save = function(track) {
-                // TODO: Need to add client-side validation
-                $uibModalInstance.close(track);
-              };
-
-              $scope.cancel = function() {
-                $uibModalInstance.dismiss('cancelled');
-              };
-
-              $scope.reset = function() {
-                $scope.track = angular.copy($scope.originalTrack);
-                this.editTrackForm.$setPristine();
-              };
-
-              $scope.isUnchanged = function(track) {
-                var isEqual = angular.equals(track, $scope.originalTrack);
-                if (isEqual) {
-                  this.editTrackForm.$setPristine();
-                }
-                return isEqual;
-              };
-            }
-          });
-
-          modalInstance.result.then(
+        scope.editTrack = function editTrack() {
+          var promise = EditTrack.openModal(scope.track);
+          promise.then(
             function(track) {
               scope.updateTrack(scope.track.id, track);
             },
             function(reason) {
-              $log.debug('Modal dismissed: ' + reason);
+              $log.debug('Modal dismissed, reason:', reason);
             }
           );
         };
 
-        scope.selectPlaylist = function(track) {
-
-          var modalInstance = $uibModal.open({
-            templateUrl: 'views/playlistsModal.html',
-            size: 'sm',
-            backdrop: false,
-            resolve: {
-              playlists: function () {
-                return scope.playlists;
-              }
-            },
-            controller: function($scope, $uibModalInstance, playlists) {
-              $scope.playlists = playlists;
-
-              $scope.selected = {
-                playlist: scope.playlists[0]
-              };
-
-              $scope.ok = function() {
-                $uibModalInstance.close($scope.selected.playlist);
-              };
-
-              $scope.cancel = function() {
-                $uibModalInstance.dismiss('cancelled');
-              };
-            }
-          });
-
-          modalInstance.result.then(
+        scope.selectPlaylist = function selectPlaylist(track) {
+          var promise = SelectPlaylist.openModal(scope.playlists);
+          promise.then(
             function(playlist) {
               scope.selected = playlist;
               scope.addTrackToPlaylist(track, playlist);
             },
             function(reason) {
-              $log.debug('Modal dismissed: ' + reason);
+              $log.debug('Modal dismissed, reason:', reason);
             }
           );
         };
