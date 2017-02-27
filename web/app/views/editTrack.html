@@ -13,7 +13,7 @@
             <input ng-model="track.name" name="name" type="text" size="50" class="form-control track-edit-input" empty-to-null/>
           </td>
           <td rowspan="2">
-            <img ng-src="{{track.coverArtUrl}}" class="track-edit-image" />
+            <image-file-chooser image-model="newCover" image-src="coverImage"></image-file-chooser>
           </td>
         </tr>
         <tr>
@@ -49,9 +49,9 @@
 
   <div class="modal-footer">
     <span class="input-group-btn">
-      <button class="btn btn-default" ng-disabled="editTrackForm.$invalid || isUnchanged(track)" ng-click="save(track)">Save</button>
+      <button class="btn btn-default" ng-disabled="editTrackForm.$invalid || isUnchanged(track, newCover)" ng-click="save(track, newCover)">Save</button>
       <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
-      <button class="btn btn-default" ng-disabled="isUnchanged(track)" ng-click="reset()">Reset</button>
+      <button class="btn btn-default" ng-disabled="isUnchanged(track, newCover)" ng-click="reset()">Reset</button>
     </span>
   </div>
 </form>

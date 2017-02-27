@@ -71,16 +71,16 @@ public class S3StorageService extends AbstractIdleService {
 		return inputStream;
 	}
 
-	public URL putCover(String coverHash, byte[] imageData) {
+	public URL putCover(String coverHash, byte[] imageData, String contentType) {
 		checkNotNull(coverHash);
 		checkNotNull(imageData);
 		checkArgument(imageData.length > 0);
 
-		String key = getCoverKey(coverHash);
+		String key = getCoverKey(coverHash, contentType);
 		InputStream input = new ByteArrayInputStream(imageData);
 		ObjectMetadata metaData = new ObjectMetadata();
 		metaData.setContentLength(imageData.length);
-		metaData.setContentType("image/png");
+		metaData.setContentType(contentType);
 
 		s3Client.putObject(this.bucket, key, input, metaData);
 		URL url = s3Client.getUrl(this.bucket, key);
@@ -88,8 +88,22 @@ public class S3StorageService extends AbstractIdleService {
 		return url;
 	}
 
-	public static String getCoverKey(String coverHash) {
-		return COVER_KEY_PREFIX + "/" + coverHash + ".png";
+	public static String getCoverKey(String coverHash, String contentType) {
+		String extension;
+
+		switch (contentType) {
+		case "image/png":
+			extension = "png";
+			break;
+		case "image/jpg":
+		case "image/jpeg":
+			extension = "jpg";
+			break;
+		default:
+			throw new RuntimeException("unsupported media type");
+		}
+
+		return COVER_KEY_PREFIX + "/" + coverHash + "." + extension;
 	}
 
 	public static void main(String[] args) throws Exception {

@@ -1,3 +1,5 @@
+'use strict';
+
 angular.module('musicApp').service('EditTrack', [
   '$log',
   '$uibModal',
@@ -34,9 +36,17 @@ angular.module('musicApp').service('EditTrack', [
           // save our original track in order to reset form and check for changes
           $scope.originalTrack = angular.copy($scope.track);
 
-          $scope.save = function(track) {
+          // TODO: handle resetting cover image, and handle placeholder image,
+          // does not work when track has no cover to begin with
+          $scope.coverImage = $scope.track.coverArtUrl;
+          // to track changing the cover art image:
+          $scope.newCover = {
+            file: null
+          };
+
+          $scope.save = function(track, newCover) {
             // TODO: Need to add client-side validation
-            $uibModalInstance.close(track);
+            $uibModalInstance.close({track: track, image: newCover.file});
           };
 
           $scope.cancel = function() {
@@ -45,15 +55,20 @@ angular.module('musicApp').service('EditTrack', [
 
           $scope.reset = function() {
             $scope.track = angular.copy($scope.originalTrack);
+            $scope.coverImage = $scope.track.coverArtUrl;
+            $scope.newCover.file = null;
+
             this.editTrackForm.$setPristine();
           };
 
-          $scope.isUnchanged = function(track) {
-            var isEqual = angular.equals(track, $scope.originalTrack);
-            if (isEqual) {
+          $scope.isUnchanged = function(track, newCover) {
+            var trackEqual = angular.equals(track, $scope.originalTrack);
+            var coverEqual = (newCover.file === null);
+            var unchanged = (trackEqual && coverEqual);
+            if (unchanged) {
               this.editTrackForm.$setPristine();
             }
-            return isEqual;
+            return unchanged;
           };
         }
       });

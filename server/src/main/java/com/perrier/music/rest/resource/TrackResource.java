@@ -58,6 +58,9 @@ public class TrackResource {
 		return TrackDtoMapper.build(tracks);
 	}
 
+	/**
+	 * This resource should be called from the web UI:
+	 */
 	@PUT
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -69,6 +72,19 @@ public class TrackResource {
 		TrackDto dto = TrackDtoMapper.build(updatedTrack);
 
 		return Response.status(Response.Status.CREATED).entity(dto).build();
+	}
+
+	/**
+	 * This resource should be called from the indexer:
+	 */
+	@PUT
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response updateTrack(TrackMetaData metaData) {
+
+		this.libraryService.updateTrack(metaData);
+
+		return Response.ok().build();
 	}
 
 	@GET
@@ -114,16 +130,6 @@ public class TrackResource {
 		metaData.setId(track.getId());
 
 		return Response.status(Response.Status.CREATED).entity(metaData).build();
-	}
-
-	@PUT
-	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response updateTrack(TrackMetaData metaData) {
-
-		this.libraryService.updateTrack(metaData);
-
-		return Response.ok().build();
 	}
 
 	private Track getTrack(Long id) throws DBException {

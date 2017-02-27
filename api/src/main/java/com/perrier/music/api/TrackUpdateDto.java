@@ -8,6 +8,8 @@ public class TrackUpdateDto {
 	String album;
 	String genre;
 	String coverArtUrl;
+	String coverHash;
+	String coverStorageKey;
 	Integer number;
 	String year;
 
@@ -52,6 +54,22 @@ public class TrackUpdateDto {
 
 	public void setCoverArtUrl(String coverArtUrl) {
 		this.coverArtUrl = coverArtUrl;
+	}
+
+	public String getCoverHash() {
+		return coverHash;
+	}
+
+	public void setCoverHash(String coverHash) {
+		this.coverHash = coverHash;
+	}
+
+	public String getCoverStorageKey() {
+		return coverStorageKey;
+	}
+
+	public void setCoverStorageKey(String coverStorageKey) {
+		this.coverStorageKey = coverStorageKey;
 	}
 
 	public Integer getNumber() {

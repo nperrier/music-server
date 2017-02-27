@@ -96,9 +96,17 @@ public class TrackUpdater {
 		}
 
 		// TODO: coverArt changes
+		boolean coverArtChanged = false;
+		if (track.getCoverUrl() == null) {
+			if (trackUpdateDto.getCoverArtUrl() != null) {
+				coverArtChanged = true;
+			}
+		} else if (!track.getCoverUrl().equals(trackUpdateDto.getCoverArtUrl())) {
+			coverArtChanged = true;
+		}
 
 		boolean trackChanged = (artist.isCreatedOrDeleted() || album.isCreatedOrDeleted() || genre.isCreatedOrDeleted()
-				|| nameChanged || yearChanged || numberChanged);
+				|| nameChanged || numberChanged) || yearChanged || coverArtChanged;
 
 		if (trackChanged) {
 			if (artist.isCreatedOrDeleted()) {
@@ -119,15 +127,20 @@ public class TrackUpdater {
 			if (yearChanged) {
 				track.setYear(trackUpdateDto.getYear());
 			}
+			if (coverArtChanged) {
+				track.setCoverUrl(trackUpdateDto.getCoverArtUrl());
+				track.setCoverHash(trackUpdateDto.getCoverHash());
+				track.setCoverStorageKey(trackUpdateDto.getCoverStorageKey());
+			}
 			// mark track as 'edited' so modifications persist even after re-scanning track
 			track.setEdited(true);
 
 			this.db.update(new TrackUpdateQuery(track));
 
 			try {
-				// if the entity can't be deleted, log an error, don't bubble up
 				cleanupOrphans(artist, album, genre);
 			} catch (DBException dbe) {
+				// if the entity can't be deleted, log an error, don't bubble up
 				log.error("Unable to clean up orphans", dbe);
 			}
 		}
@@ -140,6 +153,8 @@ public class TrackUpdater {
 	 * Album)
 	 * <p>
 	 * Delete them if there are no more associations to them
+	 * <p>
+	 * TODO: need to handle orphaned cover art. Need some kind of background job to vacuum them up from AWS S3
 	 *
 	 * @param artist
 	 * @param album

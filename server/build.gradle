@@ -97,6 +97,7 @@ dependencies {
 			[group: 'com.sun.jersey', name: 'jersey-servlet', version: '1.19.+'],
 			[group: 'com.sun.jersey', name: 'jersey-bundle', version: '1.19.+'],
 			[group: 'com.sun.jersey.contribs', name: 'jersey-guice', version: '1.19.+'],
+			[group: 'com.sun.jersey.contribs', name: 'jersey-multipart', version: '1.19.+'],
 
 			// jackson
 			[group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.2.+'],
