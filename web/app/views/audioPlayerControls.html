@@ -1,16 +1,29 @@
 <!-- audioPlayerControls.html -->
 <div id="player-controls">
 
+  <div id="track-progress" ng-show="model.isTrackLoaded()">
+    <time-slider id="range-slider"
+                 class="time-range"
+                 floor="0"
+                 ceiling="100"
+                 step="0.1"
+                 precision="1"
+                 highlight="left"
+                 ng-model="currentPercentage">
+    </time-slider>
+  </div>
+
   <div id="wrapper-left">
     <div id="player-wrapper-left">
-      <div class="now-playing" ng-show="model.isTrackLoaded()">
+      <div id="now-playing" ng-show="model.isTrackLoaded()">
         <img class="coverart-thumb img-responsive" ng-src="{{model.track.coverArtUrl}}" ng-if="model.track.coverArtUrl"/>
         <div class="coverart-thumb" ng-if="!model.track.coverArtUrl">
           <span class="glyphicon glyphicon-cd"></span>
         </div>
-        <a ui-sref="artist-detail({ id: model.track.artist.id })">
+        <a class="artist-text" ui-sref="artist-detail({ id: model.track.artist.id })">
           {{model.track.artist.name}}
-        </a> - {{model.track.name}}
+        </a>
+        <div class="track-name">{{model.track.name}}</div>
       </div>
     </div>
   </div>
@@ -35,18 +48,22 @@
       <span class="current-time" ng-model="currentTime">
         {{( currentTime ? currentTime : 0 ) | duration:'seconds'}}
       </span>
-
+       &nbsp;/&nbsp;
       <span class="duration" ng-model="model.track.length">
         {{ model.track ? model.track.length : 0 | duration }}
       </span>
-
-      <time-slider id="range-slider" class="time-range" floor="0" ceiling="100" step="0.1" precision="1" highlight="left" ng-model="currentPercentage"></time-slider>
     </div>
 
     <div class="volume" ng-show="model.isTrackLoaded()">
       <span id="volume-icon-low" class="glyphicon glyphicon-volume-down"></span>
       <span id="volume-icon-high" class="glyphicon glyphicon-volume-up"></span>
-      <input class="volume-slider" min="0" max="1" step="0.01" type="range" ng-model="audioVolume.volume" ng-model-options="{ getterSetter: true }" />
+      <input class="volume-slider"
+             min="0"
+             max="1"
+             step="0.01"
+             type="range"
+             ng-model="audioVolume.volume"
+             ng-model-options="{ getterSetter: true }" />
     </div>
   </div>
 </div>
