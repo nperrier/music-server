@@ -1,5 +1,6 @@
 #TODO
 
+* BUG: if updating cover art for track while it's in queue, the queue track object doesn't update it's cover url
 * Add persisted history to record when a track was played
 * Add a settings/config page for configuring various things
 * Integration with other media player accounts:
