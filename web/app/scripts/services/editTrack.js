@@ -37,7 +37,7 @@ angular.module('musicApp').service('EditTrack', [
           $scope.originalTrack = angular.copy($scope.track);
 
           // TODO: handle resetting cover image
-          scope.coverImage = $scope.track.coverArtUrl;
+          $scope.coverImage = $scope.track.coverArtUrl;
           // to track changing the cover art image:
           $scope.newCover = {
             file: null
