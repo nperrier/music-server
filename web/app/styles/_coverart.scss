@@ -24,28 +24,41 @@
   float: left;
   margin-right: 10px;
   background-repeat: no-repeat;
+
+  > span {
+    padding: 1px;
+    font-size: 36px;
+    width: inherit;
+    height: inherit;
+    top: 1px;
+  }
 }
 
-.coverart-thumb > span {
-  padding: 1px;
-  font-size: 36px;
-  width: inherit;
-  height: inherit;
-  top: 1px;
+.coverart-small {
+  width: $cover-small-width;
+  height: $cover-small-height; /* NOTE: svg crops the width if aspect ratio is different */
+  background-repeat: no-repeat;
+
+  > span {
+    font-size: 108px;
+    width: inherit;
+    height: inherit;
+    top: 5px;
+  }
 }
 
 .coverart-medium {
   width: $coverart-medium-width;
   height: $coverart-medium-height; /* svg crops the width if aspect ratio is different */
   background-repeat: no-repeat;
-}
 
-.coverart-medium > span {
-  padding: 1px;
-  font-size: 280px;
-  width: inherit;
-  height: inherit;
-  top: 12px;
+  > span {
+    padding: 1px;
+    font-size: 280px;
+    width: inherit;
+    height: inherit;
+    top: 12px;
+  }
 }
 
 .overlay {

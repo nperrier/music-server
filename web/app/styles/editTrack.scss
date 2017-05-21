@@ -1,5 +1,7 @@
 /* track edit styles */
 
+@import 'variables';
+
 /* ng-dirty and ng-invalid appear at the same time - errors should be visible */
 #editTrackForm input.ng-invalid {
   background-color: red !important;
@@ -14,7 +16,8 @@
 }
 
 .track-edit-image {
-  width: 115px;
+  width: $cover-small-width;
+  height: $cover-small-height; /* NOTE: svg crops the width if aspect ratio is different */
 }
 
 .track-edit-table td {

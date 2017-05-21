@@ -1,0 +1,10 @@
+
+<img ng-if="imageSrc" ng-src="{{imageSrc}}" class="coverart-small" ng-click="fileChooser()" />
+
+<div class="coverart-small" ng-if="!imageSrc" ng-click="fileChooser()">
+  <span class="glyphicon glyphicon-cd"></span>
+</div>
+
+<input class="input-edit-image" type="file" style="display: none;"
+       file-input="imageModel.file"
+       file-preview="imageSrc" />
