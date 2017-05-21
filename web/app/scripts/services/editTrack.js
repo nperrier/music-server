@@ -36,9 +36,8 @@ angular.module('musicApp').service('EditTrack', [
           // save our original track in order to reset form and check for changes
           $scope.originalTrack = angular.copy($scope.track);
 
-          // TODO: handle resetting cover image, and handle placeholder image,
-          // does not work when track has no cover to begin with
-          $scope.coverImage = $scope.track.coverArtUrl;
+          // TODO: handle resetting cover image
+          scope.coverImage = $scope.track.coverArtUrl;
           // to track changing the cover art image:
           $scope.newCover = {
             file: null

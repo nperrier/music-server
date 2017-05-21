@@ -1,5 +1,5 @@
 'use strict';
-// TODO
+
 angular.module('musicApp').service('CoverArtService', [
   '$http',
   '$q',
